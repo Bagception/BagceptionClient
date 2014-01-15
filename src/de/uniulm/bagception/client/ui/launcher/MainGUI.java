@@ -3,6 +3,7 @@ package de.uniulm.bagception.client.ui.launcher;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -15,6 +16,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import de.uniulm.bagception.client.R;
+import de.uniulm.bagception.client.bluetooth.pairing.AddNewBagStartActivity;
+import de.uniulm.bagception.client.osm.ShowMap;
 
 public class MainGUI extends Activity {
 
@@ -22,7 +25,7 @@ public class MainGUI extends Activity {
 
 	final String[] data = { "Übersicht", "Alle Items", "Gefundene Items",
 			"Item erstellen", "Ort erstellen", "Neue Tasche", "Einstellungen" };
-	final String[] fragments = {
+	final String[] menueFragments = {
 			"de.uniulm.bagception.client.ui.launcher.OverviewFragment",
 			"de.uniulm.bagception.client.ui.launcher.AllItemsFragment",
 			"de.uniulm.bagception.client.ui.launcher.ItemsFoundFragment",
@@ -53,7 +56,7 @@ public class MainGUI extends Activity {
 						FragmentTransaction tx = getFragmentManager()
 								.beginTransaction();
 						tx.replace(R.id.main, Fragment.instantiate(
-								MainGUI.this, fragments[pos]));
+								MainGUI.this, menueFragments[pos]));
 						tx.commit();
 					}
 				});
@@ -76,48 +79,38 @@ public class MainGUI extends Activity {
 		getActionBar().setDisplayShowHomeEnabled(true);
 
 		FragmentTransaction tx = getFragmentManager().beginTransaction();
-		tx.replace(R.id.main, Fragment.instantiate(MainGUI.this, fragments[0]));
+		tx.replace(R.id.main,
+				Fragment.instantiate(MainGUI.this, menueFragments[0]));
 		tx.commit();
 	}
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
-	    super.onPostCreate(savedInstanceState);
-	    mDrawerToggle.syncState();
+		super.onPostCreate(savedInstanceState);
+		mDrawerToggle.syncState();
 	}
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
-	    super.onConfigurationChanged(newConfig);
-	    mDrawerToggle.onConfigurationChanged(newConfig);
+		super.onConfigurationChanged(newConfig);
+		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    if (mDrawerToggle.onOptionsItemSelected(item)) {
-	        return true;
-	    }
-	    return super.onOptionsItemSelected(item);
+		if (mDrawerToggle.onOptionsItemSelected(item)) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	public void onScanClick(View view) {
+		Intent intent = new Intent(this, AddNewBagStartActivity.class);
+		startActivity(intent);
 	}
 	
-	// public void createNewPlace(View view){
-	// Intent placeIntent = new Intent(this, CreateNewPlace.class);
-	// startActivity(placeIntent);
-	// }
-	//
-	// public void createNewItem(View view){
-	// Intent itemIntent = new Intent(this, CreateNewItem.class);
-	// startActivity(itemIntent);
-	// }
-	//
-	// public void searchForNewBag(View view){
-	// Intent searchBagIntent = new Intent(this, AddNewBagStartActivity.class);
-	// startActivity(searchBagIntent);
-	// }
-	//
-	// public void startSettings(View view){
-	// Intent settingsIntent = new Intent(this, SettingsActivity.class);
-	// startActivity(settingsIntent);
-	// }
-
+	public void startMap(View view){
+		Intent intent = new Intent(this, ShowMap.class);
+		startActivity(intent);
+	}
 }
