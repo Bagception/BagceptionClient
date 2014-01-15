@@ -6,6 +6,7 @@ import android.os.IBinder;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
 import de.uniulm.bagception.client.bluetooth.middleware.BluetoothSystem;
+import de.uniulm.bagception.client.caching.ImageCachingSystem;
 import de.uniulm.bagception.client.items.ItemsSystem;
 import de.uniulm.bagception.client.notification.NotificationSystem;
 import de.uniulm.bagception.client.ui.launcher.MainGUI;
@@ -15,19 +16,29 @@ public class BagceptionClientService extends Service{
 	
 	private BundleMessageActor bluetoothMessageActor;
 	private BundleMessageActor notificationMessageActor;
+	private BundleMessageActor itemActor;
+
+	private BundleMessageActor imageCachingActor;
 	
 	public BundleMessageHelper bmHelper;
 	
 	private ItemsSystem itemSys; 
-	private BundleMessageActor itemActor;
 	
 	private BluetoothSystem btSys;
 	private NotificationSystem notifySys;
 	
 	
+
+	
+	
 	@Override
 	public void onCreate() {
+		
 		bmHelper = new BundleMessageHelper(this);
+		
+		ImageCachingSystem.initInstance(this);
+		imageCachingActor = new BundleMessageActor(ImageCachingSystem.getInstance());
+		imageCachingActor.register(this);
 		
 		btSys = new BluetoothSystem(this);
 		notifySys = new NotificationSystem(this);
@@ -63,6 +74,8 @@ public class BagceptionClientService extends Service{
 		notificationMessageActor.unregister(this);
 		itemActor.unregister(this);
 		stopForeground(true);
+		imageCachingActor.unregister(this);
+
 	}
 	
 	

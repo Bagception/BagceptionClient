@@ -79,6 +79,7 @@
             android:name="de.uniulm.bagception.client.ui.launcher.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
+
     </application>
 
 </manifest>
