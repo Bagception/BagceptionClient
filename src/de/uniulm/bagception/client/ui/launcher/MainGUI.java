@@ -1,0 +1,82 @@
+package de.uniulm.bagception.client.ui.launcher;
+
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
+import de.uniulm.bagception.client.R;
+
+public class MainGUI extends Activity {
+	final String[] data = { "Übersicht", "Alle Items", "Gefundene Items",
+			"Item erstellen", "Ort erstellen", "Neue Tasche", "Einstellungen" };
+	final String[] fragments = {
+			"de.uniulm.bagception.client.ui.launcher.OverviewFragment",
+			"de.uniulm.bagception.client.ui.launcher.AllItemsFragment",
+			"de.uniulm.bagception.client.ui.launcher.ItemsFoundFragment",
+			"de.uniulm.bagception.client.ui.launcher.CreateNewItemFragment",
+			"de.uniulm.bagception.client.ui.launcher.CreateNewPlaceFragment",
+			"de.uniulm.bagception.client.ui.launcher.NewBagFragment",
+			"de.uniulm.bagception.client.ui.launcher.SettingsFragment" };
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main_gui);
+
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActionBar()
+				.getThemedContext(), android.R.layout.simple_list_item_1, data);
+
+		final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+		final ListView navList = (ListView) findViewById(R.id.drawer);
+		navList.setAdapter(adapter);
+		navList.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					final int pos, long id) {
+				drawer.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+					@Override
+					public void onDrawerClosed(View drawerView) {
+						super.onDrawerClosed(drawerView);
+						FragmentTransaction tx = getFragmentManager()
+								.beginTransaction();
+						tx.replace(R.id.main, Fragment.instantiate(
+								MainGUI.this, fragments[pos]));
+						tx.commit();
+					}
+				});
+				drawer.closeDrawer(navList);
+			}
+		});
+		FragmentTransaction tx = getFragmentManager().beginTransaction();
+		tx.replace(R.id.main, Fragment.instantiate(MainGUI.this, fragments[0]));
+		tx.commit();
+	}
+
+	// public void createNewPlace(View view){
+	// Intent placeIntent = new Intent(this, CreateNewPlace.class);
+	// startActivity(placeIntent);
+	// }
+	//
+	// public void createNewItem(View view){
+	// Intent itemIntent = new Intent(this, CreateNewItem.class);
+	// startActivity(itemIntent);
+	// }
+	//
+	// public void searchForNewBag(View view){
+	// Intent searchBagIntent = new Intent(this, AddNewBagStartActivity.class);
+	// startActivity(searchBagIntent);
+	// }
+	//
+	// public void startSettings(View view){
+	// Intent settingsIntent = new Intent(this, SettingsActivity.class);
+	// startActivity(settingsIntent);
+	// }
+
+}

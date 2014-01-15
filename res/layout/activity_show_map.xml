@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <de.uniulm.bagception.client.osm.HandleMapEvents
+        android:id="@+id/map"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+    <SeekBar
+        android:id="@+id/meterSlider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/okBtn"
+        android:max="1000"
+        android:progress="50" />
+
+    <TextView
+        android:id="@+id/meter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/okBtn"
+        android:layout_alignLeft="@+id/okBtn"
+        android:layout_alignParentRight="true"
+        android:text="50"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/okBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/meterSlider"
+        android:onClick="onOkBtnClicked"
+        android:text="ok" />
+
+</RelativeLayout>

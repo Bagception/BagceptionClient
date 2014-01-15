@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">BagceptionClient</string>
+    <string name="title_activity_start_service">StartServiceActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_bagception_list">Items</string>
+    <string name="title_bagception_detail">Bagception Detail</string>
+    <string name="app_name">Bagception_Database</string>
+    <string name="title_item_detail">Item Detail</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_items">Alle Gegenstände</string>
+    <string name="item">Gegenstand</string>
+    <string name="name">Name</string>
+    <string name="des">TagID</string>
+    <string name="vis">Sichtbarkeit</string>
+    <string name="foto">Bild</string>
+    <string name="tag">Tag ID</string>
+    <string name="save">Speichern</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="headText">Menü</string>
+    <string name="place">Ort hinzufügen</string>
+    <string name="activity">Aktivität hinzufügen</string>
+    <string name="context">Kontext hinzufügen</string>
+    <string name="title_activity_add_place">AddPlace</string>
+    <string name="title_activity_add">AddActivity</string>
+    <string name="title_activity_add_context">AddContext</string>
+    <string name="hello_item">Item</string>
+    <string name="hello_place">Place</string>
+    <string name="hello_activity">Activity</string>
+    <string name="hello_context">Context</string>
+    <string name="itemName">Name</string>
+    <string name="description">Beschreibung</string>
+    <string name="itemVisibility">Sichtbarkeit</string>
+    <string name="itemPhoto">Bild</string>
+    <string name="itemPlace">Adresse</string>
+    <string name="rb1">Privat</string>
+    <string name="rb2">Öffentlich</string>
+    <string name="addTag">Tag hinzufügen</string>
+    <string name="chooseItem">Gegenstände</string>
+    <string name="chooseButton">Auswahl</string>
+    <string name="football">FUßBALL</string>
+    <string name="forgot">Vergessen:</string>
+    <string name="additionalFunctions">Weitere Funktionen:</string>
+    <string name="changeItem">Gegenstand bearbeiten</string>
+    <string name="showItems">Gegenstände</string>
+    <string name="showFoundItems">Zeige gefundene Items</string>
+    <string name="FoundItemsTitle">Gefundene Items</string>
+    <string name="no_items">Keine Gegenstände vorhanden</string>
+
+    <string-array name="ids">
+        <item>Found ID 1</item>
+        <item>Found ID 2</item>
+        <item>Found ID XY</item>
+    </string-array>
+    <string-array name="visibility">
+        <item>Öffentlich</item>
+        <item>Privat</item>
+    </string-array>
+
+    <string name="title_activity_test__gui_1">Test_GUI_1</string>
+    <string name="title_activity_test__gui_2">Test_GUI_2</string>
+    <string name="title_activity_add_new_bag">AddNewBagActivity</string>
+    <string name="title_activity_show_found_tags">ShowFoundTags</string>
+    <string name="title_activity_item_overview">ItemOverviewActivity</string>
+    <string name="title_activity_items_detail">ItemsDetailActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="hello">Hello World, Todo!</string>
+    <string name="app_name">Todo</string>
+    <string name="no_todos">Currently there are no Todo items maintained</string>
+    <string name="menu_insert">Add Item</string>
+    <string name="menu_delete">Delete Todo</string>
+    <string name="todo_summary">Summary</string>
+    <string name="todo_description">Delete Todo</string>
+    <string name="todo_edit_summary">Summary</string>
+    <string name="todo_edit_description">Description</string>
+    <string name="todo_edit_confirm">Confirm</string>
+    <string name="title_activity_item__overview_">Item_Overview_Activity</string>
+    <string name="title_activity_item_list">ItemListActivity</string>
+    <string name="title_activity_item_edit">ItemEditActivity</string>
+    <string name="title_activity_main_gui">MainGUI</string>
+    <string name="title_activity_create_new_place">CreateNewPlace</string>
+    <string name="title_activity_start">StartActivity</string>
+    <string name="title_activity_show_map">ShowMap</string>
+    <string name="title_activity_create_new_item">CreateNewItem</string>
+    <string name="title_activity_take_picture">TakePicture</string>
+
+</resources>

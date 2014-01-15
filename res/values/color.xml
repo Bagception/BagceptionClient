@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <color name="light_blue">#00ccff</color>
+    <color name="background">#5F5F5F</color>
+	<color name="text">#3a3a3a</color>
+	<color name="dark_text">#000000</color>
+	<color name="listitem">#767676</color>
+    
+</resources>
