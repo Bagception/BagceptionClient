@@ -1,5 +1,7 @@
 package de.uniulm.bagception.client.items;
 
+import java.util.List;
+
 import org.json.JSONException;
 
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.widget.Toast;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
+import de.uniulm.bagception.bundlemessageprotocol.entities.ContainerStateUpdate;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.client.service.BagceptionClientService;
 
@@ -24,7 +27,6 @@ public class ItemsSystem implements BundleMessageReactor{
 
 	@Override
 	public void onBundleMessageRecv(Bundle b) {
-		Log.d("bag","bundlemessagerecv12");
 		BUNDLE_MESSAGE msg = BundleMessage.getInstance().getBundleMessageType(b);
 		switch (msg){
 			case ITEM_FOUND:
@@ -33,7 +35,7 @@ public class ItemsSystem implements BundleMessageReactor{
 				i = BundleMessage.getInstance().toItemFound(b);
 				
 				Toast.makeText(mainService,"Item found: "+i.getName() , Toast.LENGTH_SHORT).show();
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			break;
@@ -41,7 +43,7 @@ public class ItemsSystem implements BundleMessageReactor{
 			try {
 				i = BundleMessage.getInstance().toItemFound(b);
 				Toast.makeText(mainService, "item not found: "+i.getIds().get(0), Toast.LENGTH_SHORT).show();
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			break;
@@ -87,7 +89,6 @@ public class ItemsSystem implements BundleMessageReactor{
 
 	@Override
 	public void onBundleMessageSend(Bundle b) {
-		Log.d("bag","bundlemessagesend");
 	}
 
 	@Override
