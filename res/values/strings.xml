@@ -87,5 +87,8 @@
     <string name="title_activity_show_map">ShowMap</string>
     <string name="title_activity_create_new_item">CreateNewItem</string>
     <string name="title_activity_take_picture">TakePicture</string>
+    
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 
 </resources>

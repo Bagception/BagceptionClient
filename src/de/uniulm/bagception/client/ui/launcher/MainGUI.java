@@ -3,17 +3,23 @@ package de.uniulm.bagception.client.ui.launcher;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
 import de.uniulm.bagception.client.R;
 
 public class MainGUI extends Activity {
+
+	private ActionBarDrawerToggle mDrawerToggle;
+
 	final String[] data = { "Übersicht", "Alle Items", "Gefundene Items",
 			"Item erstellen", "Ort erstellen", "Neue Tasche", "Einstellungen" };
 	final String[] fragments = {
@@ -54,11 +60,46 @@ public class MainGUI extends Activity {
 				drawer.closeDrawer(navList);
 			}
 		});
+
+		mDrawerToggle = new ActionBarDrawerToggle(this, drawer,
+				R.drawable.ic_drawer, R.string.drawer_open,
+				R.string.drawer_close);
+
+		Log.d("Mudit",
+				"mDrawerToggle" + mDrawerToggle.isDrawerIndicatorEnabled());
+
+		drawer.setDrawerListener(mDrawerToggle);
+
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setHomeButtonEnabled(true);
+
+		getActionBar().setDisplayShowHomeEnabled(true);
+
 		FragmentTransaction tx = getFragmentManager().beginTransaction();
 		tx.replace(R.id.main, Fragment.instantiate(MainGUI.this, fragments[0]));
 		tx.commit();
 	}
 
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+	    super.onPostCreate(savedInstanceState);
+	    mDrawerToggle.syncState();
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+	    super.onConfigurationChanged(newConfig);
+	    mDrawerToggle.onConfigurationChanged(newConfig);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    if (mDrawerToggle.onOptionsItemSelected(item)) {
+	        return true;
+	    }
+	    return super.onOptionsItemSelected(item);
+	}
+	
 	// public void createNewPlace(View view){
 	// Intent placeIntent = new Intent(this, CreateNewPlace.class);
 	// startActivity(placeIntent);
