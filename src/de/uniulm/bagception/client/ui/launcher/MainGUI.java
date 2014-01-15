@@ -34,6 +34,9 @@ public class MainGUI extends Activity {
 			"de.uniulm.bagception.client.ui.launcher.NewBagFragment",
 			"de.uniulm.bagception.client.ui.launcher.SettingsFragment" };
 
+	final String[] data2 = {"Test1", "Test2"};
+	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -41,11 +44,16 @@ public class MainGUI extends Activity {
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActionBar()
 				.getThemedContext(), android.R.layout.simple_list_item_1, data);
+		
+//		ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getActionBar()
+//				.getThemedContext(), android.R.layout.simple_list_item_1, data2);
 
 		final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-		final ListView navList = (ListView) findViewById(R.id.drawer);
-		navList.setAdapter(adapter);
-		navList.setOnItemClickListener(new OnItemClickListener() {
+		final ListView navListLeft = (ListView) findViewById(R.id.drawer);
+//		final ListView navListRight = (ListView) findViewById(R.id.drawerRight);
+		navListLeft.setAdapter(adapter);
+//		navListRight.setAdapter(adapter2);
+		navListLeft.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					final int pos, long id) {
@@ -60,7 +68,7 @@ public class MainGUI extends Activity {
 						tx.commit();
 					}
 				});
-				drawer.closeDrawer(navList);
+				drawer.closeDrawer(navListLeft);
 			}
 		});
 
