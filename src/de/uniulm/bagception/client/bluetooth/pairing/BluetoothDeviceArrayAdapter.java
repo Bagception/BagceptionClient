@@ -1,5 +1,6 @@
 package de.uniulm.bagception.client.bluetooth.pairing;
 
+import de.uniulm.bagception.client.ui.launcher.NewBagFragment;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,8 +11,8 @@ import android.widget.TextView;
 
 public class BluetoothDeviceArrayAdapter extends ArrayAdapter<BluetoothDevice> {
 
-	public BluetoothDeviceArrayAdapter(Context context) {
-		super(context, android.R.layout.simple_list_item_1);
+	public BluetoothDeviceArrayAdapter(Context newBagFragment) {
+		super(newBagFragment, android.R.layout.simple_list_item_1);
 	}
 	
 	@Override
