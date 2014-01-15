@@ -15,8 +15,11 @@ public class ItemsSystem implements BundleMessageReactor{
 
 	private final BagceptionClientService mainService;
 	
+	public static Item DEBUGITEM;
+	
 	public ItemsSystem(BagceptionClientService mainService) {
 		this.mainService = mainService;
+		
 	}
 
 	@Override
@@ -42,6 +45,40 @@ public class ItemsSystem implements BundleMessageReactor{
 				e.printStackTrace();
 			}
 			break;
+
+			
+			case CONTAINER_STATUS_UPDATE:
+				ContainerStateUpdate statusUpdate = ContainerStateUpdate.fromJSON(BundleMessage.getInstance().extractObject(b));
+				
+				StringBuilder sb = new StringBuilder();
+				List<Item> itemsIs = statusUpdate.getItemList();
+				List<Item> itemsMust = statusUpdate.getActivity().getItemsForActivity();
+				sb.append("Update: \n");
+				sb.append("Items in Bag:");
+				sb.append("\n");
+				for(Item item:itemsIs){
+					sb.append(item.getName());
+					sb.append("\n");
+					if(item.getImageHash()>0){
+						DEBUGITEM=item;
+					}
+				}
+				sb.append("\n");
+				sb.append("Activity: ");
+				sb.append(statusUpdate.getActivity().getName());
+				sb.append("\n");
+				sb.append("Items for activity:");
+				sb.append("\n");
+				
+				for(Item item:itemsMust){
+					sb.append(item.getName());
+					sb.append("\n");
+				}
+				sb.append("\n");
+				Toast.makeText(mainService, sb.toString(), Toast.LENGTH_LONG).show();
+				break;
+			
+
 			default:break;
 				
 			
