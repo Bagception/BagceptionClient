@@ -8,5 +8,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hier kommt die Übersicht"/>
+    
+      <ListView
+            android:id="@+id/itemsOverview"
+            android:layout_width="fill_parent"
+            android:layout_height="170dp" />
 
 </LinearLayout>
