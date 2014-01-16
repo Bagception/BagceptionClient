@@ -63,6 +63,7 @@ public class BagceptionClientService extends Service{
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		bmHelper.sendCommandBundle(Command.TRIGGER_SCAN_DEVICES.toBundle());
 		Intent sa = new Intent(this, MainGUI.class);
+		
 		sa.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(sa);
 		return super.onStartCommand(intent, flags, startId);
