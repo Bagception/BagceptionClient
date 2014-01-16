@@ -1,6 +1,8 @@
 package de.uniulm.bagception.client;
 
+import android.app.DialogFragment;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -86,6 +88,9 @@ public class ConnectivityFragment extends Fragment implements BundleMessageReact
 			break;
 			
 		case DISCONNECTED:
+			FragmentManager fm = getActivity().getFragmentManager();
+			DialogFragment dialog = new DialogFragment();
+			dialog.show(fm, "Connection lost");
 			connectedString.setText("disconnected");
 			connectedString.setTextColor(Color.RED);
 			break;
