@@ -8,12 +8,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".Debug" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
-
     <Button
         android:id="@+id/imageDebugButton"
         android:layout_width="wrap_content"
@@ -25,14 +19,14 @@
         android:onClick="debugClick"
         android:text="Button" />
 
-    <ImageView
-        android:id="@+id/imageDebugView"
+    <de.uniulm.bagception.client.items.AutoUpdateableItemView
+        android:id="@+id/autoUpdateableItemView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
-        android:layout_marginLeft="60dp"
-        android:layout_marginTop="20dp"
-        android:layout_toRightOf="@+id/textView1"
-         />
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="46dp"
+        android:layout_marginTop="92dp"
+        android:layout_toLeftOf="@+id/imageDebugButton"
+        android:src="@drawable/service_icon" />
 
 </RelativeLayout>

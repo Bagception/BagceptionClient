@@ -80,6 +80,11 @@
             android:label="@string/title_activity_settings" >
         </activity>
 
+         <activity
+            android:name="de.uniulm.bagception.client.debugactivities.Debug"
+            android:label="Debug" >
+        </activity>
+        
     </application>
 
 </manifest>

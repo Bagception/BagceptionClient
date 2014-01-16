@@ -2,16 +2,15 @@ package de.uniulm.bagception.client.items;
 
 import java.util.List;
 
-import org.json.JSONException;
-
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.bundlemessageprotocol.entities.ContainerStateUpdate;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
+import de.uniulm.bagception.client.debugactivities.Debug;
 import de.uniulm.bagception.client.service.BagceptionClientService;
 
 public class ItemsSystem implements BundleMessageReactor{
@@ -78,6 +77,9 @@ public class ItemsSystem implements BundleMessageReactor{
 				}
 				sb.append("\n");
 				Toast.makeText(mainService, sb.toString(), Toast.LENGTH_LONG).show();
+				Intent sa = new Intent(mainService, Debug.class);
+				sa.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				mainService.startActivity(sa);
 				break;
 			
 

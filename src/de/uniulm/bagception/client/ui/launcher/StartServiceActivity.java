@@ -1,11 +1,9 @@
 package de.uniulm.bagception.client.ui.launcher;
 
+import android.app.Activity;
+import android.os.Bundle;
 import de.uniulm.bagception.client.Loader;
 import de.uniulm.bagception.client.R;
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
 
 public class StartServiceActivity extends Activity {
 

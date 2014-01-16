@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.util.SparseArray;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
@@ -86,7 +87,7 @@ public class ImageCachingSystem implements BundleMessageReactor{
 	public void onBundleMessageRecv(Bundle b) {
 		switch (BundleMessage.getInstance().getBundleMessageType(b)){
 			case IMAGE_REPLY:
-
+				Log.d("debug", "image reply");
 				JSONObject obj = BundleMessage.getInstance().extractObject(b);
 				String deserImg = obj.get("img").toString();
 				Bitmap bmp = PictureSerializer.deserialize(deserImg);
