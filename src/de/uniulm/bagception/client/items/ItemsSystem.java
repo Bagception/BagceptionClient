@@ -2,11 +2,8 @@ package de.uniulm.bagception.client.items;
 
 import java.util.List;
 
-<<<<<<< HEAD
 import android.content.Context;
-=======
 import android.content.Intent;
->>>>>>> 4ddefaf311ef9f0b75fcd15f744bc8a568452ad9
 import android.os.Bundle;
 import android.widget.Toast;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
@@ -14,11 +11,7 @@ import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.bundlemessageprotocol.entities.ContainerStateUpdate;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
-<<<<<<< HEAD
-=======
 import de.uniulm.bagception.client.debugactivities.Debug;
-import de.uniulm.bagception.client.service.BagceptionClientService;
->>>>>>> 4ddefaf311ef9f0b75fcd15f744bc8a568452ad9
 
 public class ItemsSystem implements BundleMessageReactor{
 
@@ -63,14 +56,10 @@ public class ItemsSystem implements BundleMessageReactor{
 					sb.append("\n");
 				}
 				sb.append("\n");
-<<<<<<< HEAD
 				Toast.makeText(context, sb.toString(), Toast.LENGTH_LONG).show();
-=======
-				Toast.makeText(mainService, sb.toString(), Toast.LENGTH_LONG).show();
-				Intent sa = new Intent(mainService, Debug.class);
+				Intent sa = new Intent(context, Debug.class);
 				sa.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				mainService.startActivity(sa);
->>>>>>> 4ddefaf311ef9f0b75fcd15f744bc8a568452ad9
+				context.startActivity(sa);
 				break;
 			
 
