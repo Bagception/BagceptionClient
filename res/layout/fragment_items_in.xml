@@ -4,7 +4,8 @@
     android:layout_gravity="center"
     android:orientation="vertical" >
 
-    <TextView 
+    <ListView
+        android:id="@+id/itemsIn" 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Bla"/>
