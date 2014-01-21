@@ -1,5 +1,7 @@
 package de.uniulm.bagception.client.ui.launcher;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
@@ -24,6 +26,48 @@ public class ItemsInFragment extends Fragment implements BundleMessageReactor {
 	private ListView itemsStatusView;
 	private ItemListArrayAdapter itemListAd;
 	private BundleMessageActor bmActor;
+	private OverviewFragment fragment;
+
+	public void setParentFragment(OverviewFragment fragment) {
+		this.fragment = fragment;
+	}
+
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		if (fragment == null) {
+			return;
+		}
+		ContainerStateUpdate update = fragment.getItemUpdate();
+		if (update != null) {
+			updateView(update);
+		}
+		super.onResume();
+	}
+
+	public void updateView(ContainerStateUpdate update) {
+		// TODO view
+		List<Item> itemsIn = update.getItemList();
+		List<Item> itemsMustBeIn = update.getActivity().getItemsForActivity();
+		itemListAd.clear();
+		
+		if(itemsMustBeIn.contains(itemsIn)){
+			Toast.makeText(getActivity(), "List is in list", Toast.LENGTH_SHORT).show();
+		}else{
+//			Log.d("isIn", itemsIn.toString());
+//			Log.d("mustBeIn", itemsMustBeIn.toString());
+		}
+		
+		for (Item item : itemsIn) {
+			// sb.append(item.getName());
+			// sb.append("\n");
+			// itemListAd.clear();
+
+			itemListAd.add(item);
+			//if()
+			// itemListAd.add(count);
+		}
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,81 +81,15 @@ public class ItemsInFragment extends Fragment implements BundleMessageReactor {
 		itemsStatusView = (ListView) root.findViewById(R.id.itemsIn);
 		itemListAd = new ItemListArrayAdapter(getActivity());
 		itemsStatusView.setAdapter(itemListAd);
+
 		return root;
-	}
-
-	public void onBundleMessageRecv(Bundle b) {
-		BUNDLE_MESSAGE msg = BundleMessage.getInstance()
-				.getBundleMessageType(b);
-		switch (msg) {
-		case ITEM_FOUND:
-			Item i;
-			try {
-				i = BundleMessage.getInstance().toItemFound(b);
-				Log.d("DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "WAAAAAAAAAAAAAAAAAAAAAAAAAAH");
-				Toast.makeText(getActivity(), "Item found: " + i.getName(),
-						Toast.LENGTH_SHORT).show();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			break;
-		case ITEM_NOT_FOUND:
-			try {
-				i = BundleMessage.getInstance().toItemFound(b);
-				Toast.makeText(getActivity(),
-						"item not found: " + i.getIds().get(0),
-						Toast.LENGTH_SHORT).show();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			break;
-
-		case CONTAINER_STATUS_UPDATE:
-			itemListAd.clear();
-			ContainerStateUpdate statusUpdate = ContainerStateUpdate
-					.fromJSON(BundleMessage.getInstance().extractObject(b));
-			StringBuilder sb = new StringBuilder();
-			List<Item> itemsIs = statusUpdate.getItemList();
-			List<Item> itemsMust = statusUpdate.getActivity()
-					.getItemsForActivity();
-			sb.append("Update: \n");
-			sb.append("Items in Bag:");
-			sb.append("\n");
-			for (Item item : itemsIs) {
-				sb.append(item.getName());
-				sb.append("\n");
-				//itemListAd.clear();
-				itemListAd.add(item);
-				// itemListAd.add(count);
-			}
-			sb.append("\n");
-			sb.append("Activity: ");
-			sb.append(statusUpdate.getActivity().getName());
-			sb.append("\n");
-			sb.append("Items for activity:");
-			sb.append("\n");
-
-			for (Item item : itemsMust) {
-				sb.append(item.getName());
-				sb.append("\n");
-			}
-			sb.append("\n");
-			Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG)
-					.show();
-			break;
-
-		default:
-			break;
-
-		}
-
 	}
 
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		 bmActor = new BundleMessageActor(this);
-		 bmActor.register(getActivity());
+		bmActor = new BundleMessageActor(this);
+		bmActor.register(getActivity());
 	}
 
 	@Override
@@ -119,7 +97,7 @@ public class ItemsInFragment extends Fragment implements BundleMessageReactor {
 		bmActor.unregister(getActivity());
 		super.onDetach();
 	}
-	
+
 	@Override
 	public void onBundleMessageSend(Bundle b) {
 		// TODO Auto-generated method stub
@@ -152,6 +130,12 @@ public class ItemsInFragment extends Fragment implements BundleMessageReactor {
 
 	@Override
 	public void onError(Exception e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onBundleMessageRecv(Bundle b) {
 		// TODO Auto-generated method stub
 
 	}

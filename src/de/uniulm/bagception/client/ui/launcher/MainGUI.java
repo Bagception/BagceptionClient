@@ -23,19 +23,16 @@ public class MainGUI extends Activity {
 
 	private ActionBarDrawerToggle mDrawerToggle;
 
-	final String[] data = { "Übersicht", "Alle Items", "Gefundene Items",
-			"Item erstellen", "Ort erstellen", "Neue Tasche", "Einstellungen" };
+	final String[] data = { "Übersicht", "Item erstellen", "Ort erstellen",
+			"Neue Tasche", "Einstellungen" };
 	final String[] menueFragments = {
 			"de.uniulm.bagception.client.ui.launcher.OverviewFragment",
-			"de.uniulm.bagception.client.ui.launcher.AllItemsFragment",
-			"de.uniulm.bagception.client.ui.launcher.ItemsFoundFragment",
 			"de.uniulm.bagception.client.ui.launcher.CreateNewItemFragment",
 			"de.uniulm.bagception.client.ui.launcher.CreateNewPlaceFragment",
 			"de.uniulm.bagception.client.ui.launcher.NewBagFragment",
 			"de.uniulm.bagception.client.ui.launcher.SettingsFragment" };
 
-	final String[] data2 = {"Test1", "Test2"};
-	
+	final String[] data2 = { "Test1", "Test2" };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,15 +40,17 @@ public class MainGUI extends Activity {
 		setContentView(R.layout.activity_main_gui);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActionBar()
 				.getThemedContext(), android.R.layout.simple_list_item_1, data);
-		
-//		ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getActionBar()
-//				.getThemedContext(), android.R.layout.simple_list_item_1, data2);
+
+		// ArrayAdapter<String> adapter2 = new
+		// ArrayAdapter<String>(getActionBar()
+		// .getThemedContext(), android.R.layout.simple_list_item_1, data2);
 
 		final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 		final ListView navListLeft = (ListView) findViewById(R.id.drawer);
-//		final ListView navListRight = (ListView) findViewById(R.id.drawerRight);
+		// final ListView navListRight = (ListView)
+		// findViewById(R.id.drawerRight);
 		navListLeft.setAdapter(adapter);
-//		navListRight.setAdapter(adapter2);
+		// navListRight.setAdapter(adapter2);
 		navListLeft.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
@@ -115,8 +114,8 @@ public class MainGUI extends Activity {
 		Intent intent = new Intent(this, AddNewBagStartActivity.class);
 		startActivity(intent);
 	}
-	
-	public void startMap(View view){
+
+	public void startMap(View view) {
 		Intent intent = new Intent(this, ShowMap.class);
 		startActivity(intent);
 	}
