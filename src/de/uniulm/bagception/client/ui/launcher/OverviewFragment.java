@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView.FindListener;
+import android.widget.TextView;
 import android.widget.Toast;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
@@ -31,6 +33,8 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 	private ItemsNeedlessFragment itemsNeedlessFragment;
 	private ItemsSuggFragment itemsSuggFragment;
 
+	private TextView currentActivityView;
+
 	private ActionBar.Tab itemsInTab;
 	private ActionBar.Tab itemsMissTab;
 	ActionBar.Tab itemsNeedlessTab;
@@ -45,6 +49,8 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		ViewGroup root = (ViewGroup) inflater.inflate(
 				R.layout.fragment_overview, null);
 		getActivity().setTitle("Übersicht");
+
+		currentActivityView = (TextView) root.findViewById(R.id.test);
 
 		ActionBar actionBar = getActivity().getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -90,7 +96,9 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		case CONTAINER_STATUS_UPDATE:
 			statusUpdate = ContainerStateUpdate.fromJSON(BundleMessage
 					.getInstance().extractObject(b));
-
+			String currentActivity = statusUpdate.getActivity().getName();
+			currentActivityView.setText("Aktuelle Aktivität: "
+					+ currentActivity);
 			itemsInFragment.updateView(statusUpdate);
 			itemsMissFragment.updateView(statusUpdate);
 			itemsNeedlessFragment.updateView(statusUpdate);
@@ -104,10 +112,12 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			if (itemsIn.size() == 0) {
 				itemsInTab.setText("Enthalten" + " (0)");
 				itemsNeedlessTab.setText("Überflüssig (0)");
-				itemsMissTab.setText("Fehlend " + "(" + copiedMustItems.size() + ")");
+				itemsMissTab.setText("Fehlend " + "(" + copiedMustItems.size()
+						+ ")");
 			} else {
 				itemsInTab.setText("Enthalten" + " (" + itemsIn.size() + ")");
-				itemsMissTab.setText("Fehlend " + "(" + copiedMustItems.size() + ")");
+				itemsMissTab.setText("Fehlend " + "(" + copiedMustItems.size()
+						+ ")");
 				itemsNeedlessTab.setText("Überflüssig " + "("
 						+ needlessItems.size() + ")");
 			}
@@ -121,12 +131,15 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 					Log.d("itemsIn size: ", "" + itemsIn.size());
 					if (bbb == false) {
 						needlessItems.add(item);
-						itemsNeedlessTab.setText("Überflüssig " + "(" + needlessItems.size() + ")");
+						itemsNeedlessTab.setText("Überflüssig " + "("
+								+ needlessItems.size() + ")");
 					}
-				}else if(bbb == true){
+				} else if (bbb == true) {
 					copiedMustItems.remove(item);
-					itemsNeedlessTab.setText("Überflüssig " + "(" + needlessItems.size() + ")");
-					itemsMissTab.setText("Fehlende " + "(" + copiedMustItems.size() + ")");
+					itemsNeedlessTab.setText("Überflüssig " + "("
+							+ needlessItems.size() + ")");
+					itemsMissTab.setText("Fehlende " + "("
+							+ copiedMustItems.size() + ")");
 				}
 
 			}

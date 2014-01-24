@@ -15,9 +15,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
+import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
+import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.client.R;
 import de.uniulm.bagception.client.bluetooth.pairing.AddNewBagStartActivity;
 import de.uniulm.bagception.client.osm.ShowMap;
+import de.uniulm.bagception.client.pictures.TakePicture;
 
 public class MainGUI extends Activity {
 
@@ -112,4 +116,15 @@ public class MainGUI extends Activity {
 		Intent intent = new Intent(this, ShowMap.class);
 		startActivity(intent);
 	}
+	
+	public void takePicture(View view){
+		Intent intent = new Intent(this, TakePicture.class);
+		startActivity(intent);
+	}
+	
+//	@Override
+//	protected void onResume() {
+//		super.onResume();
+//		new BundleMessageHelper(this).sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.CONTAINER_STATUS_UPDATE_REQUEST, ""));
+//	}
 }

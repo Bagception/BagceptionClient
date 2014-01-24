@@ -6,9 +6,17 @@
 
     <LinearLayout
         android:id="@+id/fragment_container"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="25dp"
+        android:layout_weight="0.04"
+        android:orientation="vertical" >
+
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Aktuelle Aktivität: " />
 
 </LinearLayout>
