@@ -8,6 +8,7 @@ import java.util.UUID;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
+import android.os.Debug;
 import android.util.Log;
 import de.philipphock.android.lib.logging.LOG;
 import de.uniulm.bagception.bluetooth.BagceptionBTServiceInterface;
@@ -19,18 +20,13 @@ import de.uniulm.bagception.protocol.bundle.BundleProtocolCallback;
 import de.uniulm.bagception.protocol.bundle.constants.Command;
 import de.uniulm.bagception.protocol.bundle.constants.StatusCode;
 
-public class BluetoothSystem implements 
-	CheckReachableCallback,
-	ResponseSystem.Interaction,
-	BundleProtocolCallback,
-	BTClient.ClientStatusCallback,
-	BundleMessageReactor{
-	
-	
-	
+public class BluetoothSystem implements CheckReachableCallback,
+		ResponseSystem.Interaction, BundleProtocolCallback,
+		BTClient.ClientStatusCallback, BundleMessageReactor {
+
 	private BTClient btclient;
-	private boolean lastConnectionState_connected=false;
-	
+	private boolean lastConnectionState_connected = false;
+
 	// TODO later, init this with config values
 	private ResponseMode responseMode = ResponseMode.MINIMAL;
 	private ResponseSystem responseSystem;
@@ -44,13 +40,14 @@ public class BluetoothSystem implements
 	private final ArrayList<BluetoothDevice> bagceptionDevicesInRange = new ArrayList<BluetoothDevice>();
 
 	private BluetoothDevice tmp_bt_device_confirm;
-	
+
 	private final BagceptionClientService mainService;
+
 	public BluetoothSystem(BagceptionClientService mainService) {
 		this.mainService = mainService;
 		responseSystem = new ResponseSystem(this);
 	}
-	
+
 	public enum ResponseMode {
 
 		/**
@@ -61,123 +58,117 @@ public class BluetoothSystem implements
 		 * with this design, we can implement smart services that handles
 		 * interactions implicitly
 		 */
-		MINIMAL, 
+		MINIMAL,
 
 		/**
 		 * the service performs operations in background but halts on every
 		 * decision, even if it is the only option(like connection to only one
 		 * device) this mode is intended to be used with your primary smartphone
 		 */
-		MAXIMAL 
+		MAXIMAL
 	}
-	
 
-
-	public void sendResponseBundle(Bundle b){
+	public void sendResponseBundle(Bundle b) {
 		mainService.bmHelper.sendResponseBundle(b);
 	}
-	
+
 	// internal routines
 
-		// states
+	// states
 
-		protected void handleNotConnectedState() {
-			Bundle conn = StatusCode.DISCONNECTED.toBundle();
-			mainService.bmHelper.sendStatusBundle(conn);
+	protected void handleNotConnectedState() {
+		Bundle conn = StatusCode.DISCONNECTED.toBundle();
+		mainService.bmHelper.sendStatusBundle(conn);
+	}
+
+	protected void handleConnectedState() {
+		Bundle conn = StatusCode.CONNECTED.toBundle();
+		conn.putString(StatusCode.EXTRA_KEYS.CONNECTED_DEVICE_NAME,
+				btclient.getRemoteDeviceName());
+		mainService.bmHelper.sendStatusBundle(conn);
+
+	}
+
+	// connect
+
+	protected void connectToAvailableContainer(BluetoothDevice device) {
+		try {
+			btclient = new BTClient(device,
+					BagceptionBTServiceInterface.BT_UUID, this, this);
+			btclient.startListeningForIncomingBytes();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+	}
 
-		protected void handleConnectedState() {
-			Bundle conn = StatusCode.CONNECTED.toBundle();
-			conn.putString(StatusCode.EXTRA_KEYS.CONNECTED_DEVICE_NAME, btclient.getRemoteDeviceName());
-			mainService.bmHelper.sendStatusBundle(conn);
+	// data transmission
 
-		}
-
-		// connect
-
-		protected void connectToAvailableContainer(BluetoothDevice device) {
-			try {
-				btclient = new BTClient(device,
-						BagceptionBTServiceInterface.BT_UUID, this, this);
-				btclient.startListeningForIncomingBytes();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-		// data transmission
-
-
-		/*
-		 * ############################################### ###############
-		 * reachability check ##############
-		 * #################################################
-		 */
-
-		protected void getPairedBagceptionDevicesInRangeAsyncDone() {
-			
-//			//\\\\\\\\\ DEBUG CODE ///////////
-//			if (!DEBUG_SWITCH){
-//				DEBUG_SWITCH=true;
-//			}else{
-//				BluetoothDevice d = bagceptionDevicesInRange.get(0);
-//				bagceptionDevicesInRange.add(d);
-//			}
-//			//////////// DEBUG CODE \\\\\\\\\\
-			
-			if (bagceptionDevicesInRange.size() == 0) {
-				// nothing in range.. pause? //TODO
-			} else if (bagceptionDevicesInRange.size() == 1) {
-				// here we have only one device in range
-
-				final BluetoothDevice device = bagceptionDevicesInRange.get(0);
-
-				switch (responseMode) {
-
-				case MAXIMAL:
-					tmp_bt_device_confirm = device;
-					responseSystem
-							.makeResponse_confirmEstablishingConnection(device);
-
-					break;
-
-				case MINIMAL:
-					// connect to container
-					connectToAvailableContainer(device);
-					break;
-
-				}
-
-			} else {
-				responseSystem
-						.makeResponse_askForSpecificDevice(bagceptionDevicesInRange);
-			}
-		}
-
-		
-		
-		protected synchronized void getPairedBagceptionDevicesInRangeAsync() {
-			LOG.out(this, "begin scanning..");
-			bagceptionDevicesInRange.clear();
-			Set<BluetoothDevice> bonded = btAdapter.getBondedDevices();
-			final UUID serviceUUID = UUID
-					.fromString(BagceptionBTServiceInterface.BT_UUID);
-			for (BluetoothDevice device : bonded) {
-				LOG.out(this, "bond device: " + device.getName());
-				if (BagceptionBluetoothUtil.isBagceptionServer(device)) {
-					LOG.out(this, "bagception device: " + device.getName());
-					pendingDeviceFeedbacks++;
-					BagceptionBluetoothUtil.checkReachable(device, serviceUUID,
-							this);
-				}
-			}
-
-		}
-
-	
-	
 	/*
-	 *  Begin CheckReachableCallback
+	 * ############################################### ###############
+	 * reachability check ##############
+	 * #################################################
+	 */
+
+	protected void getPairedBagceptionDevicesInRangeAsyncDone() {
+
+		// //\\\\\\\\\ DEBUG CODE ///////////
+		// if (!DEBUG_SWITCH){
+		// DEBUG_SWITCH=true;
+		// }else{
+		// BluetoothDevice d = bagceptionDevicesInRange.get(0);
+		// bagceptionDevicesInRange.add(d);
+		// }
+		// //////////// DEBUG CODE \\\\\\\\\\
+
+		if (bagceptionDevicesInRange.size() == 0) {
+			// nothing in range.. pause? //TODO
+		} else if (bagceptionDevicesInRange.size() == 1) {
+			// here we have only one device in range
+
+			final BluetoothDevice device = bagceptionDevicesInRange.get(0);
+
+			switch (responseMode) {
+
+			case MAXIMAL:
+				tmp_bt_device_confirm = device;
+				responseSystem
+						.makeResponse_confirmEstablishingConnection(device);
+
+				break;
+
+			case MINIMAL:
+				// connect to container
+				connectToAvailableContainer(device);
+				break;
+
+			}
+
+		} else {
+			responseSystem
+					.makeResponse_askForSpecificDevice(bagceptionDevicesInRange);
+		}
+	}
+
+	protected synchronized void getPairedBagceptionDevicesInRangeAsync() {
+		LOG.out(this, "begin scanning..");
+		bagceptionDevicesInRange.clear();
+		Set<BluetoothDevice> bonded = btAdapter.getBondedDevices();
+		final UUID serviceUUID = UUID
+				.fromString(BagceptionBTServiceInterface.BT_UUID);
+		for (BluetoothDevice device : bonded) {
+			LOG.out(this, "bond device: " + device.getName());
+			if (BagceptionBluetoothUtil.isBagceptionServer(device)) {
+				LOG.out(this, "bagception device: " + device.getName());
+				pendingDeviceFeedbacks++;
+				BagceptionBluetoothUtil.checkReachable(device, serviceUUID,
+						this);
+			}
+		}
+
+	}
+
+	/*
+	 * Begin CheckReachableCallback
 	 */
 	@Override
 	public void isReachable(BluetoothDevice device, boolean reachable) {
@@ -192,28 +183,22 @@ public class BluetoothSystem implements
 			getPairedBagceptionDevicesInRangeAsyncDone();
 
 		}
-		
+
 	}
-	
+
 	/*
-	   ***********************************
-	    End CheckReachableCallback
-	   ***********************************
+	 * **********************************
+	 * End CheckReachableCallback**********************************
 	 */
 
-	
-	
 	/*
-	   ***********************************
-	 	Begin ResponseSystem.Interaction 
-	   ***********************************
-	*/
+	 * **********************************
+	 * Begin ResponseSystem.Interaction**********************************
+	 */
 	@Override
 	public void interactionFor_askForSpecificDevice(BluetoothDevice d) {
-		connectToAvailableContainer(d);		
+		connectToAvailableContainer(d);
 	}
-
-
 
 	@Override
 	public void interactionFor_confirmEstablishingConnection(boolean connect) {
@@ -222,67 +207,61 @@ public class BluetoothSystem implements
 		} else {
 			// TODO todo?
 		}
-		
-	}
-	/*
-	   ***********************************
-	    End ResponseSystem.Interaction
-	   ***********************************
 
+	}
+
+	/*
+	 * **********************************
+	 * End ResponseSystem.Interaction**********************************
 	 */
 
-
-
 	/*
-	   ***********************************
-	    Begin BundleProtocolCallback
-	   ***********************************
+	 * **********************************
+	 * Begin BundleProtocolCallback**********************************
 	 */
 	@Override
 	public void onBundleRecv(Bundle bundle) {
 		mainService.bmHelper.sendMessageRecvBundle(bundle);
-		
+
 	}
+
 	/*
-	   ***********************************
-	   End BundleProtocolCallback
-	   ***********************************
+	 * **********************************
+	 * End BundleProtocolCallback**********************************
 	 */
 
-
 	/*
-	   ***********************************
-		Begin BTClient.ClientStatusCallback
-	   ***********************************	
-	*/
+	 * **********************************
+	 * Begin BTClient.ClientStatusCallback**********************************
+	 */
 	@Override
 	public void onConnect() {
 		handleConnectedState();
-		responseSystem.makeResponse_bluetoothConnection(true,lastConnectionState_connected!=true);
-		lastConnectionState_connected=true;
+		responseSystem.makeResponse_bluetoothConnection(true,
+				lastConnectionState_connected != true);
+		lastConnectionState_connected = true;
 	}
 
 	@Override
 	public void onDisconnect() {
 		handleNotConnectedState();
-		responseSystem.makeResponse_bluetoothConnection(false,lastConnectionState_connected!=false);
-		lastConnectionState_connected=false;
+		responseSystem.makeResponse_bluetoothConnection(false,
+				lastConnectionState_connected != false);
+		lastConnectionState_connected = false;
 	}
-	/*
-	   ***********************************
-		End BTClient.ClientStatusCallback
-	   ***********************************	
-	*/
-
 
 	/*
-	   ***********************************
-		Begin BundleMessageReactor
-	   ***********************************	
-	*/
+	 * **********************************
+	 * End BTClient.ClientStatusCallback**********************************
+	 */
+
+	/*
+	 * **********************************
+	 * Begin BundleMessageReactor**********************************
+	 */
 	@Override
 	public void onResponseMessage(Bundle b) {
-		//noting to do here
+		// noting to do here
 	}
 
 	@Override
@@ -291,10 +270,10 @@ public class BluetoothSystem implements
 	}
 
 	@Override
-	public void onResponseAnswerMessage(Bundle b){
+	public void onResponseAnswerMessage(Bundle b) {
 		responseSystem.handleInteraction(b);
 	}
-	
+
 	@Override
 	public void onCommandMessage(Bundle b) {
 		Command command = Command.getCommand(b);
@@ -304,7 +283,8 @@ public class BluetoothSystem implements
 			getPairedBagceptionDevicesInRangeAsync();
 			break;
 		case PING:
-			mainService.bmHelper.sendCommandBundle(Command.getCommandBundle(Command.PONG));
+			mainService.bmHelper.sendCommandBundle(Command
+					.getCommandBundle(Command.PONG));
 			break;
 		case PONG:
 			// nothing to do here, Pong is only on client side
@@ -334,7 +314,7 @@ public class BluetoothSystem implements
 			}
 			break;
 		}
-		
+
 	}
 
 	@Override
@@ -342,18 +322,12 @@ public class BluetoothSystem implements
 		e.printStackTrace();
 	}
 
-
-
-
-	//data recv from remote endpont via broadcast
+	// data recv from remote endpont via broadcast
 	@Override
 	public void onBundleMessageRecv(Bundle b) {
-		//noting todo here, this is not delivered by broadcasts
-		
-		
+		// noting todo here, this is not delivered by broadcasts
+
 	}
-
-
 
 	// data received from local endpoint, that is data to be send
 	@Override
@@ -363,13 +337,17 @@ public class BluetoothSystem implements
 
 		}
 
-		btclient.send(b);		
+		if (btclient == null) {
+			Log.d("Client ist null beim Appstart", "Null!");
+		} else {
+
+			btclient.send(b);
+		}
 	}
 
 	/*
-	   ***********************************
-		End BundleMessageReactor
-	   ***********************************	
-	*/
-	
+	 * **********************************
+	 * End BundleMessageReactor**********************************
+	 */
+
 }
