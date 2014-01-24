@@ -1,6 +1,5 @@
 package de.uniulm.bagception.client.service;
 
-import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -10,7 +9,6 @@ import de.uniulm.bagception.client.bluetooth.middleware.BluetoothSystem;
 import de.uniulm.bagception.client.caching.ImageCachingSystem;
 import de.uniulm.bagception.client.items.ItemsSystem;
 import de.uniulm.bagception.client.notification.NotificationSystem;
-import de.uniulm.bagception.client.ui.launcher.ItemsInFragment;
 import de.uniulm.bagception.client.ui.launcher.MainGUI;
 import de.uniulm.bagception.protocol.bundle.constants.Command;
 
