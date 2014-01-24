@@ -1,20 +1,16 @@
 package de.uniulm.bagception.client.ui.launcher;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
-import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
-import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.bundlemessageprotocol.entities.ContainerStateUpdate;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.client.R;
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +23,7 @@ public class ItemsInFragment extends Fragment implements BundleMessageReactor {
 	private ItemListArrayAdapter itemListAd;
 	private BundleMessageActor bmActor;
 	private OverviewFragment fragment;
+
 
 	public void setParentFragment(OverviewFragment fragment) {
 		this.fragment = fragment;
@@ -54,29 +51,18 @@ public class ItemsInFragment extends Fragment implements BundleMessageReactor {
 		if(itemsMustBeIn.contains(itemsIn)){
 			Toast.makeText(getActivity(), "List is in list", Toast.LENGTH_SHORT).show();
 		}else{
-//			Log.d("isIn", itemsIn.toString());
-//			Log.d("mustBeIn", itemsMustBeIn.toString());
 		}
 		
 		for (Item item : itemsIn) {
-			// sb.append(item.getName());
-			// sb.append("\n");
-			// itemListAd.clear();
-
 			itemListAd.add(item);
-			//if()
-			// itemListAd.add(count);
 		}
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// Inflate the layout for this fragment
 		ViewGroup root = (ViewGroup) inflater.inflate(
 				R.layout.fragment_items_in, null);
-		// return inflater.inflate(R.layout.fragment_items_in, container,
-		// false);
 
 		itemsStatusView = (ListView) root.findViewById(R.id.itemsIn);
 		itemListAd = new ItemListArrayAdapter(getActivity());

@@ -1,7 +1,6 @@
 package de.uniulm.bagception.client.ui.launcher;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import android.app.ActionBar;
@@ -26,12 +25,16 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 	public static Context appContext;
 	private BundleMessageActor bmActor;
-	//private ListView itemsStatusView;
-	private ItemListArrayAdapter itemListAd;
 	private ContainerStateUpdate statusUpdate;
 	private ItemsInFragment itemsInFragment;
 	private ItemsMissFragment itemsMissFragment;
-	// private int count = 0;
+	private ItemsNeedlessFragment itemsNeedlessFragment;
+	private ItemsSuggFragment itemsSuggFragment;
+
+	private ActionBar.Tab itemsInTab;
+	private ActionBar.Tab itemsMissTab;
+	ActionBar.Tab itemsNeedlessTab;
+	ActionBar.Tab itemsSuggTab;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,35 +49,38 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		ActionBar actionBar = getActivity().getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		// initiating both tabs and set text to it.
-		ActionBar.Tab ItemsInTab = actionBar.newTab().setText("Enthalten");
-		ActionBar.Tab ItemsMissTab = actionBar.newTab().setText("Fehlend");
-		ActionBar.Tab ItemsRedundantTab = actionBar.newTab().setText("Doppelt");
-		ActionBar.Tab ItemsSuggTab = actionBar.newTab().setText("Vorschlag");
+		itemsInTab = actionBar.newTab().setText("Enthalten (0)");
+		itemsMissTab = actionBar.newTab().setText("Fehlend (0)");
+		itemsNeedlessTab = actionBar.newTab().setText("Überflüssig (0)");
+		itemsSuggTab = actionBar.newTab().setText("Vorschlag");
 
 		itemsInFragment = new ItemsInFragment();
 		itemsInFragment.setParentFragment(this);
 		itemsMissFragment = new ItemsMissFragment();
 		itemsMissFragment.setParentFragment(this);
-		Fragment ItemsRedundantFragment = new ItemsRedundantFragment();
-		Fragment ItemsSuggFragment = new ItemsSuggFragment();
+		itemsNeedlessFragment = new ItemsNeedlessFragment();
+		itemsNeedlessFragment.setParentFragment(this);
+		itemsSuggFragment = new ItemsSuggFragment();
+		itemsSuggFragment.setParentFragment(this);
 
-		ItemsInTab.setTabListener(new ItemTabListener(itemsInFragment));
-		ItemsMissTab.setTabListener(new ItemTabListener(itemsMissFragment));
-		ItemsRedundantTab.setTabListener(new ItemTabListener(
-				ItemsRedundantFragment));
-		ItemsSuggTab.setTabListener(new ItemTabListener(ItemsSuggFragment));
+		itemsInTab.setTabListener(new ItemTabListener(itemsInFragment));
+		itemsMissTab.setTabListener(new ItemTabListener(itemsMissFragment));
+		itemsNeedlessTab.setTabListener(new ItemTabListener(
+				itemsNeedlessFragment));
+		itemsSuggTab.setTabListener(new ItemTabListener(itemsSuggFragment));
 
-		actionBar.addTab(ItemsInTab);
-		actionBar.addTab(ItemsMissTab);
-		actionBar.addTab(ItemsRedundantTab);
-		actionBar.addTab(ItemsSuggTab);
-
-		// itemsStatusView = (ListView) root.findViewById(R.id.itemsOverview);
-		// itemListAd = new ItemListArrayAdapter(getActivity());
-		// itemsStatusView.setAdapter(itemListAd);
+		actionBar.addTab(itemsInTab);
+		actionBar.addTab(itemsMissTab);
+		actionBar.addTab(itemsNeedlessTab);
+		actionBar.addTab(itemsSuggTab);
 
 		return root;
 	}
+
+	List<Item> itemsMust;
+	List<Item> itemsIn;
+	List<Item> needlessItems;
+	List<Item> copiedMustItems;
 
 	public void onBundleMessageRecv(Bundle b) {
 		BUNDLE_MESSAGE msg = BundleMessage.getInstance()
@@ -82,31 +88,55 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		switch (msg) {
 
 		case CONTAINER_STATUS_UPDATE:
-			// itemListAd.clear();
 			statusUpdate = ContainerStateUpdate.fromJSON(BundleMessage
 					.getInstance().extractObject(b));
-			
+
 			itemsInFragment.updateView(statusUpdate);
 			itemsMissFragment.updateView(statusUpdate);
+			itemsNeedlessFragment.updateView(statusUpdate);
+
 			StringBuilder sb = new StringBuilder();
-			List<Item> itemsIs = statusUpdate.getItemList();
-			List<Item> itemsMust = statusUpdate.getActivity()
-					.getItemsForActivity();
+			itemsIn = statusUpdate.getItemList();
+			itemsMust = statusUpdate.getActivity().getItemsForActivity();
+			needlessItems = new ArrayList<Item>();
+			copiedMustItems = new ArrayList<Item>(itemsMust);
+
+			if (itemsIn.size() == 0) {
+				itemsInTab.setText("Enthalten" + " (0)");
+				itemsNeedlessTab.setText("Überflüssig (0)");
+				itemsMissTab.setText("Fehlend " + "(" + copiedMustItems.size() + ")");
+			} else {
+				itemsInTab.setText("Enthalten" + " (" + itemsIn.size() + ")");
+				itemsMissTab.setText("Fehlend " + "(" + copiedMustItems.size() + ")");
+				itemsNeedlessTab.setText("Überflüssig " + "("
+						+ needlessItems.size() + ")");
+			}
+
+			for (Item item : itemsIn) {
+
+				// boolean bb = copiedMustItems.remove(item);
+				boolean bbb = copiedMustItems.contains(item);
+				if (bbb == false) {
+
+					Log.d("itemsIn size: ", "" + itemsIn.size());
+					if (bbb == false) {
+						needlessItems.add(item);
+						itemsNeedlessTab.setText("Überflüssig " + "(" + needlessItems.size() + ")");
+					}
+				}else if(bbb == true){
+					copiedMustItems.remove(item);
+					itemsNeedlessTab.setText("Überflüssig " + "(" + needlessItems.size() + ")");
+					itemsMissTab.setText("Fehlende " + "(" + copiedMustItems.size() + ")");
+				}
+
+			}
+			if (copiedMustItems.size() == 0) {
+				itemsMissTab.setText("Fehlende (0)");
+			}
 			sb.append("Update: \n");
 			sb.append("Items in Bag:");
 			sb.append("\n");
-			for (Item item : itemsIs) {
-				sb.append(item.getName());
-				sb.append("\n");
-				// itemListAd.clear();
-				//itemListAd.add(item);
-				// itemListAd.add(count);
-			}
-//			ArrayList<Item> copiedMustItems = new ArrayList<Item>(itemsMust);
-//			for(Item item : itemsIs){
-//				copiedMustItems.remove(item);
-//			}
-			
+
 			sb.append("\n");
 			sb.append("Activity: ");
 			sb.append(statusUpdate.getActivity().getName());
@@ -114,32 +144,24 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			sb.append("Items for activity:");
 			sb.append("\n");
 
-			for (Item item : itemsMust) {
-				sb.append(item.getName());
-				sb.append("\n");
-			}
 			sb.append("\n");
 			Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG)
 					.show();
 			break;
-
 		default:
 			break;
-
 		}
-
 	}
 
 	public ContainerStateUpdate getItemUpdate() {
-
 		return statusUpdate;
 	}
 
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		 bmActor = new BundleMessageActor(this);
-		 bmActor.register(getActivity());
+		bmActor = new BundleMessageActor(this);
+		bmActor.register(getActivity());
 	}
 
 	@Override
@@ -183,12 +205,12 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	@Override
 	public void onResume() {
 		itemsInFragment.setParentFragment(this);
 		super.onResume();
-		
+
 	}
 
 }

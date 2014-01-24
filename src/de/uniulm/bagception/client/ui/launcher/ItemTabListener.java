@@ -17,8 +17,7 @@ public class ItemTabListener extends FragmentActivity implements TabListener {
 	}
 
 	public void onTabReselected(Tab tab, FragmentTransaction ft) {
-		Toast.makeText(OverviewFragment.appContext, "Reselected!",
-				Toast.LENGTH_LONG).show();
+		
 	}
 
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
