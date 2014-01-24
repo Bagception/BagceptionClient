@@ -103,8 +103,8 @@ public class Debug extends Activity implements BundleMessageReactor{
 		bmA.register(this);
 		super.onResume();
 		BundleMessageHelper h = new BundleMessageHelper(this);
-		Log.d("debug",BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.CONTAINER_STATUS_UPDATE_REQUEST, "")+"");
-		//h.sendMessageSendBundle();
+		
+		h.sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.CONTAINER_STATUS_UPDATE_REQUEST, ""));
 		
 	}
 	
