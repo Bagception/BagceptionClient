@@ -7,9 +7,9 @@ import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMe
 import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
 import de.uniulm.bagception.client.bluetooth.middleware.BluetoothSystem;
 import de.uniulm.bagception.client.caching.ImageCachingSystem;
+import de.uniulm.bagception.client.debugactivities.Debug;
 import de.uniulm.bagception.client.items.ItemsSystem;
 import de.uniulm.bagception.client.notification.NotificationSystem;
-import de.uniulm.bagception.client.ui.launcher.MainGUI;
 import de.uniulm.bagception.protocol.bundle.constants.Command;
 
 public class BagceptionClientService extends Service{
@@ -62,7 +62,7 @@ public class BagceptionClientService extends Service{
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		bmHelper.sendCommandBundle(Command.TRIGGER_SCAN_DEVICES.toBundle());
-		Intent sa = new Intent(this, MainGUI.class);
+		Intent sa = new Intent(this, Debug.class);
 		
 		sa.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(sa);
