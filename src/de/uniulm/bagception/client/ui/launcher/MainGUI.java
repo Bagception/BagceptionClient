@@ -1,5 +1,6 @@
 package de.uniulm.bagception.client.ui.launcher;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -58,8 +59,10 @@ public class MainGUI extends Activity {
 						super.onDrawerClosed(drawerView);
 						FragmentTransaction tx = getFragmentManager()
 								.beginTransaction();
+						getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 						tx.replace(R.id.main, Fragment.instantiate(
 								MainGUI.this, menueFragments[pos]));
+						getActionBar().setTitle(data[pos]);
 						tx.commit();
 					}
 				});

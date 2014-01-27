@@ -1,39 +1,12 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/background" >
+    android:layout_height="fill_parent" >
 
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:context=".MainActivity" >
-
-        <TableRow
-            android:id="@+id/tableRow"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dip"
-            android:layout_marginTop="10dip" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="4dip"
-                android:layout_marginTop="10dp"
-                android:layout_span="2"
-                android:text="Ort hinzufügen"
-                android:textColor="@color/text"
-                android:textSize="25sp" />
-        </TableRow>
-
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="1dip"
-            android:background="#A2A0A0" />
 
         <TableRow
             android:id="@+id/tableRow2"
@@ -44,17 +17,16 @@
 
             <TextView
                 android:id="@+id/itemName"
-                android:layout_gravity="center"
-                android:layout_marginLeft="15dp"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="3"
                 android:text="@string/itemName"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/text" />
+                android:textColor="@color/text"
+                android:textSize="20dp" />
 
             <EditText
                 android:id="@+id/editName"
                 android:layout_width="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginRight="15dp"
                 android:ems="10"
                 android:inputType="text"
                 android:textColor="@color/text" >
@@ -62,24 +34,51 @@
                 <requestFocus />
             </EditText>
         </TableRow>
-        
+
         <TableRow
             android:id="@+id/tableRow3"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="25dip"
+            android:layout_marginBottom="10dip"
             android:layout_marginTop="10dip" >
 
-            <Button
-                android:id="@+id/addWithMap"
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:text="Karte verwenden"
-                android:onClick="startMap" />
-                
+            <TextView
+                android:id="@+id/adressName"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="3"
+                android:text="Adresse"
+                android:textColor="@color/text"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/editAdress"
+                android:layout_width="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                android:textColor="@color/text" >
+            </EditText>
         </TableRow>
 
         <TableRow
+            android:id="@+id/tableRow4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dip"
+            android:layout_marginTop="10dip" >
+
+            <TextView android:layout_width="wrap_content" />
+
+            <Button
+                android:id="@+id/addWithMap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="startMap"
+                android:gravity="left"
+                android:text="Karte verwenden" />
+        </TableRow>
+
+         <TableRow
             android:id="@+id/tableRow4"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -98,25 +97,16 @@
                 android:id="@+id/visibility"
                 android:layout_height="40dp"
                 android:layout_marginRight="15dp"
-                android:background="@color/background"
                 android:entries="@array/visibility"
                 android:textAlignment="center" />
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow5"
+            android:id="@+id/tableRow6"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dip"
             android:layout_marginTop="10dip" >
-
-            <TextView
-                android:id="@+id/itemPhoto"
-                android:layout_gravity="center"
-                android:layout_marginLeft="15dp"
-                android:text="@string/itemPhoto"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/text" />
 
             <QuickContactBadge
                 android:id="@+id/badge_small"
@@ -124,35 +114,46 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
                 android:src="@drawable/ic_launcher" />
+
+            <Button
+                android:id="@+id/addWithMap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="20dp"
+                android:onClick="takePicture"
+                android:text="Neues Foto" />
         </TableRow>
 
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="1dip"
-            android:background="#A2A0A0" />
-
-        <TableRow
-            android:id="@+id/tableRow7"
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dip"
-            android:layout_marginTop="15dip" >
+            android:layout_gravity="bottom"
+            android:layout_marginTop="110dp"
+            android:background="@color/background"
+            android:divider="?android:attr/listDivider"
+            android:dividerPadding="12dp"
+            android:orientation="horizontal"
+            android:showDividers="middle" >
 
             <Button
-                android:id="@+id/cancel"
-                android:layout_gravity="center"
-                android:layout_marginLeft="25dp"
-                android:onClick="goToMenu"
-                android:text="@string/cancel"
-                android:textColor="@color/text" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:drawable/list_selector_background"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:text="@string/cancel" />
 
             <Button
-                android:id="@+id/save"
-                android:layout_gravity="center"
-                android:onClick="onClickAddItem"
-                android:text="@string/save"
-                android:textColor="@color/text" />
-        </TableRow>
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:drawable/list_selector_background"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:text="@string/save" />
+        </LinearLayout>
     </TableLayout>
 
 </ScrollView>

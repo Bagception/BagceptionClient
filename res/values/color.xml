@@ -2,7 +2,7 @@
 <resources>
     
     <color name="light_blue">#00ccff</color>
-    <color name="background">#000000</color>
+    <color name="background">#7e7e7e</color>
 	<color name="text">#3a3a3a</color>
 	<color name="dark_text">#000000</color>
 	<color name="listitem">#767676</color>
