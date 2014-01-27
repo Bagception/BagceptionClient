@@ -7,7 +7,6 @@ import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMe
 import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
 import de.uniulm.bagception.client.bluetooth.middleware.BluetoothSystem;
 import de.uniulm.bagception.client.caching.ImageCachingSystem;
-import de.uniulm.bagception.client.debugactivities.Debug;
 import de.uniulm.bagception.client.items.ItemsSystem;
 import de.uniulm.bagception.client.notification.NotificationSystem;
 import de.uniulm.bagception.client.ui.launcher.MainGUI;

@@ -3,6 +3,9 @@ package de.uniulm.bagception.client.ui.launcher;
 import java.util.List;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
+import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
+import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
+import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.bundlemessageprotocol.entities.ContainerStateUpdate;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.client.R;
@@ -39,6 +42,7 @@ public class ItemsInFragment extends Fragment implements BundleMessageReactor {
 		if (update != null) {
 			updateView(update);
 		}
+
 		super.onResume();
 	}
 
@@ -58,6 +62,7 @@ public class ItemsInFragment extends Fragment implements BundleMessageReactor {
 		}
 	}
 
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {

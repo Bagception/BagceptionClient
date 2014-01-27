@@ -12,11 +12,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
 import android.widget.TextView;
 import android.widget.Toast;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
+import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.bundlemessageprotocol.entities.ContainerStateUpdate;
@@ -175,6 +175,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		super.onAttach(activity);
 		bmActor = new BundleMessageActor(this);
 		bmActor.register(getActivity());
+
 	}
 
 	@Override
@@ -223,6 +224,8 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 	public void onResume() {
 		itemsInFragment.setParentFragment(this);
 		super.onResume();
+		new BundleMessageHelper(getActivity()).sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.CONTAINER_STATUS_UPDATE_REQUEST, ""));
+
 
 	}
 
