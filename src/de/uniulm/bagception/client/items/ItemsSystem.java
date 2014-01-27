@@ -1,17 +1,14 @@
 package de.uniulm.bagception.client.items;
 
-import java.util.List;
-
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
-import de.uniulm.bagception.bundlemessageprotocol.entities.ContainerStateUpdate;
+import de.uniulm.bagception.bundlemessageprotocol.entities.Activity;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
-import de.uniulm.bagception.client.debugactivities.Debug;
+import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
+import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommandProcessor;
 
 public class ItemsSystem implements BundleMessageReactor{
 
@@ -64,9 +61,30 @@ public class ItemsSystem implements BundleMessageReactor{
 //			
 //
 //			default:break;
+		
+		
 //				
 //			
 //		}
+		
+		BUNDLE_MESSAGE msg = BundleMessage.getInstance().getBundleMessageType(b);
+		AdministrationCommandProcessor p = new AdministrationCommandProcessor(){
+			@Override
+			public void onActivityAdd(Activity a) {
+				
+			}
+		};
+		
+		switch (msg){
+		case ADMINISTRATION_COMMAND:
+			AdministrationCommand<?> c = AdministrationCommand.fromJSONObject(BundleMessage.getInstance().extractObject(b));
+			c.accept(p);
+			
+			break;
+			
+			default:break;
+		}
+
 	}
 
 	@Override
@@ -100,4 +118,11 @@ public class ItemsSystem implements BundleMessageReactor{
 	}
 	
 
+	private void test(){
+		
+		
+		
+		
+	}
+	
 }

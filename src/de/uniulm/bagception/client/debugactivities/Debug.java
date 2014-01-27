@@ -81,7 +81,6 @@ public class Debug extends Activity implements BundleMessageReactor{
 		for (Item i : update.getActivity().getItemsForActivity()){
 			debugListAdapter.add("  "+i.getName());
 			debugListAdapter.add("   "+i.getId());
-			debugListAdapter.add("   "+i.getVisibility());
 			debugListAdapter.add("   "+i.getImageHash());
 			debugListAdapter.add("   "+i.getCategory());
 		}
@@ -90,7 +89,6 @@ public class Debug extends Activity implements BundleMessageReactor{
 		for(Item i:update.getItemList()){
 			debugListAdapter.add("  "+i.getName());
 			debugListAdapter.add("   "+i.getId());
-			debugListAdapter.add("   "+i.getVisibility());
 			debugListAdapter.add("   "+i.getImageHash());
 			debugListAdapter.add("   "+i.getCategory());
 		}
