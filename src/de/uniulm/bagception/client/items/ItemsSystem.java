@@ -67,23 +67,9 @@ public class ItemsSystem implements BundleMessageReactor{
 //			
 //		}
 		
-		BUNDLE_MESSAGE msg = BundleMessage.getInstance().getBundleMessageType(b);
-		AdministrationCommandProcessor p = new AdministrationCommandProcessor(){
-			@Override
-			public void onActivityAdd(Activity a) {
-				
-			}
-		};
 		
-		switch (msg){
-		case ADMINISTRATION_COMMAND:
-			AdministrationCommand<?> c = AdministrationCommand.fromJSONObject(BundleMessage.getInstance().extractObject(b));
-			c.accept(p);
-			
-			break;
-			
-			default:break;
-		}
+		
+		
 
 	}
 
