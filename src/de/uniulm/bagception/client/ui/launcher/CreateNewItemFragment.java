@@ -2,17 +2,15 @@ package de.uniulm.bagception.client.ui.launcher;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.ImageView;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
@@ -34,7 +32,7 @@ public class CreateNewItemFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		ViewGroup root = (ViewGroup) inflater.inflate(
+		final ViewGroup root = (ViewGroup) inflater.inflate(
 				R.layout.fragment_create_new_item, null);
 		editName = (EditText) root.findViewById(R.id.editName);
 		send = (Button) root.findViewById(R.id.sendItem);
@@ -43,10 +41,10 @@ public class CreateNewItemFragment extends Fragment {
 			
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				
 				Item item = new Item();
 				item.setName(editName.getText().toString());
+				item.setImage(((MainGUI)getActivity()).currentPicturetaken);
 				
 				
 				BundleMessageHelper helper = new BundleMessageHelper(getActivity());
