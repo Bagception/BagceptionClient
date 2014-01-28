@@ -1,6 +1,5 @@
 package de.uniulm.bagception.client.ui.launcher;
 
-import java.util.ArrayList;
 import java.util.List;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
@@ -14,9 +13,7 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.app.Fragment;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,18 +52,13 @@ public class ItemsInFragment extends Fragment implements BundleMessageReactor {
 		List<Item> itemsMustBeIn = update.getActivity().getItemsForActivity();
 		itemListAd.clear();
 		
-		ArrayList<Item> copiedMustItems = new ArrayList<Item>(itemsMustBeIn);
+		if(itemsMustBeIn.contains(itemsIn)){
+			Toast.makeText(getActivity(), "List is in list", Toast.LENGTH_SHORT).show();
+		}else{
+		}
 		
 		for (Item item : itemsIn) {
 			itemListAd.add(item);
-			
-			boolean bb = copiedMustItems.contains(item);
-			if(bb == false){
-				Log.d("bb Wert: ", "" + bb);
-				itemsStatusView.getChildAt(itemListAd.getCount()).setBackgroundColor(Color.CYAN);
-			}else{
-				itemsStatusView.getChildAt(itemListAd.getCount()).setBackgroundColor(Color.MAGENTA);
-			}
 		}
 	}
 

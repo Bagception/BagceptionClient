@@ -42,32 +42,10 @@ public class ItemsMissFragment extends Fragment implements BundleMessageReactor 
 	}
 
 	public void updateView(ContainerStateUpdate update) {
-		// TODO view
-		List<Item> itemsIn = update.getItemList();
-		Log.d("Itemlist Inhalt: ", itemsIn.size() + "");
-		List<Item> itemsMustBeIn = update.getActivity().getItemsForActivity();
-
-		if (arrayAdapter == null) {
-			return;
-		} else {
-			arrayAdapter.clear();
-		}
-
-		ArrayList<Item> copiedMustItems = new ArrayList<Item>(itemsMustBeIn);
-
-		for (Item item : itemsIn) {
-			boolean b = copiedMustItems.remove(item);
-//			boolean bb = copiedMustItems.contains(item);
-//
-//			Log.d("gelöscht: ", item.getName() + " deleted: " + b
-//					+ " contains: " + bb);
-		}
-		arrayAdapter.addAll(copiedMustItems);
-	
-		if(itemsIn.size() == 0){
-			arrayAdapter.clear();
-		}
-
+		if (arrayAdapter == null) return;
+		arrayAdapter.clear();
+		arrayAdapter.addAll(update.getMissingItems());
+		
 	}
 
 	@Override

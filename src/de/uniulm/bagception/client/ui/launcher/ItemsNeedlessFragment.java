@@ -1,12 +1,8 @@
 package de.uniulm.bagception.client.ui.launcher;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +10,6 @@ import android.widget.ListView;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
 import de.uniulm.bagception.bundlemessageprotocol.entities.ContainerStateUpdate;
-import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.client.R;
 
 public class ItemsNeedlessFragment extends Fragment implements
@@ -24,11 +19,11 @@ public class ItemsNeedlessFragment extends Fragment implements
 	private ListView itemsRedundantView;
 	private ItemListArrayAdapter arrayAdapter;
 	private BundleMessageActor bmActor;
-	
+
 	public void setParentFragment(OverviewFragment fragment) {
 		this.fragment = fragment;
 	}
-	
+
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
@@ -42,46 +37,13 @@ public class ItemsNeedlessFragment extends Fragment implements
 		}
 		super.onResume();
 	}
-	
+
 	public void updateView(ContainerStateUpdate update) {
-		// TODO view
-		List<Item> itemsIn = update.getItemList();
-		List<Item> itemsMustBeIn = update.getActivity().getItemsForActivity();
-
-		if (arrayAdapter == null) {
+		if (arrayAdapter == null)
 			return;
-		} else {
-			arrayAdapter.clear();
-		}
-
-		ArrayList<Item> copiedMustItems = new ArrayList<Item>(itemsMustBeIn);
-		
-		for(Item item : copiedMustItems){
-			Log.d("Item in copiedMust: ", item.getName());
-		}
-		Log.d("das ist in mustList drin: ", "" + copiedMustItems.toString());
-		for (Item item : itemsIn) {
-			//boolean b = copiedMustItems.remove(item);
-			Log.d("Item Name: ", item.getName());
-			boolean bb = copiedMustItems.contains(item);
-			//arrayAdapter.add(item);
-			
-			if(bb == false){
-				Log.d("bb Wert: ", "" + bb);
-				arrayAdapter.add(item);
-			}
-			
-		}
-		
-		
-		//arrayAdapter.addAll(copiedMustItems);
-	
-		if(itemsIn.size() == 0){
-			arrayAdapter.clear();
-		}
-
+		arrayAdapter.clear();
+		arrayAdapter.addAll(update.getNeedlessItems());
 	}
-
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
