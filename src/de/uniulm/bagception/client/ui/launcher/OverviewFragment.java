@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,7 +49,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 				ActionBar.NAVIGATION_MODE_TABS);
 		ViewGroup root = (ViewGroup) inflater.inflate(
 				R.layout.fragment_overview, null);
-		getActivity().setTitle("Übersicht");
+		getActivity().setTitle("ï¿½bersicht");
 
 		currentActivityView = (TextView) root.findViewById(R.id.test);
 
@@ -57,7 +58,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		// initiating both tabs and set text to it.
 		itemsInTab = actionBar.newTab().setText("Enthalten (0)");
 		itemsMissTab = actionBar.newTab().setText("Fehlend (0)");
-		itemsNeedlessTab = actionBar.newTab().setText("Überflüssig (0)");
+		itemsNeedlessTab = actionBar.newTab().setText("ï¿½berflï¿½ssig (0)");
 		itemsSuggTab = actionBar.newTab().setText("Vorschlag");
 
 		itemsInFragment = new ItemsInFragment();
@@ -97,7 +98,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			statusUpdate = ContainerStateUpdate.fromJSON(BundleMessage
 					.getInstance().extractObject(b));
 			String currentActivity = statusUpdate.getActivity().getName();
-			currentActivityView.setText("Aktuelle Aktivität: "
+			currentActivityView.setText("Aktuelle Aktivitï¿½t: "
 					+ currentActivity);
 			itemsInFragment.updateView(statusUpdate);
 			itemsMissFragment.updateView(statusUpdate);
@@ -111,14 +112,14 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 			if (itemsIn.size() == 0) {
 				itemsInTab.setText("Enthalten" + " (0)");
-				itemsNeedlessTab.setText("Überflüssig (0)");
+				itemsNeedlessTab.setText("ï¿½berflï¿½ssig (0)");
 				itemsMissTab.setText("Fehlend " + "(" + copiedMustItems.size()
 						+ ")");
 			} else {
 				itemsInTab.setText("Enthalten" + " (" + itemsIn.size() + ")");
 				itemsMissTab.setText("Fehlend " + "(" + copiedMustItems.size()
 						+ ")");
-				itemsNeedlessTab.setText("Überflüssig " + "("
+				itemsNeedlessTab.setText("ï¿½berflï¿½ssig " + "("
 						+ needlessItems.size() + ")");
 			}
 
@@ -131,12 +132,12 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 					Log.d("itemsIn size: ", "" + itemsIn.size());
 					if (bbb == false) {
 						needlessItems.add(item);
-						itemsNeedlessTab.setText("Überflüssig " + "("
+						itemsNeedlessTab.setText("ï¿½berflï¿½ssig " + "("
 								+ needlessItems.size() + ")");
 					}
 				} else if (bbb == true) {
 					copiedMustItems.remove(item);
-					itemsNeedlessTab.setText("Überflüssig " + "("
+					itemsNeedlessTab.setText("ï¿½berflï¿½ssig " + "("
 							+ needlessItems.size() + ")");
 					itemsMissTab.setText("Fehlende " + "("
 							+ copiedMustItems.size() + ")");
@@ -224,7 +225,17 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 	public void onResume() {
 		itemsInFragment.setParentFragment(this);
 		super.onResume();
-		new BundleMessageHelper(getActivity()).sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.CONTAINER_STATUS_UPDATE_REQUEST, ""));
+		Handler h = new Handler();
+		h.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				Toast.makeText(getActivity(), "requesting update", Toast.LENGTH_SHORT).show();
+				new BundleMessageHelper(getActivity()).sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.CONTAINER_STATUS_UPDATE_REQUEST, ""));
+				
+			}
+		}, 1500);
+		
 
 
 	}
