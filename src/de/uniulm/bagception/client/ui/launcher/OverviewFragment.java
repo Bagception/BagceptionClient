@@ -183,7 +183,6 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		StatusCode status = StatusCode.getStatusCode(b);
 		switch (status){
 		case CONNECTED:
-			Toast.makeText(getActivity(), "requesting update", Toast.LENGTH_SHORT).show();
 			bmHelper.sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.CONTAINER_STATUS_UPDATE_REQUEST, ""));
 			break;
 		case DISCONNECTED:

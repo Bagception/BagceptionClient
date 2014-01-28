@@ -23,14 +23,14 @@ import de.uniulm.bagception.services.ServiceNames;
 public class NotificationSystem implements BundleMessageReactor{
 	
 	private final BagceptionClientService mainService;
-	
+	private int iconID = R.drawable.noconnectionicon;
 	public NotificationSystem(BagceptionClientService mainService) {
 		this.mainService = mainService;
 		
 		Notification foregroundNotification = new Notification();
 		mainService.startForeground(1, foregroundNotification);
 				
-		updateNotification("bagception client is running");
+		updateNotification("touch to connect");
 		
 		
 		
@@ -72,10 +72,10 @@ public class NotificationSystem implements BundleMessageReactor{
 		
 
 		Notification n = new Notification.Builder(
-				mainService).setSmallIcon(R.drawable.service_icon)
+				mainService).setSmallIcon(iconID)
 				.setContentTitle("Bagception")
 				.setContentIntent(pendingIntent)
-				.setLargeIcon(BitmapFactory.decodeResource(mainService.getResources(),R.drawable.service_icon))
+				.setLargeIcon(BitmapFactory.decodeResource(mainService.getResources(),iconID))
 				.setContentText(text).build();
 		
 		notificationManager.notify(1, n);
@@ -125,8 +125,10 @@ public class NotificationSystem implements BundleMessageReactor{
 				//bluetooth state not changed
 				return;
 			}
-			String s = "lost";
+			String s = "lost: touch to connect";
+			iconID = R.drawable.noconnectionicon;
 			if (connected){
+				iconID = R.drawable.connectedicon;
 				s="established";
 			}
 			updateNotification("Connection "+s);
