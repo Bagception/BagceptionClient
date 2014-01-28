@@ -123,7 +123,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			itemsInFragment.updateView(statusUpdate);
 			itemsMissFragment.updateView(statusUpdate);
 			//itemsNeedlessFragment.updateView(statusUpdate);
-			
+			//debugMessage(statusUpdate);
 			
 			break;
 			
@@ -133,35 +133,30 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		}
 	}
 
-//	private void debugMessage(ContainerStateUpdate update){
-//		StringBuilder sb = new StringBuilder();
-//
-//		sb.append("Update: \n");
-//		sb.append("Items in Bag:");
-//		sb.append("\n");
-//
-//		sb.append("\n");
-//		sb.append("Activity: ");
-//		sb.append(statusUpdate.getActivity().getName());
-//		sb.append("\n");
-//		sb.append("Items for activity:");
-//		sb.append("\n");
-//
-//		sb.append("\n");
-//		Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG)
-//				.show();
-//	}
+	private void debugMessage(ContainerStateUpdate update){
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("Update: \n");
+		sb.append("Items in Bag:");
+		sb.append("\n");
+
+		sb.append("\n");
+		sb.append("Activity: ");
+		sb.append(statusUpdate.getActivity().getName());
+		sb.append("\n");
+		sb.append("Items for activity:");
+		sb.append("\n");
+
+		sb.append("\n");
+		Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG)
+				.show();
+	}
 	public synchronized ContainerStateUpdate getItemUpdate() {
 		return statusUpdate;
 	}
 
 	
 
-	@Override
-	public void onDetach() {
-		bmActor.unregister(getActivity());
-		super.onDetach();
-	}
 
 	@Override
 	public void onBundleMessageSend(Bundle b) {
@@ -184,6 +179,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		switch (status){
 		case CONNECTED:
 			bmHelper.sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.CONTAINER_STATUS_UPDATE_REQUEST, ""));
+			//Toast.makeText(getActivity(), "update status request", Toast.LENGTH_SHORT).show();
 			break;
 		case DISCONNECTED:
 			break;
@@ -206,18 +202,23 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 	}
 
+	
 	@Override
-	public void onResume() {
-		super.onResume();
-		
+	public void onStart() {
+		super.onStart();
 		bmActor = new BundleMessageActor(this);
 		bmActor.register(getActivity());
 		bmHelper = new BundleMessageHelper(getActivity());
-		//bmHelper.sendCommandBundle(Command.RESEND_STATUS.toBundle());
+		bmHelper.sendCommandBundle(Command.RESEND_STATUS.toBundle());
 		
 		
-		
-		
+	}
+	
+	@Override
+	public void onStop() {
+		super.onStop();
+		bmActor.unregister(getActivity());
+
 	}
 
 }

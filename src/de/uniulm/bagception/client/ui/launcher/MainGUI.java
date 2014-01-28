@@ -34,7 +34,6 @@ import de.uniulm.bagception.bundlemessageprotocol.entities.administration.Admini
 import de.uniulm.bagception.client.R;
 import de.uniulm.bagception.client.bluetooth.pairing.AddNewBagStartActivity;
 import de.uniulm.bagception.client.osm.ShowMap;
-import de.uniulm.bagception.protocol.bundle.constants.Command;
 import de.uniulm.bagception.protocol.bundle.constants.StatusCode;
 
 public class MainGUI extends Activity implements BundleMessageReactor{
@@ -43,6 +42,8 @@ public class MainGUI extends Activity implements BundleMessageReactor{
 	CreateNewItemFragment newItemfragment;
 	private BundleMessageActor bmActor;
 
+	private boolean lastConnected=false;
+	
 	private BundleMessageHelper bmHelper;
 	private DrawerLayout drawer;
 	private View drawRightLayout;
@@ -232,6 +233,7 @@ public class MainGUI extends Activity implements BundleMessageReactor{
 		StatusCode c = StatusCode.getStatusCode(b);
 		switch (c){
 		case CONNECTED:{
+			if (lastConnected) return;
 			drawer.openDrawer(drawRightLayout);
 			Handler h = new Handler();
 			h.postDelayed(new Runnable() {
@@ -241,11 +243,15 @@ public class MainGUI extends Activity implements BundleMessageReactor{
 					drawer.closeDrawer(drawRightLayout);
 					
 				}
-			}, 3000);
+			}, 1500);
+			
+			lastConnected=true;
 			break;
 		}
 		case DISCONNECTED:{
+			if (!lastConnected) return;
 			drawer.openDrawer(drawRightLayout);
+			lastConnected=false;
 			break;
 		}
 		default:
@@ -269,20 +275,28 @@ public class MainGUI extends Activity implements BundleMessageReactor{
 	@Override
 	protected void onPause() {
 		super.onPause();
-		bmActor.unregister(this);
 		
+		
+	}
+	
+	@Override
+	protected void onStop() {
+	
+		super.onStop();
+		bmActor.unregister(this);
 	}
 	
 	@Override
 	protected void onStart() {
 		super.onStart();
 		bmActor.register(this);
+		//bmHelper.sendCommandBundle(Command.RESEND_STATUS.toBundle());
+
 	}
 	@Override
 	protected void onResume() {
 	
 		super.onResume();
-		bmHelper.sendCommandBundle(Command.RESEND_STATUS.toBundle());
 	}
 //	@Override
 //	protected void onResume() {
