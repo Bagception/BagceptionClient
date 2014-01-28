@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">BagceptionClient</string>
-    <string name="title_activity_start_service">StartServiceActivity</string>
+    <string name="title_activity_start_service">BagceptionClient</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_bagception_list">Items</string>
