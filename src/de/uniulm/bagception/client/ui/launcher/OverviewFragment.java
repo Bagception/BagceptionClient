@@ -214,7 +214,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		bmActor = new BundleMessageActor(this);
 		bmActor.register(getActivity());
 		bmHelper = new BundleMessageHelper(getActivity());
-		bmHelper.sendCommandBundle(Command.RESEND_STATUS.toBundle());
+		//bmHelper.sendCommandBundle(Command.RESEND_STATUS.toBundle());
 		
 		
 		

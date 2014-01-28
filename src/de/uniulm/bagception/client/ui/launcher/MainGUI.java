@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -24,6 +25,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
+import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
@@ -32,6 +34,8 @@ import de.uniulm.bagception.bundlemessageprotocol.entities.administration.Admini
 import de.uniulm.bagception.client.R;
 import de.uniulm.bagception.client.bluetooth.pairing.AddNewBagStartActivity;
 import de.uniulm.bagception.client.osm.ShowMap;
+import de.uniulm.bagception.protocol.bundle.constants.Command;
+import de.uniulm.bagception.protocol.bundle.constants.StatusCode;
 
 public class MainGUI extends Activity implements BundleMessageReactor{
 
@@ -39,9 +43,12 @@ public class MainGUI extends Activity implements BundleMessageReactor{
 	CreateNewItemFragment newItemfragment;
 	private BundleMessageActor bmActor;
 
+	private BundleMessageHelper bmHelper;
+	private DrawerLayout drawer;
+	private View drawRightLayout;
 	public Bitmap currentPicturetaken = null;
 	
-	final String[] data = { "�bersicht", "Item erstellen", "Ort erstellen",
+	final String[] data = { "Übersicht", "Item erstellen", "Ort erstellen",
 			"Neue Tasche", "Einstellungen" };
 	final String[] menueFragments = {
 			"de.uniulm.bagception.client.ui.launcher.OverviewFragment",
@@ -56,11 +63,13 @@ public class MainGUI extends Activity implements BundleMessageReactor{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		bmActor = new BundleMessageActor(this);
+		bmHelper = new BundleMessageHelper(this);
 		setContentView(R.layout.activity_main_gui);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActionBar()
 				.getThemedContext(), android.R.layout.simple_list_item_1, data);
 
-		final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+		drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+		drawRightLayout = findViewById(R.id.drawerRight);
 		final ListView navListLeft = (ListView) findViewById(R.id.drawer);
 		navListLeft.setAdapter(adapter);
 		navListLeft.setOnItemClickListener(new OnItemClickListener() {
@@ -220,7 +229,28 @@ public class MainGUI extends Activity implements BundleMessageReactor{
 
 	@Override
 	public void onStatusMessage(Bundle b) {
-		// TODO Auto-generated method stub
+		StatusCode c = StatusCode.getStatusCode(b);
+		switch (c){
+		case CONNECTED:{
+			drawer.openDrawer(drawRightLayout);
+			Handler h = new Handler();
+			h.postDelayed(new Runnable() {
+				
+				@Override
+				public void run() {
+					drawer.closeDrawer(drawRightLayout);
+					
+				}
+			}, 3000);
+			break;
+		}
+		case DISCONNECTED:{
+			drawer.openDrawer(drawRightLayout);
+			break;
+		}
+		default:
+			break;
+		}
 		
 	}
 
@@ -248,7 +278,12 @@ public class MainGUI extends Activity implements BundleMessageReactor{
 		super.onStart();
 		bmActor.register(this);
 	}
+	@Override
+	protected void onResume() {
 	
+		super.onResume();
+		bmHelper.sendCommandBundle(Command.RESEND_STATUS.toBundle());
+	}
 //	@Override
 //	protected void onResume() {
 //		super.onResume();
