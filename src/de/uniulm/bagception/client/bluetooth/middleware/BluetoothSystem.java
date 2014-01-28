@@ -8,8 +8,8 @@ import java.util.UUID;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
-import android.os.Debug;
 import android.util.Log;
+import android.widget.Toast;
 import de.philipphock.android.lib.logging.LOG;
 import de.uniulm.bagception.bluetooth.BagceptionBTServiceInterface;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
@@ -317,10 +317,7 @@ public class BluetoothSystem implements CheckReachableCallback,
 
 	}
 
-	@Override
-	public void onError(Exception e) {
-		e.printStackTrace();
-	}
+	
 
 	// data recv from remote endpont via broadcast
 	@Override
@@ -343,6 +340,14 @@ public class BluetoothSystem implements CheckReachableCallback,
 
 			btclient.send(b);
 		}
+	}
+
+	@Override
+	public void onError(Exception e) {
+		if (e.getMessage().equals("not connected")){
+			Toast.makeText(mainService, "unable to send data, not connected with remote endpoint", Toast.LENGTH_SHORT ).show();	
+		}
+		 
 	}
 
 	/*

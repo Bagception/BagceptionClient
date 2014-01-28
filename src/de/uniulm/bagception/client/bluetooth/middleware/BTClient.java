@@ -129,6 +129,10 @@ public class BTClient implements Runnable {
 	
 	public void send(Bundle b){
 		try {
+			if (clientSocketOutStream==null){
+				clientcallback.onError(new Exception("not connected"));
+				return;
+			}
 			clientSocketOutStream.write(protocol.getSendableBytes(b));
 			clientSocketOutStream.flush();
 		} catch (IOException e) {
@@ -142,6 +146,7 @@ public class BTClient implements Runnable {
 	public interface ClientStatusCallback{
 		public void onConnect();
 		public void onDisconnect();
+		public void onError(Exception e);
 		
 	}
 
