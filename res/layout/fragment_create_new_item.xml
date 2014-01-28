@@ -43,11 +43,12 @@
             android:layout_marginBottom="25dip"
             android:layout_marginTop="10dip" >
 
-            <QuickContactBadge
-                android:id="@+id/badge_small"
+            <ImageView
+                android:id="@+id/itemIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
+                android:contentDescription="item icon"
                 android:src="@drawable/ic_launcher" />
 
             <Button

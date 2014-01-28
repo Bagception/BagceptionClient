@@ -19,21 +19,19 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
-import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommandProcessor;
-import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ItemCommand;
 import de.uniulm.bagception.client.R;
 import de.uniulm.bagception.client.bluetooth.pairing.AddNewBagStartActivity;
 import de.uniulm.bagception.client.osm.ShowMap;
-import de.uniulm.bagception.client.pictures.TakePicture;
 
 public class MainGUI extends Activity implements BundleMessageReactor{
 
@@ -41,7 +39,9 @@ public class MainGUI extends Activity implements BundleMessageReactor{
 	CreateNewItemFragment newItemfragment;
 	private BundleMessageActor bmActor;
 
-	final String[] data = { "Übersicht", "Item erstellen", "Ort erstellen",
+	public Bitmap currentPicturetaken = null;
+	
+	final String[] data = { "ï¿½bersicht", "Item erstellen", "Ort erstellen",
 			"Neue Tasche", "Einstellungen" };
 	final String[] menueFragments = {
 			"de.uniulm.bagception.client.ui.launcher.OverviewFragment",
@@ -156,6 +156,9 @@ public class MainGUI extends Activity implements BundleMessageReactor{
 				return;
 			// send as string (this would work over bluetooth)
 			Toast.makeText(this, "picture taken", Toast.LENGTH_SHORT).show();
+			ImageView img = (ImageView) findViewById(R.id.itemIcon);
+			img.setImageBitmap(imageBitmap);
+			currentPicturetaken = imageBitmap;
 			//Intent i = new Intent(this, PictureSerializing.class);
 			//i.putExtra("img", PictureSerializer.serialize(imageBitmap));
 			
@@ -193,6 +196,8 @@ public class MainGUI extends Activity implements BundleMessageReactor{
 			};
 			cmd.accept(p);
 			break;
+			
+		default: break;
 		}
 	}
 

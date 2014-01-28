@@ -10,12 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
-import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
-import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
-import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
-import de.uniulm.bagception.bundlemessageprotocol.entities.Location;
-import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ItemCommand;
-import de.uniulm.bagception.bundlemessageprotocol.entities.administration.LocationCommand;
 import de.uniulm.bagception.client.R;
 import de.uniulm.bagception.client.osm.ShowMap;
 
