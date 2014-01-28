@@ -39,6 +39,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 	private ActionBar.Tab itemsMissTab;
 	ActionBar.Tab itemsNeedlessTab;
 	ActionBar.Tab itemsSuggTab;
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -106,7 +107,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			StringBuilder sb = new StringBuilder();
 			itemsIn = statusUpdate.getItemList();
 			itemsMust = statusUpdate.getActivity().getItemsForActivity();
-			needlessItems = new ArrayList<Item>();
+			needlessItems = statusUpdate.getNeedlessItems();
 			copiedMustItems = new ArrayList<Item>(itemsMust);
 
 			if (itemsIn.size() == 0) {
