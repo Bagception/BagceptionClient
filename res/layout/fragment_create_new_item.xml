@@ -51,12 +51,12 @@
                 android:src="@drawable/ic_launcher" />
 
             <Button
-                android:id="@+id/addWithMap"
+                android:id="@+id/takePhoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:layout_marginLeft="20dp"
-                android:onClick="takePicture"
+                android:onClick="ontakePictureButtonClick"
                 android:text="Neues Foto" />
         </TableRow>
 
@@ -112,12 +112,14 @@
                 android:text="@string/cancel" />
 
             <Button
+                android:id="@+id/sendItem"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@android:drawable/list_selector_background"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
+                android:onClick="sendNewItem"
                 android:text="@string/save" />
         </LinearLayout>
     </TableLayout>

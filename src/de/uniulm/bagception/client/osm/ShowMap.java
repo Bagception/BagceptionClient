@@ -7,7 +7,10 @@ import org.osmdroid.events.ZoomEvent;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.graphics.Rect;
 import android.location.Location;
 import android.location.LocationListener;
@@ -19,6 +22,8 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 import de.uniulm.bagception.client.R;
+import de.uniulm.bagception.client.ui.launcher.CreateNewPlaceFragment;
+import de.uniulm.bagception.client.ui.launcher.MainGUI;
 
 public class ShowMap extends Activity implements LocationListener {
 
@@ -30,6 +35,7 @@ public class ShowMap extends Activity implements LocationListener {
 	private TextView meterIndicatior;
 
 	private final int INIT_RADIUS = 100;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +49,6 @@ public class ShowMap extends Activity implements LocationListener {
 		mapView.setBuiltInZoomControls(true);
 		meterIndicatior = (TextView) findViewById(R.id.meter);
 		final SeekBar meterSlider = (SeekBar) findViewById(R.id.meterSlider);
-
 		meterSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
 			@Override
@@ -173,6 +178,7 @@ public class ShowMap extends Activity implements LocationListener {
 		Toast.makeText(this,
 				mapView.getGeoPoint().toString() + " " + mapView.getRadius(),
 				Toast.LENGTH_SHORT).show();
+		ShowMap.this.finish();
 	}
 
 }

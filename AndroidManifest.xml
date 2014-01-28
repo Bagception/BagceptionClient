@@ -24,7 +24,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="de.uniulm.bagception.client.ui.launcher.StartServiceActivity"
-            android:label="@string/title_activity_start_service" >
+            android:label="@string/title_activity_start_service"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,53 +39,62 @@
         <activity
             android:name="de.uniulm.bagception.client.ui.launcher.ItemListActivity"
             android:label="@string/title_activity_item_list"
-            android:parentActivityName="de.uniulm.bagception.client.ui.launcher.StartServiceActivity" >
+            android:parentActivityName="de.uniulm.bagception.client.ui.launcher.StartServiceActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.uniulm.bagception.client.ui.launcher.StartServiceActivity" />
         </activity>
         <activity
             android:name="de.uniulm.bagception.client.ItemEditActivity"
-            android:label="@string/title_activity_item_edit" >
+            android:label="@string/title_activity_item_edit"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="de.uniulm.bagception.client.ui.launcher.MainGUI"
-            android:label="@string/title_activity_main_gui" >
+            android:label="@string/title_activity_main_gui"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="de.uniulm.bagception.client.ui.launcher.CreateNewPlace"
-            android:label="@string/title_activity_create_new_place" >
+            android:label="@string/title_activity_create_new_place"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="de.uniulm.bagception.client.osm.ShowMap"
-            android:label="@string/title_activity_start" >
+            android:label="@string/title_activity_start"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="de.uniulm.bagception.client.ShowMap"
-            android:label="@string/title_activity_show_map" >
+            android:label="@string/title_activity_show_map"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="de.uniulm.bagception.client.CreateNewItem"
-            android:label="@string/title_activity_create_new_item" >
+            android:label="@string/title_activity_create_new_item"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="de.uniulm.bagception.client.pictures.TakePicture"
-            android:label="@string/title_activity_take_picture" >
+            android:label="@string/title_activity_take_picture"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="de.uniulm.bagception.client.bluetooth.pairing.AddNewBagStartActivity"
-            android:label="@string/title_activity_add_new_bag" >
+            android:label="@string/title_activity_add_new_bag"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="de.uniulm.bagception.client.ui.launcher.SettingsActivity"
-            android:label="@string/title_activity_settings" >
+            android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait" >
         </activity>
-
-         <activity
+        <activity
             android:name="de.uniulm.bagception.client.debugactivities.Debug"
-            android:label="Debug" >
+            android:label="Debug"
+            android:screenOrientation="portrait" >
         </activity>
-        
     </application>
 
 </manifest>
