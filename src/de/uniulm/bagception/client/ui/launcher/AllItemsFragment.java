@@ -26,6 +26,7 @@ public class AllItemsFragment extends Fragment implements BundleMessageReactor{
 	ItemListArrayAdapter ad;
 	String bla;
 	BundleMessageActor actor;
+	BundleMessageHelper helper;
 	public static Fragment newInstance(Context context) {
 		AllItemsFragment f = new AllItemsFragment();
 
@@ -36,6 +37,7 @@ public class AllItemsFragment extends Fragment implements BundleMessageReactor{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		actor = new BundleMessageActor(this);
+		helper = new BundleMessageHelper(getActivity());
 		
 	}
 	
@@ -53,7 +55,7 @@ public class AllItemsFragment extends Fragment implements BundleMessageReactor{
 	@Override
 	public void onResume() {
 		super.onResume();
-		BundleMessageHelper helper = new BundleMessageHelper(getActivity());
+		
 		actor.register(getActivity()); //necessary?
 		helper.sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND, ItemCommand.list()));
 	}
@@ -77,6 +79,7 @@ public class AllItemsFragment extends Fragment implements BundleMessageReactor{
 				public void onItemList(AdministrationCommand<Item> i) {
 					//item list
 					Item[] theItemsWeWantToDisplay = i.getPayloadObjects();
+					ad.clear();
 					ad.addAll(theItemsWeWantToDisplay);
 				}
 			};
