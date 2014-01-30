@@ -31,9 +31,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 	
 	private ItemsInFragment itemsInFragment;
 	private ItemsMissFragment itemsMissFragment;
-	//private ItemsNeedlessFragment itemsNeedlessFragment;
 	private ItemsSuggFragment itemsSuggFragment;
-
 	
 	private BundleMessageHelper bmHelper;
 	private TextView currentActivityView;

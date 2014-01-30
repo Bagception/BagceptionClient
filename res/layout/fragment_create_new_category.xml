@@ -16,16 +16,16 @@
             android:layout_marginTop="10dip" >
 
             <TextView
-                android:id="@+id/itemName"
+                android:id="@+id/CategoryName"
                 android:layout_width="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="3"
-                android:text="@string/itemName"
+                android:text="Name"
                 android:textColor="@color/text"
                 android:textSize="20dp" />
 
             <EditText
-                android:id="@+id/editName"
+                android:id="@+id/editCategory"
                 android:layout_width="wrap_content"
                 android:ems="10"
                 android:gravity="left"
@@ -44,11 +44,11 @@
             android:layout_marginTop="10dip" >
 
             <ImageView
-                android:id="@+id/itemIcon"
+                android:id="@+id/categoryIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
-                android:contentDescription="item icon"
+                android:contentDescription="category icon"
                 android:src="@drawable/ic_launcher" />
 
             <Button
@@ -113,7 +113,7 @@
                 android:text="@string/cancel" />
 
             <Button
-                android:id="@+id/sendCategory"
+                android:id="@+id/sendItem"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

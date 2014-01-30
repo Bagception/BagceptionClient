@@ -36,25 +36,33 @@ import de.uniulm.bagception.client.bluetooth.pairing.AddNewBagStartActivity;
 import de.uniulm.bagception.client.osm.ShowMap;
 import de.uniulm.bagception.protocol.bundle.constants.StatusCode;
 
-public class MainGUI extends Activity implements BundleMessageReactor{
+public class MainGUI extends Activity implements BundleMessageReactor {
 
 	private ActionBarDrawerToggle mDrawerToggle;
 	CreateNewItemFragment newItemfragment;
 	private BundleMessageActor bmActor;
 
-	private boolean lastConnected=false;
-	
+	private boolean lastConnected = false;
+
 	private BundleMessageHelper bmHelper;
 	private DrawerLayout drawer;
 	private View drawRightLayout;
 	public Bitmap currentPicturetaken = null;
-	
-	final String[] data = { "Ãœbersicht", "Item erstellen", "Ort erstellen",
+
+	final String[] data = { "Ãœbersicht", "Alle Items", "Alle Locations",
+			"Alle Kategorien", "Alle Aktivitäten", "Item erstellen",
+			"Ort erstellen", "Kategorie erstellen", "Aktivität erstellen",
 			"Neue Tasche", "Einstellungen" };
 	final String[] menueFragments = {
 			"de.uniulm.bagception.client.ui.launcher.OverviewFragment",
+			"de.uniulm.bagception.client.ui.launcher.AllItemsFragment",
+			"de.uniulm.bagception.client.ui.launcher.AllLocationsFragment",
+			"de.uniulm.bagception.client.ui.launcher.AllCategoriesFragment",
+			"de.uniulm.bagception.client.ui.launcher.AllActivitiesFragment",
 			"de.uniulm.bagception.client.ui.launcher.CreateNewItemFragment",
 			"de.uniulm.bagception.client.ui.launcher.CreateNewPlaceFragment",
+			"de.uniulm.bagception.client.ui.launcher.CreateNewCategoryFragment",
+			"de.uniulm.bagception.client.ui.launcher.CreateNewActivityFragment",
 			"de.uniulm.bagception.client.ui.launcher.NewBagFragment",
 			"de.uniulm.bagception.client.ui.launcher.SettingsFragment" };
 
@@ -83,7 +91,8 @@ public class MainGUI extends Activity implements BundleMessageReactor{
 						super.onDrawerClosed(drawerView);
 						FragmentTransaction tx = getFragmentManager()
 								.beginTransaction();
-						getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+						getActionBar().setNavigationMode(
+								ActionBar.NAVIGATION_MODE_STANDARD);
 						tx.replace(R.id.main, Fragment.instantiate(
 								MainGUI.this, menueFragments[pos]));
 						getActionBar().setTitle(data[pos]);
@@ -143,9 +152,9 @@ public class MainGUI extends Activity implements BundleMessageReactor{
 		Intent intent = new Intent(this, ShowMap.class);
 		startActivity(intent);
 	}
-	
+
 	private final int REQUEST_IMAGE_CAPTURE = 1;
-	
+
 	public void ontakePictureButtonClick(View v) {
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -169,45 +178,43 @@ public class MainGUI extends Activity implements BundleMessageReactor{
 			ImageView img = (ImageView) findViewById(R.id.itemIcon);
 			img.setImageBitmap(imageBitmap);
 			currentPicturetaken = imageBitmap;
-			//Intent i = new Intent(this, PictureSerializing.class);
-			//i.putExtra("img", PictureSerializer.serialize(imageBitmap));
-			
 		}
 	}
-	
-//	public void takePicture(View view){
-//		Intent intent = new Intent(this, TakePicture.class);
-//		startActivity(intent);
-//	}
-//	
-//	public void sendNewItem(View view){
-//		BundleMessageHelper helper = new BundleMessageHelper(this);
-//		helper.sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND, ItemCommand.add(new Item)))
-//	}
 
 	@Override
 	public void onBundleMessageRecv(Bundle b) {
-		BUNDLE_MESSAGE msg = BundleMessage.getInstance().getBundleMessageType(b);
+		BUNDLE_MESSAGE msg = BundleMessage.getInstance()
+				.getBundleMessageType(b);
 		JSONObject obj = BundleMessage.getInstance().extractObject(b);
-		
-		switch (msg){
+
+		switch (msg) {
 		case ADMINISTRATION_COMMAND:
-			AdministrationCommand<?> cmd = AdministrationCommand.fromJSONObject(obj);
-			AdministrationCommandProcessor p = new AdministrationCommandProcessor(){
+			AdministrationCommand<?> cmd = AdministrationCommand
+					.fromJSONObject(obj);
+			AdministrationCommandProcessor p = new AdministrationCommandProcessor() {
 				@Override
 				public void onItemAdd(Item a, AdministrationCommand<Item> i) {
-					if (i.isSuccessful()){
-						Toast.makeText(MainGUI.this, "item : " + a.getName() + "erfolgreich angelegt ", Toast.LENGTH_SHORT).show();
-					}else{
-						Toast.makeText(MainGUI.this, "item : " + a.getName() + "nicht erfolgreich angelegt ", Toast.LENGTH_SHORT).show();
-							
+					if (i.isSuccessful()) {
+						Toast.makeText(
+								MainGUI.this,
+								"item : " + a.getName()
+										+ "erfolgreich angelegt ",
+								Toast.LENGTH_SHORT).show();
+					} else {
+						Toast.makeText(
+								MainGUI.this,
+								"item : " + a.getName()
+										+ "nicht erfolgreich angelegt ",
+								Toast.LENGTH_SHORT).show();
+
 					}
 				}
 			};
 			cmd.accept(p);
 			break;
-			
-		default: break;
+
+		default:
+			break;
 		}
 	}
 
@@ -219,88 +226,92 @@ public class MainGUI extends Activity implements BundleMessageReactor{
 	@Override
 	public void onResponseMessage(Bundle b) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onResponseAnswerMessage(Bundle b) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onStatusMessage(Bundle b) {
 		StatusCode c = StatusCode.getStatusCode(b);
-		switch (c){
-		case CONNECTED:{
-			if (lastConnected) return;
+		switch (c) {
+		case CONNECTED: {
+			if (lastConnected)
+				return;
 			drawer.openDrawer(drawRightLayout);
 			Handler h = new Handler();
 			h.postDelayed(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					drawer.closeDrawer(drawRightLayout);
-					
+
 				}
 			}, 1500);
-			
-			lastConnected=true;
+
+			lastConnected = true;
 			break;
 		}
-		case DISCONNECTED:{
-			if (!lastConnected) return;
+		case DISCONNECTED: {
+			if (!lastConnected)
+				return;
 			drawer.openDrawer(drawRightLayout);
-			lastConnected=false;
+			lastConnected = false;
 			break;
 		}
 		default:
 			break;
 		}
-		
+
 	}
 
 	@Override
 	public void onCommandMessage(Bundle b) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onError(Exception e) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
-		
-		
+
 	}
-	
+
 	@Override
 	protected void onStop() {
-	
+
 		super.onStop();
 		bmActor.unregister(this);
 	}
-	
+
 	@Override
 	protected void onStart() {
 		super.onStart();
 		bmActor.register(this);
-		//bmHelper.sendCommandBundle(Command.RESEND_STATUS.toBundle());
+		// bmHelper.sendCommandBundle(Command.RESEND_STATUS.toBundle());
 
 	}
+
 	@Override
 	protected void onResume() {
-	
+
 		super.onResume();
 	}
-//	@Override
-//	protected void onResume() {
-//		super.onResume();
-//		new BundleMessageHelper(this).sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.CONTAINER_STATUS_UPDATE_REQUEST, ""));
-//	}
+	// @Override
+	// protected void onResume() {
+	// super.onResume();
+	// new
+	// BundleMessageHelper(this).sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.CONTAINER_STATUS_UPDATE_REQUEST,
+	// ""));
+	// }
 }
