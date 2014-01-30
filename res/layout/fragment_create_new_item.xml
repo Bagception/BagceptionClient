@@ -113,7 +113,7 @@
                 android:text="@string/cancel" />
 
             <Button
-                android:id="@+id/sendCategory"
+                android:id="@+id/sendItem"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
