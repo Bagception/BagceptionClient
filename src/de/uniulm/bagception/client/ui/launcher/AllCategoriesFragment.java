@@ -3,6 +3,7 @@ package de.uniulm.bagception.client.ui.launcher;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,9 @@ import de.uniulm.bagception.bundlemessageprotocol.entities.Category;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Location;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
+import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommandProcessor;
+import de.uniulm.bagception.bundlemessageprotocol.entities.administration.CategoryCommand;
+import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ItemCommand;
 import de.uniulm.bagception.client.R;
 
 public class AllCategoriesFragment extends BasicListEntitiesFragment<Category> {
@@ -52,14 +56,27 @@ public class AllCategoriesFragment extends BasicListEntitiesFragment<Category> {
 
 	@Override
 	protected AdministrationCommand<Category> getAdminCommandRequest() {
-		// TODO Auto-generated method stub
-		return null;
+		return CategoryCommand.list();
 	}
 
 	@Override
 	public void onAdminCommand(AdministrationCommand<?> a_cmd) {
-		// TODO Auto-generated method stub
+		AdministrationCommandProcessor adminCommandProcessor = new AdministrationCommandProcessor() {
+			@Override
+			public void onCategoryList(AdministrationCommand<Category> c) {
+				// item list
+				Category[] theCategoriesWeWantToDisplay = c.getPayloadObjects();
+				listAdapter.clear();
+				listAdapter.addAll(theCategoriesWeWantToDisplay);
+				Log.d("inhalt adapter: ", listAdapter.toString());
+			}
+		};
+		a_cmd.accept(adminCommandProcessor);
+	}
 
+	@Override
+	protected AdministrationCommand<Category> getToDeleteEntity(int pos) {
+		return CategoryCommand.remove(listAdapter.getItem(pos));
 	}
 
 }

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Location;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommandProcessor;
+import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ItemCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.LocationCommand;
 
 public class AllLocationsFragment extends BasicListEntitiesFragment<Location> {
@@ -40,7 +41,8 @@ public class AllLocationsFragment extends BasicListEntitiesFragment<Location> {
 							.findViewById(android.R.id.text1);
 
 					if (itemView != null) {
-						itemView.setText(loc.getName());
+						itemView.setText(loc.getName() + "string");
+						Log.d("testausgabe", loc.getName() + "");
 					}
 				}
 				return view;
@@ -66,6 +68,11 @@ public class AllLocationsFragment extends BasicListEntitiesFragment<Location> {
 			}
 		};
 		a_cmd.accept(adminCommandProcessor);
+	}
+
+	@Override
+	protected AdministrationCommand<Location> getToDeleteEntity(int pos) {
+		return LocationCommand.remove(listAdapter.getItem(pos));
 	}
 
 }

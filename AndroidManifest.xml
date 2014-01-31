@@ -95,6 +95,10 @@
             android:label="Debug"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name="de.uniulm.bagception.client.EditItemActivity"
+            android:label="@string/title_activity_edit_item" >
+        </activity>
     </application>
 
 </manifest>

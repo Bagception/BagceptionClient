@@ -40,6 +40,12 @@ public class AllItemsFragment extends BasicListEntitiesFragment<Item> {
 		return ItemCommand.list();
 	}
 
+	@Override
+	protected AdministrationCommand<Item> getToDeleteEntity(int pos) {
+		
+		return ItemCommand.remove(listAdapter.getItem(pos));
+	}
+
 
 
 }
