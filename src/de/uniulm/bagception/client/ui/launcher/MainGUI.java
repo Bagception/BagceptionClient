@@ -50,8 +50,8 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 	public Bitmap currentPicturetaken = null;
 
 	final String[] data = { "√úbersicht", "Alle Items", "Alle Locations",
-			"Alle Kategorien", "Alle Aktivit‰ten", "Item erstellen",
-			"Ort erstellen", "Kategorie erstellen", "Aktivit‰t erstellen",
+			"Alle Kategorien", "Alle Aktivit√§ten", "Item erstellen",
+			"Ort erstellen", "Kategorie erstellen", "Aktivit√§t erstellen",
 			"Neue Tasche", "Einstellungen" };
 	final String[] menueFragments = {
 			"de.uniulm.bagception.client.ui.launcher.OverviewFragment",

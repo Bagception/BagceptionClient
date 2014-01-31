@@ -13,7 +13,6 @@ import de.uniulm.bagception.bluetoothclientmessengercommunication.service.Bundle
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
-import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommandProcessor;
 import de.uniulm.bagception.client.R;
 
 public abstract class BasicListEntitiesFragment<E> extends Fragment implements BundleMessageReactor{
