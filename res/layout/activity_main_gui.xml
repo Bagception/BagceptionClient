@@ -13,7 +13,7 @@
 
     <ListView
         android:id="@+id/drawer"
-        android:layout_width="240dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="left"
         android:background="#6d5151"
@@ -23,8 +23,8 @@
 
     <fragment
         android:id="@+id/drawerRight"
-        android:name="de.uniulm.bagception.client.ConnectivityFragment"
-        android:layout_width="200dp"
+        android:name="de.uniulm.bagception.client.ui.launcher.SettingsFragment"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="right"
         android:background="#6d5151"
