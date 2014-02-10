@@ -225,13 +225,11 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 
 	@Override
 	public void onResponseMessage(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onResponseAnswerMessage(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -261,6 +259,10 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 				return;
 			drawer.openDrawer(drawRightLayout);
 			lastConnected = false;
+			break;
+		}
+		case UNABLE_TO_SEND_DATA:{
+			Toast.makeText(this, "unable to send data, not connected with remote endpoint",Toast.LENGTH_SHORT).show();
 			break;
 		}
 		default:
