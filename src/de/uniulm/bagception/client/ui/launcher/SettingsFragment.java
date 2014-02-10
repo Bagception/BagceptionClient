@@ -4,17 +4,19 @@ import org.json.simple.JSONObject;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import de.philipphock.android.lib.services.ServiceUtil;
 import de.philipphock.android.lib.services.observation.ServiceObservationActor;
 import de.philipphock.android.lib.services.observation.ServiceObservationReactor;
@@ -49,7 +51,7 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 	private BundleMessageHelper bmHelper;
 	
 	private ServiceObservationActor soActor;
-	
+	private Bitmap batteryArray[] = new Bitmap[6];
 	
 	public static Fragment newInstance(Context context) {
 		SettingsFragment f = new SettingsFragment();
@@ -71,6 +73,29 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 		batteryPercentage = (TextView) root.findViewById(R.id.batteryPercentage);
 		battery = (ImageView) root.findViewById(R.id.battery_status);
 		bt_connected_with = (TextView) root.findViewById(R.id.bt_connected_with);
+		
+		bt_button.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View arg0, MotionEvent arg1) {
+				if (arg1.getAction() == MotionEvent.ACTION_DOWN){
+					((ImageView)arg0).setImageResource(R.drawable.power_holdstate);		
+				}
+				return false;
+			}
+		});
+		
+		service_button.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View arg0, MotionEvent arg1) {
+				if (arg1.getAction() == MotionEvent.ACTION_DOWN){
+					((ImageView)arg0).setImageResource(R.drawable.power_holdstate);		
+				}
+				return false;
+			}
+		});
+		
 		
 		
 		bt_button.setOnClickListener(new OnClickListener() {
@@ -105,8 +130,11 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 			
 			@Override
 			public void onClick(View arg0) {
+				service_button.setImageResource(R.drawable.power_holdstate);
 				if (ServiceUtil.isServiceRunning(getActivity(), BagceptionClientService.class)){
 					Loader.stopService(getActivity());
+					bmHelper.sendCommandBundle(Command.DISCONNECT.toBundle());	
+
 				}else{
 					Loader.startService(getActivity());
 				}
@@ -122,10 +150,18 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 	@Override
 	public void onStart() {
 		bmActor = new BundleMessageActor(this);
-		bmActor.register(getActivity());
+		//bmActor.register(getActivity());
 		bmHelper = new BundleMessageHelper(getActivity());
 		soActor = new ServiceObservationActor(this, "de.uniulm.bagception.client.service.BagceptionClientService");
 		soActor.register(getActivity());
+		
+		batteryArray[0] = BitmapFactory.decodeResource(getResources(), R.drawable.battery6);
+		batteryArray[1] = BitmapFactory.decodeResource(getResources(), R.drawable.battery5);
+		batteryArray[2] = BitmapFactory.decodeResource(getResources(), R.drawable.battery4);
+		batteryArray[3] = BitmapFactory.decodeResource(getResources(), R.drawable.battery3);
+		batteryArray[4] = BitmapFactory.decodeResource(getResources(), R.drawable.battery2);
+		batteryArray[5] = BitmapFactory.decodeResource(getResources(), R.drawable.battery1);
+		
 		super.onStart();
 	}
 	
@@ -133,6 +169,8 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 	
 	@Override
 	public void onResume() {
+		bmActor.register(getActivity());
+
 		bmHelper.sendCommandBundle(Command.RESEND_STATUS.toBundle());
 		if (ServiceUtil.isServiceRunning(getActivity(), BagceptionClientService.class)){
 			onServiceStarted(null);
@@ -143,8 +181,14 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 	}
 	
 	@Override
-	public void onStop() {
+	public void onPause() {
 		bmActor.unregister(getActivity());
+
+		super.onPause();
+	}
+	
+	@Override
+	public void onStop() {
 		soActor.unregister(getActivity());
 		super.onStop();
 	}
@@ -161,15 +205,16 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 		case CONTAINER_STATUS_UPDATE:
 			ContainerStateUpdate csu = ContainerStateUpdate.fromJSON(obj);
 			int battery = csu.getBatteryState();
-			batteryPercentage.setText(battery+"");
+			batteryPercentage.setText(battery+"%");
+			int batteryIconIndex = Math.round(battery/20f);
+			
+			this.battery.setImageBitmap(batteryArray[batteryIconIndex]);
 			break;
 		case CONTAINER_STATUS_UPDATE_REQUEST:
 			break;
 		case IMAGE_REPLY:
 			break;
 		case IMAGE_REQUEST:
-			break;
-		case ITEM_FOUND:
 			break;
 		case ITEM_NOT_FOUND:
 			break;
@@ -204,10 +249,10 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 		case CONNECTED:
 			String devName = b.getString(StatusCode.EXTRA_KEYS.CONNECTED_DEVICE_NAME);
 			bt_connected_with.setText(devName);
-			bt_connected_with.setTextColor(Color.BLACK);
+			bt_connected_with.setTextColor(Color.GREEN);
 			
 			bt_status.setText("connected");
-			bt_connected_with.setTextColor(Color.GREEN);
+			bt_status.setTextColor(Color.GREEN);
 			
 			isConnected = true;
 			
@@ -221,7 +266,7 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 			bt_connected_with.setTextColor(Color.RED);
 			
 			bt_status.setText("disconnected");
-			bt_connected_with.setTextColor(Color.RED);
+			bt_status.setTextColor(Color.RED);
 			bt_button.setImageResource(R.drawable.power_offstate);
 			isConnected = false;
 			break;
