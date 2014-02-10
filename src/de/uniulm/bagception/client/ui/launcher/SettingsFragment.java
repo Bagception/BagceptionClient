@@ -4,25 +4,33 @@ import org.json.simple.JSONObject;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+import de.philipphock.android.lib.services.ServiceUtil;
+import de.philipphock.android.lib.services.observation.ServiceObservationActor;
+import de.philipphock.android.lib.services.observation.ServiceObservationReactor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.bundlemessageprotocol.entities.ContainerStateUpdate;
+import de.uniulm.bagception.client.Loader;
 import de.uniulm.bagception.client.R;
+import de.uniulm.bagception.client.service.BagceptionClientService;
 import de.uniulm.bagception.protocol.bundle.constants.Command;
 import de.uniulm.bagception.protocol.bundle.constants.StatusCode;
 
-public class SettingsFragment extends Fragment implements BundleMessageReactor{
+public class SettingsFragment extends Fragment implements BundleMessageReactor, ServiceObservationReactor{
 
 	
 	//ui
@@ -39,6 +47,9 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor{
 	//communication
 	private BundleMessageActor bmActor;
 	private BundleMessageHelper bmHelper;
+	
+	private ServiceObservationActor soActor;
+	
 	
 	public static Fragment newInstance(Context context) {
 		SettingsFragment f = new SettingsFragment();
@@ -70,6 +81,20 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor{
 					bmHelper.sendCommandBundle(Command.DISCONNECT.toBundle());	
 				}else{
 					bmHelper.sendCommandBundle(Command.TRIGGER_SCAN_DEVICES.toBundle());
+					bt_status.setText("connecting..");
+					
+					Handler h = new Handler();
+					h.postDelayed(new Runnable() {
+						
+						@Override
+						public void run() {
+							if (!isConnected){
+								bt_status.setText("disconnected");
+								bt_status.setTextColor(Color.RED);
+							}
+							
+						}
+					}, 10000);
 				}
 			}
 				
@@ -80,7 +105,11 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor{
 			
 			@Override
 			public void onClick(View arg0) {
-				//TODO 
+				if (ServiceUtil.isServiceRunning(getActivity(), BagceptionClientService.class)){
+					Loader.stopService(getActivity());
+				}else{
+					Loader.startService(getActivity());
+				}
 			}
 		});
 		
@@ -95,18 +124,28 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor{
 		bmActor = new BundleMessageActor(this);
 		bmActor.register(getActivity());
 		bmHelper = new BundleMessageHelper(getActivity());
+		soActor = new ServiceObservationActor(this, "de.uniulm.bagception.client.service.BagceptionClientService");
+		soActor.register(getActivity());
 		super.onStart();
 	}
+	
+	
 	
 	@Override
 	public void onResume() {
 		bmHelper.sendCommandBundle(Command.RESEND_STATUS.toBundle());
+		if (ServiceUtil.isServiceRunning(getActivity(), BagceptionClientService.class)){
+			onServiceStarted(null);
+		}else{
+			onServiceStopped(null);
+		}
 		super.onResume();
 	}
 	
 	@Override
 	public void onStop() {
 		bmActor.unregister(getActivity());
+		soActor.unregister(getActivity());
 		super.onStop();
 	}
 	
@@ -199,6 +238,23 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor{
 
 	@Override
 	public void onError(Exception e) {
+		
+	}
+
+	
+	//ServiceObservatonReactor
+	@Override
+	public void onServiceStarted(String serviceName) {
+		service_button.setImageResource(R.drawable.power_onstate);
+		service_status_text.setText("started");
+		service_status_text.setTextColor(Color.GREEN);
+	}
+
+	@Override
+	public void onServiceStopped(String serviceName) {
+		service_button.setImageResource(R.drawable.power_offstate);
+		service_status_text.setText("stopped");
+		service_status_text.setTextColor(Color.RED);
 		
 	}
 

@@ -1,8 +1,8 @@
 package de.uniulm.bagception.client.service;
 
-import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import de.philipphock.android.lib.services.observation.ObservableService;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
 import de.uniulm.bagception.client.bluetooth.middleware.BluetoothSystem;
@@ -12,7 +12,7 @@ import de.uniulm.bagception.client.notification.NotificationSystem;
 import de.uniulm.bagception.client.ui.launcher.MainGUI;
 import de.uniulm.bagception.protocol.bundle.constants.Command;
 
-public class BagceptionClientService extends Service{
+public class BagceptionClientService extends ObservableService{
 	
 	private BundleMessageActor bluetoothMessageActor;
 	private BundleMessageActor notificationMessageActor;
@@ -28,7 +28,11 @@ public class BagceptionClientService extends Service{
 	private NotificationSystem notifySys;
 	
 	
-
+	@Override
+	public String getServiceName() {
+	
+		return "de.uniulm.bagception.client.service.BagceptionClientService";
+	}
 	
 	
 	@Override
@@ -55,17 +59,14 @@ public class BagceptionClientService extends Service{
 		itemActor = new BundleMessageActor(itemSys);
 		itemActor.register(this);
 		
-		
+		super.onCreate();
 	}
 
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		bmHelper.sendCommandBundle(Command.TRIGGER_SCAN_DEVICES.toBundle());
-		Intent sa = new Intent(this, MainGUI.class);
-		
-		sa.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(sa);
+
 		return super.onStartCommand(intent, flags, startId);
 	}
 	
@@ -76,6 +77,7 @@ public class BagceptionClientService extends Service{
 		itemActor.unregister(this);
 		stopForeground(true);
 		imageCachingActor.unregister(this);
+		super.onDestroy();
 
 	}
 	
@@ -85,6 +87,15 @@ public class BagceptionClientService extends Service{
 	public IBinder onBind(Intent arg0) {
 		
 		return null;
+	}
+
+
+	@Override
+	protected void onFirstInit() {
+		Intent sa = new Intent(this, MainGUI.class);
+		
+		sa.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(sa);
 	}
 
 
