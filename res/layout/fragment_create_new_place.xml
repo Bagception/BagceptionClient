@@ -86,14 +86,14 @@
             android:layout_marginTop="10dip" >
 
             <Button
-                android:id="@+id/addWithMap"
+                android:id="@+id/btButton"
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:onClick="startMap"
                 android:text="Bluetooth" />
 
             <Button
-                android:id="@+id/wlan"
+                android:id="@+id/wlanButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="startMap"
