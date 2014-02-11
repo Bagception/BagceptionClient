@@ -58,17 +58,17 @@ public class ImageCachingSystem implements BundleMessageReactor{
 	@SuppressWarnings("unchecked")
 	public Bitmap getImage(Item i){
 		if (instance == null) return null;
-		Bitmap img = imageCache.get(i.getImageHash());
+		Bitmap img = imageCache.get((int)i.getImageHash());
 		if (img == null){
 			JSONObject jo = new JSONObject();
 			jo.put("img", i.getImageHash());
 			 Bundle imageRequest = BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.IMAGE_REQUEST,jo);
 			 mainService.bmHelper.sendMessageSendBundle(imageRequest);
 			 if (i != null){
-				 HashSet<Item> items = pendingImages.get(i.getImageHash());
+				 HashSet<Item> items = pendingImages.get((int)i.getImageHash());
 				 if (items == null){
 					 items = new HashSet<Item>();
-					 pendingImages.put(i.getImageHash(), items);
+					 pendingImages.put((int)i.getImageHash(), items);
 				 }
 				 
 				 items.add(i);
@@ -79,9 +79,8 @@ public class ImageCachingSystem implements BundleMessageReactor{
 		return img;
 	}
 	
-	private void setImage(Bitmap i){
-		int hash =PictureSerializer.serialize(i).hashCode();
-		imageCache.put(hash, i);
+	private void setImage(Bitmap i,long id){
+		imageCache.put((int)id, i);
 	}
 	@Override
 	public void onBundleMessageRecv(Bundle b) {
@@ -90,9 +89,10 @@ public class ImageCachingSystem implements BundleMessageReactor{
 				Log.d("debug", "image reply");
 				JSONObject obj = BundleMessage.getInstance().extractObject(b);
 				String deserImg = obj.get("img").toString();
+				long id = Long.parseLong(obj.get("id").toString());
 				Bitmap bmp = PictureSerializer.deserialize(deserImg);
-				setImage(bmp);
-				HashSet<Item> items = pendingImages.get(deserImg.hashCode());
+				setImage(bmp,id);
+				HashSet<Item> items = pendingImages.get((int)id);
 				if (items != null){
 					for (Item item_:items){
 						item_.setImage(bmp);
@@ -100,7 +100,7 @@ public class ImageCachingSystem implements BundleMessageReactor{
 					pendingImages.remove(deserImg.hashCode());
 				}
 				Intent intent = new Intent(INTENT_IMAGE_ID_BROADCAST);
-				intent.putExtra(INTENT_EXTRA_IMAGE_ID, deserImg.hashCode());
+				intent.putExtra(INTENT_EXTRA_IMAGE_ID, id);
 				LocalBroadcastManager.getInstance(mainService).sendBroadcast(intent);
 			default: break;
 		}
