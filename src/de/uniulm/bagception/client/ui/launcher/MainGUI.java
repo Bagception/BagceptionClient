@@ -52,7 +52,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 	final String[] data = { "Übersicht", "Alle Items", "Alle Locations",
 			"Alle Kategorien", "Alle Aktivitäten", "Item erstellen",
 			"Ort erstellen", "Kategorie erstellen", "Aktivität erstellen",
-			"Neue Tasche", "Einstellungen" };
+			"Neue Tasche"};
 	final String[] menueFragments = {
 			"de.uniulm.bagception.client.ui.launcher.OverviewFragment",
 			"de.uniulm.bagception.client.ui.launcher.AllItemsFragment",
@@ -63,8 +63,8 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 			"de.uniulm.bagception.client.ui.launcher.CreateNewPlaceFragment",
 			"de.uniulm.bagception.client.ui.launcher.CreateNewCategoryFragment",
 			"de.uniulm.bagception.client.ui.launcher.CreateNewActivityFragment",
-			"de.uniulm.bagception.client.ui.launcher.NewBagFragment",
-			"de.uniulm.bagception.client.ui.launcher.SettingsFragment" };
+			"de.uniulm.bagception.client.ui.launcher.NewBagFragment"
+			 };
 
 	final String[] data2 = { "Test1", "Test2" };
 
@@ -225,13 +225,11 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 
 	@Override
 	public void onResponseMessage(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onResponseAnswerMessage(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -261,6 +259,10 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 				return;
 			drawer.openDrawer(drawRightLayout);
 			lastConnected = false;
+			break;
+		}
+		case UNABLE_TO_SEND_DATA:{
+			Toast.makeText(this, "unable to send data, not connected with remote endpoint",Toast.LENGTH_SHORT).show();
 			break;
 		}
 		default:

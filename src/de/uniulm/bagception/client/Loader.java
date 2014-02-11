@@ -10,4 +10,10 @@ public class Loader {
 		
 		c.startService(startServiceIntent);	
 	}
+	
+	public static void stopService(Context c){
+		Intent startServiceIntent = new Intent(c,BagceptionClientService.class);
+		
+		c.stopService(startServiceIntent);	
+	}
 }

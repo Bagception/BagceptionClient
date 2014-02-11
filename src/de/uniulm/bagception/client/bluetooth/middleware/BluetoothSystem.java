@@ -329,15 +329,9 @@ public class BluetoothSystem implements CheckReachableCallback,
 	// data received from local endpoint, that is data to be send
 	@Override
 	public void onBundleMessageSend(Bundle b) {
-		for (String keys : b.keySet()) {
-			LOG.out(this, keys + ": " + b.get(keys));
-
-		}
-
 		if (btclient == null) {
-			Log.d("Client ist null beim Appstart", "Null!");
+			onCannotSendDueToNotConnected();
 		} else {
-
 			btclient.send(b);
 		}
 	}
@@ -345,9 +339,12 @@ public class BluetoothSystem implements CheckReachableCallback,
 	@Override
 	public void onError(Exception e) {
 		if (e.getMessage().equals("not connected")){
-			Toast.makeText(mainService, "unable to send data, not connected with remote endpoint", Toast.LENGTH_SHORT ).show();	
+			onCannotSendDueToNotConnected();	
 		}
-		 
+	}
+	
+	private void onCannotSendDueToNotConnected(){
+		mainService.bmHelper.sendStatusBundle(StatusCode.UNABLE_TO_SEND_DATA.toBundle());
 	}
 
 	/*

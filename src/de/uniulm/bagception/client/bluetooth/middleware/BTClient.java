@@ -136,7 +136,7 @@ public class BTClient implements Runnable {
 			clientSocketOutStream.write(protocol.getSendableBytes(b));
 			clientSocketOutStream.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			clientcallback.onError(new Exception("not connected"));
 			e.printStackTrace();
 		}
 		

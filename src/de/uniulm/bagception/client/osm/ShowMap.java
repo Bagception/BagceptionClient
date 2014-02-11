@@ -45,7 +45,7 @@ public class ShowMap extends Activity implements LocationListener {
 
 		mapView = (HandleMapEvents) findViewById(R.id.map);
 		mapView.setClickable(true);
-		mapView.setTileSource(TileSourceFactory.MAPNIK);
+		mapView.setTileSource(TileSourceFactory.CYCLEMAP);
 		mapView.setBuiltInZoomControls(true);
 		meterIndicatior = (TextView) findViewById(R.id.meter);
 		final SeekBar meterSlider = (SeekBar) findViewById(R.id.meterSlider);
