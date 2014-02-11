@@ -73,63 +73,38 @@
                 android:id="@+id/addWithMap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="startMap"
                 android:gravity="left"
+                android:onClick="startMap"
                 android:text="Karte verwenden" />
         </TableRow>
 
-         <TableRow
-            android:id="@+id/tableRow4"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="25dip"
-            android:layout_marginTop="10dip" >
-
-            <TextView
-                android:id="@+id/itemVisibility"
-                android:layout_gravity="center"
-                android:layout_marginLeft="15dp"
-                android:text="@string/itemVisibility"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/text" />
-
-            <Spinner
-                android:id="@+id/visibility"
-                android:layout_height="40dp"
-                android:layout_marginRight="15dp"
-                android:entries="@array/visibility"
-                android:textAlignment="center" />
-        </TableRow>
-
         <TableRow
-            android:id="@+id/tableRow6"
-            android:layout_width="fill_parent"
+            android:id="@+id/tableRow10"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dip"
             android:layout_marginTop="10dip" >
-
-            <QuickContactBadge
-                android:id="@+id/badge_small"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:src="@drawable/ic_launcher" />
 
             <Button
                 android:id="@+id/addWithMap"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:onClick="startMap"
+                android:text="Bluetooth" />
+
+            <Button
+                android:id="@+id/wlan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="20dp"
-                android:onClick="takePicture"
-                android:text="Neues Foto" />
+                android:onClick="startMap"
+                android:text="WLAN" />
         </TableRow>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginTop="110dp"
+            android:layout_marginTop="220dp"
             android:background="@color/background"
             android:divider="?android:attr/listDivider"
             android:dividerPadding="12dp"
@@ -137,6 +112,7 @@
             android:showDividers="middle" >
 
             <Button
+                android:id="@+id/cancelPlace"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

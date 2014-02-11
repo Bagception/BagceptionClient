@@ -41,7 +41,7 @@ public class AllLocationsFragment extends BasicListEntitiesFragment<Location> {
 							.findViewById(android.R.id.text1);
 
 					if (itemView != null) {
-						itemView.setText(loc.getName() + "string");
+						itemView.setText(loc.getName());
 						Log.d("testausgabe", loc.getName() + "");
 					}
 				}

@@ -36,67 +36,11 @@
             </EditText>
         </TableRow>
 
-        <TableRow
-            android:id="@+id/tableRow3"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="25dip"
-            android:layout_marginTop="10dip" >
-
-            <ImageView
-                android:id="@+id/categoryIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:contentDescription="category icon"
-                android:src="@drawable/ic_launcher" />
-
-            <Button
-                android:id="@+id/takePhoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="20dp"
-                android:onClick="ontakePictureButtonClick"
-                android:text="Neues Foto" />
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tableRow4"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="25dip"
-            android:layout_marginTop="10dip" >
-
-            <TextView
-                android:id="@+id/itemVisibility"
-                android:layout_gravity="center"
-                android:layout_marginLeft="15dp"
-                android:text="@string/itemVisibility"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/text" />
-
-            <Spinner
-                android:id="@+id/visibility"
-                android:layout_height="40dp"
-                android:layout_marginRight="15dp"
-                android:entries="@array/visibility"
-                android:textAlignment="center" />
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tableRow5"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="25dip"
-            android:layout_marginTop="10dip" >
-        </TableRow>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginTop="220dp"
+            android:layout_marginTop="350dp"
             android:background="@color/background"
             android:divider="?android:attr/listDivider"
             android:dividerPadding="12dp"
@@ -104,6 +48,7 @@
             android:showDividers="middle" >
 
             <Button
+                android:id="@+id/cancelCategory"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -118,9 +63,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@android:drawable/list_selector_background"
+                android:onClick="sendNewCategory"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
-                android:onClick="sendNewCategory"
                 android:text="@string/save" />
         </LinearLayout>
     </TableLayout>

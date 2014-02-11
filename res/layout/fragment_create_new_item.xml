@@ -12,7 +12,6 @@
             android:id="@+id/tableRow2"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dip"
             android:layout_marginTop="10dip" >
 
             <TextView
@@ -40,7 +39,6 @@
             android:id="@+id/tableRow3"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="25dip"
             android:layout_marginTop="10dip" >
 
             <ImageView
@@ -65,14 +63,14 @@
             android:id="@+id/tableRow4"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="25dip"
+            android:layout_marginBottom="10dp"
             android:layout_marginTop="10dip" >
 
             <TextView
                 android:id="@+id/itemVisibility"
                 android:layout_gravity="center"
                 android:layout_marginLeft="15dp"
-                android:text="@string/itemVisibility"
+                android:text="Kategorie"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/text" />
 
@@ -84,19 +82,172 @@
                 android:textAlignment="center" />
         </TableRow>
 
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
         <TableRow
             android:id="@+id/tableRow5"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="25dip"
             android:layout_marginTop="10dip" >
+
+            <TextView
+                android:id="@+id/itemVisibility"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:text="Temperatur"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/text" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow5"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip" >
+
+            <ToggleButton
+                android:id="@+id/warmButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:text="Warm" />
+
+            <ToggleButton
+                android:id="@+id/coldButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:text="Kalt" />
+        </TableRow>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <TableRow
+            android:id="@+id/tableRow5"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip" >
+
+            <TextView
+                android:id="@+id/itemVisibility"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:text="Witterung"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/text" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow5"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip" >
+
+            <ToggleButton
+                android:id="@+id/sunButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:text="Sonne" />
+
+            <ToggleButton
+                android:id="@+id/rainButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:text="Regen" />
+        </TableRow>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <TableRow
+            android:id="@+id/tableRow5"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip" >
+
+            <TextView
+                android:id="@+id/itemVisibility"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:text="Tageszeit"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/text" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow5"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip" >
+
+            <ToggleButton
+                android:id="@+id/lightButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:text="Hell" />
+
+            <ToggleButton
+                android:id="@+id/darkButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:text="Dunkel" />
+        </TableRow>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <TableRow
+            android:id="@+id/tableRow5"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip" >
+
+            <CheckBox
+                android:id="@+id/always"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="Immer dabei" />
+
+            <CheckBox
+                android:id="@+id/independent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="Aktivitätsunabhängig" />
         </TableRow>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginTop="220dp"
+            android:layout_marginTop="25dp"
             android:background="@color/background"
             android:divider="?android:attr/listDivider"
             android:dividerPadding="12dp"
@@ -104,6 +255,7 @@
             android:showDividers="middle" >
 
             <Button
+                android:id="@+id/cancelItem"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -118,9 +270,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@android:drawable/list_selector_background"
+                android:onClick="sendNewItem"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
-                android:onClick="sendNewItem"
                 android:text="@string/save" />
         </LinearLayout>
     </TableLayout>

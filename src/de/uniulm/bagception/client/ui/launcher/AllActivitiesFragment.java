@@ -21,24 +21,11 @@ import de.uniulm.bagception.client.R;
 
 public class AllActivitiesFragment extends BasicListEntitiesFragment<Activity>{
 
-	ListView listView;
-	ArrayAdapter<Item> ad;
-	String bla;
 	
 	public static Fragment newInstance(Context context) {
-		AllItemsFragment f = new AllItemsFragment();
+		AllActivitiesFragment f = new AllActivitiesFragment();
 
 		return f;
-	}
-	
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		final ViewGroup root = (ViewGroup) inflater.inflate(
-				R.layout.fragment_all_activities, null);
-		listView = (ListView) root.findViewById(R.id.listViewAllActivities);
-		return root;
 	}
 
 
