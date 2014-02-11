@@ -238,7 +238,8 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 		StatusCode c = StatusCode.getStatusCode(b);
 		switch (c) {
 		case CONNECTED: {
-			if (lastConnected)
+			boolean hasChanged = b.getBoolean(StatusCode.EXTRA_KEYS.CONNECTION_CHANGED);
+			if (!hasChanged)
 				return;
 			drawer.openDrawer(drawRightLayout);
 			Handler h = new Handler();
@@ -251,14 +252,13 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 				}
 			}, 1500);
 
-			lastConnected = true;
 			break;
 		}
 		case DISCONNECTED: {
-			if (!lastConnected)
+			boolean hasChanged = b.getBoolean(StatusCode.EXTRA_KEYS.CONNECTION_CHANGED);
+			if (!hasChanged)
 				return;
 			drawer.openDrawer(drawRightLayout);
-			lastConnected = false;
 			break;
 		}
 		case UNABLE_TO_SEND_DATA:{
