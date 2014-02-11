@@ -76,15 +76,19 @@ public class BluetoothSystem implements CheckReachableCallback,
 
 	// states
 
-	protected void handleNotConnectedState() {
+	protected void handleNotConnectedState(boolean connectionChanged) {
 		Bundle conn = StatusCode.DISCONNECTED.toBundle();
+		conn.putBoolean(StatusCode.EXTRA_KEYS.CONNECTION_CHANGED,
+				connectionChanged);
 		mainService.bmHelper.sendStatusBundle(conn);
 	}
 
-	protected void handleConnectedState() {
+	protected void handleConnectedState(boolean connectionChanged) {
 		Bundle conn = StatusCode.CONNECTED.toBundle();
 		conn.putString(StatusCode.EXTRA_KEYS.CONNECTED_DEVICE_NAME,
 				btclient.getRemoteDeviceName());
+		conn.putBoolean(StatusCode.EXTRA_KEYS.CONNECTION_CHANGED,
+				connectionChanged);
 		mainService.bmHelper.sendStatusBundle(conn);
 
 	}
@@ -236,7 +240,7 @@ public class BluetoothSystem implements CheckReachableCallback,
 	 */
 	@Override
 	public void onConnect() {
-		handleConnectedState();
+		handleConnectedState(lastConnectionState_connected != true);
 		responseSystem.makeResponse_bluetoothConnection(true,
 				lastConnectionState_connected != true);
 		lastConnectionState_connected = true;
@@ -244,7 +248,7 @@ public class BluetoothSystem implements CheckReachableCallback,
 
 	@Override
 	public void onDisconnect() {
-		handleNotConnectedState();
+		handleNotConnectedState(lastConnectionState_connected != false);
 		responseSystem.makeResponse_bluetoothConnection(false,
 				lastConnectionState_connected != false);
 		lastConnectionState_connected = false;
