@@ -53,7 +53,7 @@ public class CreateNewPlaceFragment extends Fragment {
 		wlan = (Button) root.findViewById(R.id.wlanButton);
 		showMap = new ShowMap();
 		
-		final String[] test = {"1", "2"};
+		
 
 		bt.setOnClickListener(new OnClickListener() {
 
@@ -65,6 +65,7 @@ public class CreateNewPlaceFragment extends Fragment {
 						getActivity());
 				dialogAlert.setTitle("BT");
 				ListView lv = (ListView) root.findViewById(R.id.btListview);
+				final String[] test = {"1", "2"};
 				ListAdapter ladapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, test);
 				lv.setAdapter(ladapter);
 				dialogAlert.create().show();
