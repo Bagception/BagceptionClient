@@ -1,5 +1,9 @@
 package de.uniulm.bagception.client.ui.launcher;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+
+import android.R.integer;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
@@ -8,25 +12,33 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
+import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Activity;
-import de.uniulm.bagception.bundlemessageprotocol.entities.Category;
+import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ActivityCommand;
-import de.uniulm.bagception.bundlemessageprotocol.entities.administration.CategoryCommand;
+import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
+import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommandProcessor;
+import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ItemCommand;
 import de.uniulm.bagception.client.R;
 
-public class CreateNewActivityFragment extends Fragment {
+public class CreateNewActivityFragment extends Fragment implements BundleMessageReactor{
 
+	ArrayList<Item> itemsForActivity;
 	EditText editName;
 	Button send;
 	Button cancel;
 	Button addPlace;
+	Button addActivityItems;
+	BundleMessageActor bmActor;
 
 	public static Fragment newInstance(Context context) {
 		CreateNewItemFragment f = new CreateNewItemFragment();
@@ -43,7 +55,9 @@ public class CreateNewActivityFragment extends Fragment {
 		send = (Button) root.findViewById(R.id.sendActivity);
 		cancel = (Button) root.findViewById(R.id.cancelActivity);
 		addPlace = (Button) root.findViewById(R.id.addLocation);
-
+		
+		bmActor = new BundleMessageActor(this);
+		
 		addPlace.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -67,13 +81,27 @@ public class CreateNewActivityFragment extends Fragment {
 				placeAlert.create().show();
 			}
 		});
+		
+		
+		addActivityItems = (Button) root.findViewById(R.id.addActivityItem);
+		
+		addActivityItems.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+
+				
+				new BundleMessageHelper(getActivity()).sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND, ItemCommand.list()));
+				
+			}
+		});
 
 		send.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
 
-				Activity activity = new Activity(editName.getText().toString());
+				Activity activity = new Activity(editName.getText().toString(), itemsForActivity);
 
 				BundleMessageHelper helper = new BundleMessageHelper(
 						getActivity());
@@ -98,6 +126,109 @@ public class CreateNewActivityFragment extends Fragment {
 		});
 
 		return root;
+	}
+
+	@Override
+	public void onBundleMessageRecv(Bundle b) {
+		switch(BundleMessage.getInstance().getBundleMessageType(b)){
+		case ADMINISTRATION_COMMAND:{
+			AdministrationCommandProcessor p = new AdministrationCommandProcessor(){
+				public void onItemList(de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand<de.uniulm.bagception.bundlemessageprotocol.entities.Item> i) {
+					final Item[] items = i.getPayloadObjects();
+					final HashSet<Integer> checkedItems = new HashSet<Integer>();
+					String[] itemStrings = new String[items.length];
+					for (int iter=0;iter<itemStrings.length;iter++){
+						itemStrings[iter] = items[iter].getName();
+					}
+					
+					AlertDialog.Builder itemAlert = new AlertDialog.Builder(getActivity());
+					itemAlert.setTitle("Items zur Activity hinzufügen");
+					itemAlert.setMultiChoiceItems(itemStrings, null, new DialogInterface.OnMultiChoiceClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+							if (isChecked){
+								checkedItems.add(which);
+							}else{
+								checkedItems.remove(which);
+							}
+						}
+					});
+					itemAlert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							ArrayList<Item> selectedItems  = new ArrayList<Item>();
+							for (int checked: checkedItems){
+								selectedItems.add(items[checked]);
+							}
+							itemsForActivity = selectedItems;
+							
+						}
+					});
+					itemAlert.create().show();
+					
+					
+					
+				}
+				
+			};
+			AdministrationCommand.fromJSONObject(BundleMessage.getInstance().extractObject(b)).accept(p);
+
+		}
+		
+		default:
+			break;
+		
+		}
+	}
+
+	@Override
+	public void onBundleMessageSend(Bundle b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onResponseMessage(Bundle b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onResponseAnswerMessage(Bundle b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onStatusMessage(Bundle b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onCommandMessage(Bundle b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onError(Exception e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void onResume() {
+		bmActor.register(getActivity());
+		super.onResume();
+	}
+	
+	@Override
+	public void onPause() {
+		bmActor.unregister(getActivity());
+		super.onPause();
 	}
 
 }
