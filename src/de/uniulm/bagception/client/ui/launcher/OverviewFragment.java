@@ -32,20 +32,18 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 	public static Context appContext;
 	private BundleMessageActor bmActor;
 	private volatile ContainerStateUpdate statusUpdate;
-	
+
 	private ItemsInFragment itemsInFragment;
 	private ItemsMissFragment itemsMissFragment;
 	private ItemsSuggFragment itemsSuggFragment;
-	
+
 	private BundleMessageHelper bmHelper;
 	private TextView currentActivityView;
 
 	private ActionBar.Tab itemsInTab;
 	private ActionBar.Tab itemsMissTab;
-	//ActionBar.Tab itemsNeedlessTab;
+	// ActionBar.Tab itemsNeedlessTab;
 	ActionBar.Tab itemsSuggTab;
-
-	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,26 +63,27 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		// initiating both tabs and set text to it.
 		itemsInTab = actionBar.newTab().setText("Enthalten (0)");
 		itemsMissTab = actionBar.newTab().setText("Fehlend (0)");
-		//itemsNeedlessTab = actionBar.newTab().setText("�berfl�ssig (0)");
+		// itemsNeedlessTab = actionBar.newTab().setText("�berfl�ssig (0)");
 		itemsSuggTab = actionBar.newTab().setText("Vorschlag");
 
 		itemsInFragment = new ItemsInFragment();
 		itemsInFragment.setParentFragment(this);
 		itemsMissFragment = new ItemsMissFragment();
 		itemsMissFragment.setParentFragment(this);
-		//itemsNeedlessFragment = new ItemsNeedlessFragment();
-		//itemsNeedlessFragment.setParentFragment(this);
+		// itemsNeedlessFragment = new ItemsNeedlessFragment();
+		// itemsNeedlessFragment.setParentFragment(this);
 		itemsSuggFragment = new ItemsSuggFragment();
 		itemsSuggFragment.setParentFragment(this);
 
 		itemsInTab.setTabListener(new ItemTabListener(itemsInFragment));
 		itemsMissTab.setTabListener(new ItemTabListener(itemsMissFragment));
-		//itemsNeedlessTab.setTabListener(new ItemTabListener(itemsNeedlessFragment));
+		// itemsNeedlessTab.setTabListener(new
+		// ItemTabListener(itemsNeedlessFragment));
 		itemsSuggTab.setTabListener(new ItemTabListener(itemsSuggFragment));
 
 		actionBar.addTab(itemsInTab);
 		actionBar.addTab(itemsMissTab);
-		//actionBar.addTab(itemsNeedlessTab);
+		// actionBar.addTab(itemsNeedlessTab);
 		actionBar.addTab(itemsSuggTab);
 		actionBar.getTabAt(0).select();
 		return root;
@@ -104,8 +103,8 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		case CONTAINER_STATUS_UPDATE:
 			itemsInFragment.setParentFragment(this);
 			itemsMissFragment.setParentFragment(this);
-			//itemsNeedlessFragment.setParentFragment(this);
-			
+			// itemsNeedlessFragment.setParentFragment(this);
+
 			statusUpdate = ContainerStateUpdate.fromJSON(BundleMessage
 					.getInstance().extractObject(b));
 			String currentActivity = statusUpdate.getActivity().getName();
@@ -114,19 +113,30 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 			itemsIn = statusUpdate.getItemList();
 			itemsMust = statusUpdate.getActivity().getItemsForActivity();
-			needlessItems = statusUpdate.getNeedlessItems();
+			if (statusUpdate.getNeedlessItems() == null) {
+				// Toast.makeText(getActivity(), "Keine needless Items",
+				// Toast.LENGTH_SHORT);
+			} else {
+				needlessItems = statusUpdate.getNeedlessItems();
+			}
 			missingItems = statusUpdate.getMissingItems();
-			copiedMustItems = new ArrayList<Item>(itemsMust);
 
-			itemsInTab.setText(String.format("Enthalten" + " (%d)",itemsIn.size()));
-			//itemsNeedlessTab.setText(String.format("Überflüssig (%d)",needlessItems.size()));
-			itemsMissTab.setText(String.format("Fehlend (%d)",missingItems.size()));
-			
+			if (itemsMust == null) {
+				copiedMustItems = new ArrayList<Item>();
+			} else {
+				copiedMustItems = new ArrayList<Item>(itemsMust);
+			}
+			itemsInTab.setText(String.format("Enthalten" + " (%d)",
+					itemsIn.size()));
+			// itemsNeedlessTab.setText(String.format("Überflüssig (%d)",needlessItems.size()));
+			itemsMissTab.setText(String.format("Fehlend (%d)",
+					missingItems.size()));
+
 			itemsInFragment.updateView(statusUpdate);
 			itemsMissFragment.updateView(statusUpdate);
-			//itemsNeedlessFragment.updateView(statusUpdate);
-			//debugMessage(statusUpdate);
-			
+			// itemsNeedlessFragment.updateView(statusUpdate);
+			// debugMessage(statusUpdate);
+
 			StringBuilder sb = new StringBuilder();
 
 			sb.append("Update: \n");
@@ -144,18 +154,20 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG)
 					.show();
 			break;
-		
+
 		case ITEM_NOT_FOUND:
-			Item unknownItem = Item.fromJSON(BundleMessage.getInstance().extractObject(b));
-//			Toast.makeText(getActivity(), "Found Item ID: " + unknownItem.getIds().get(0), Toast.LENGTH_LONG).show();
-			
+			Item unknownItem = Item.fromJSON(BundleMessage.getInstance()
+					.extractObject(b));
+			// Toast.makeText(getActivity(), "Found Item ID: " +
+			// unknownItem.getIds().get(0), Toast.LENGTH_LONG).show();
+
 			dialog(unknownItem);
-		break;
+			break;
 		default:
 			break;
 		}
 	}
-	
+
 	public void dialog(final Item item) {
 		AlertDialog.Builder dialogAlert = new AlertDialog.Builder(getActivity());
 		dialogAlert.setTitle("Unbekannter Tag gefunden");
@@ -164,31 +176,33 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				// TODO Auto-generated method stub
-				//dialog.cancel();
-				Toast.makeText(getActivity(), "Neues Item", Toast.LENGTH_SHORT).show();
+				// dialog.cancel();
+				Toast.makeText(getActivity(), "Neues Item", Toast.LENGTH_SHORT)
+						.show();
 				Intent intent = new Intent(getActivity(), MainGUI.class);
-				intent.putExtra("FRAGMENT", "de.uniulm.bagception.client.ui.launcher.CreateNewItemFragment");
+				intent.putExtra("FRAGMENT",
+						"de.uniulm.bagception.client.ui.launcher.CreateNewItemFragment");
 				intent.putExtra("ID", -1);
 				intent.putExtra("TAGID", item.getIds().get(0));
-				
+
 				startActivity(intent);
 			}
 		});
-		
+
 		dialogAlert.setPositiveButton("Zu Item hinzu", new OnClickListener() {
-			
+
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				Toast.makeText(getActivity(), "Zu Item hinzu", Toast.LENGTH_SHORT).show();
-				//de.uniulm.bagception.client.ui.launcher.AllItemsFragment
+				Toast.makeText(getActivity(), "Zu Item hinzu",
+						Toast.LENGTH_SHORT).show();
+				// de.uniulm.bagception.client.ui.launcher.AllItemsFragment
 			}
 		});
-		
+
 		dialogAlert.create().show();
 	}
-	
 
-	private void debugMessage(ContainerStateUpdate update){
+	private void debugMessage(ContainerStateUpdate update) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("Update: \n");
@@ -203,15 +217,12 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		sb.append("\n");
 
 		sb.append("\n");
-		Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG)
-				.show();
+		Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG).show();
 	}
+
 	public synchronized ContainerStateUpdate getItemUpdate() {
 		return statusUpdate;
 	}
-
-	
-
 
 	@Override
 	public void onBundleMessageSend(Bundle b) {
@@ -231,10 +242,13 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 	@Override
 	public void onStatusMessage(Bundle b) {
 		StatusCode status = StatusCode.getStatusCode(b);
-		switch (status){
+		switch (status) {
 		case CONNECTED:
-			bmHelper.sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.CONTAINER_STATUS_UPDATE_REQUEST, ""));
-			//Toast.makeText(getActivity(), "update status request", Toast.LENGTH_SHORT).show();
+			bmHelper.sendMessageSendBundle(BundleMessage.getInstance()
+					.createBundle(
+							BUNDLE_MESSAGE.CONTAINER_STATUS_UPDATE_REQUEST, ""));
+			// Toast.makeText(getActivity(), "update status request",
+			// Toast.LENGTH_SHORT).show();
 			break;
 		case DISCONNECTED:
 			break;
@@ -257,7 +271,6 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 	}
 
-	
 	@Override
 	public void onStart() {
 		super.onStart();
@@ -265,10 +278,9 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		bmActor.register(getActivity());
 		bmHelper = new BundleMessageHelper(getActivity());
 		bmHelper.sendCommandBundle(Command.RESEND_STATUS.toBundle());
-		
-		
+
 	}
-	
+
 	@Override
 	public void onStop() {
 		super.onStop();
