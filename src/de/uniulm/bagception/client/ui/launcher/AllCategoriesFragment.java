@@ -79,4 +79,16 @@ public class AllCategoriesFragment extends BasicListEntitiesFragment<Category> {
 		return CategoryCommand.remove(listAdapter.getItem(pos));
 	}
 
+	@Override
+	protected String getFragmentName() {
+		// TODO Auto-generated method stub
+		return "de.uniulm.bagception.client.ui.launcher.CreateNewCategoryFragment";
+	}
+
+	@Override
+	protected long itemSelected(Category e) {
+		// TODO Auto-generated method stub
+		return e.getId();
+	}
+
 }

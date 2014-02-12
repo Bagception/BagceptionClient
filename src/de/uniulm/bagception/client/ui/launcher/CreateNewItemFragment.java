@@ -1,7 +1,9 @@
 package de.uniulm.bagception.client.ui.launcher;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
@@ -27,6 +30,7 @@ public class CreateNewItemFragment extends Fragment {
 	EditText editName;
 	Button send;
 	Button cancel;
+	Button addCategory;
 	ToggleButton warm;
 	ToggleButton cold;
 	ToggleButton sunny;
@@ -36,6 +40,7 @@ public class CreateNewItemFragment extends Fragment {
 	Spinner spinner;
 	ImageView iv;
 
+	private String tagId;
 	static Fragment newInstance(Context context) {
 		CreateNewItemFragment f = new CreateNewItemFragment();
 
@@ -50,6 +55,7 @@ public class CreateNewItemFragment extends Fragment {
 		editName = (EditText) root.findViewById(R.id.editName);
 		send = (Button) root.findViewById(R.id.sendItem);
 		cancel = (Button) root.findViewById(R.id.cancelItem);
+		addCategory = (Button) root.findViewById(R.id.addCategory);
 		iv = (ImageView) root.findViewById(R.id.itemIcon);
 		warm = (ToggleButton) root.findViewById(R.id.warmButton);
 		cold = (ToggleButton) root.findViewById(R.id.coldButton);
@@ -58,6 +64,52 @@ public class CreateNewItemFragment extends Fragment {
 		light = (ToggleButton) root.findViewById(R.id.lightButton);
 		dark = (ToggleButton) root.findViewById(R.id.darkButton);
 
+		addCategory.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				String names[] = { "1", "2" };
+				// TODO Auto-generated method stub
+				AlertDialog.Builder btAlert = new AlertDialog.Builder(
+						getActivity());
+
+				btAlert.setTitle("Kategorie");
+
+				final CharSequence[] test = { "1", "2" };
+				btAlert.setItems(test, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+
+					}
+				});
+				btAlert.create().show();
+			}
+		});
+		
+
+
+		if (getArguments() == null) {
+			Toast.makeText(getActivity(), "Arguments null", Toast.LENGTH_SHORT);
+		} else {
+			int id = getArguments().getInt("ID", 0);
+
+			if (id > 0) {
+				// edit item
+				Toast.makeText(getActivity(), "load item with id " + id,
+						Toast.LENGTH_SHORT).show();
+			} else {
+				// new item
+				Toast.makeText(getActivity(), "new item", Toast.LENGTH_SHORT)
+						.show();
+				tagId = getArguments().getString("TAGID");
+
+			}
+		
+		Toast.makeText(getActivity(), "load item with id " + id,
+				Toast.LENGTH_SHORT).show();
+		}
 		warm.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -158,9 +210,16 @@ public class CreateNewItemFragment extends Fragment {
 
 			@Override
 			public void onClick(View arg0) {
+				Item item;
+				if (tagId != null){
+					item = new Item(editName.getText().toString(),tagId);
 
-				Item item = new Item(editName.getText().toString());
+				}else{
+					item = new Item(editName.getText().toString());
 
+				}
+				
+				
 				item.setImage(((MainGUI) getActivity()).currentPicturetaken);
 
 				BundleMessageHelper helper = new BundleMessageHelper(
@@ -173,19 +232,18 @@ public class CreateNewItemFragment extends Fragment {
 				startActivity(intent);
 			}
 		});
-		
+
 		cancel.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				editName.setText("");
 				iv.setImageResource(R.drawable.ic_launcher);
-				
+
 			}
 		});
-		
-		
+
 		return root;
 	}
 

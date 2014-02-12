@@ -76,6 +76,8 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 		setContentView(R.layout.activity_main_gui);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActionBar()
 				.getThemedContext(), android.R.layout.simple_list_item_1, data);
+		
+
 
 		drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 		drawRightLayout = findViewById(R.id.drawerRight);
@@ -116,10 +118,18 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 		getActionBar().setHomeButtonEnabled(true);
 
 		getActionBar().setDisplayShowHomeEnabled(true);
-
+		
+		String fragmentToLoad = menueFragments[0];
+		String s = getIntent().getStringExtra("FRAGMENT");
+		if (s != null){
+			fragmentToLoad = s;
+		}
+		
+		
 		FragmentTransaction tx = getFragmentManager().beginTransaction();
+		
 		tx.replace(R.id.main,
-				Fragment.instantiate(MainGUI.this, menueFragments[0]));
+				Fragment.instantiate(MainGUI.this, fragmentToLoad,getIntent().getExtras()));
 		tx.commit();
 	}
 

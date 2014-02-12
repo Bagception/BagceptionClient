@@ -2,6 +2,8 @@ package de.uniulm.bagception.client.ui.launcher;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -51,6 +53,10 @@ public abstract class BasicListEntitiesFragment<E> extends Fragment implements
 
 	protected abstract AdministrationCommand<E> getAdminCommandRequest();
 
+	protected abstract String getFragmentName();
+
+	protected abstract long itemSelected(E e);
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -67,13 +73,17 @@ public abstract class BasicListEntitiesFragment<E> extends Fragment implements
 		listView = (ListView) root.findViewById(R.id.listViewAllItems);
 		listAdapter = getEntityAdapter();
 		listView.setAdapter(listAdapter);
+		listAdapter.notifyDataSetChanged();
 		
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				Intent intent = new Intent(getActivity(), EditItemActivity.class);
+				Intent intent = new Intent(getActivity(), MainGUI.class);
+				intent.putExtra("FRAGMENT", getFragmentName());
+				long id = itemSelected(listAdapter.getItem(arg2));
+				intent.putExtra("ID",id );
 				startActivity(intent);
 			}
 		});
@@ -109,6 +119,7 @@ public abstract class BasicListEntitiesFragment<E> extends Fragment implements
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				sendDeleteCommand(getToDeleteEntity(pos));
+				listAdapter.notifyDataSetChanged();
 			}
 		});
 		
@@ -123,6 +134,7 @@ public abstract class BasicListEntitiesFragment<E> extends Fragment implements
 		AdministrationCommand<?> cmd = getAdminCommandRequest();
 		helper.sendMessageSendBundle(BundleMessage.getInstance().createBundle(
 				BUNDLE_MESSAGE.ADMINISTRATION_COMMAND, cmd));
+		listAdapter.notifyDataSetChanged();
 
 	}
 

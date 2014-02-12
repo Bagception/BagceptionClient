@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -123,13 +127,66 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			//itemsNeedlessFragment.updateView(statusUpdate);
 			//debugMessage(statusUpdate);
 			
+			StringBuilder sb = new StringBuilder();
+
+			sb.append("Update: \n");
+			sb.append("Items in Bag:");
+			sb.append("\n");
+
+			sb.append("\n");
+			sb.append("Activity: ");
+			sb.append(statusUpdate.getActivity().getName());
+			sb.append("\n");
+			sb.append("Items for activity:");
+			sb.append("\n");
+
+			sb.append("\n");
+			Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG)
+					.show();
 			break;
-			
 		
+		case ITEM_NOT_FOUND:
+			Item unknownItem = Item.fromJSON(BundleMessage.getInstance().extractObject(b));
+//			Toast.makeText(getActivity(), "Found Item ID: " + unknownItem.getIds().get(0), Toast.LENGTH_LONG).show();
+			
+			dialog(unknownItem);
+		break;
 		default:
 			break;
 		}
 	}
+	
+	public void dialog(final Item item) {
+		AlertDialog.Builder dialogAlert = new AlertDialog.Builder(getActivity());
+		dialogAlert.setTitle("Unbekannter Tag gefunden");
+		dialogAlert.setNegativeButton("Neues Item", new OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				//dialog.cancel();
+				Toast.makeText(getActivity(), "Neues Item", Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent(getActivity(), MainGUI.class);
+				intent.putExtra("FRAGMENT", "de.uniulm.bagception.client.ui.launcher.CreateNewItemFragment");
+				intent.putExtra("ID", -1);
+				intent.putExtra("TAGID", item.getIds().get(0));
+				
+				startActivity(intent);
+			}
+		});
+		
+		dialogAlert.setPositiveButton("Zu Item hinzu", new OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Toast.makeText(getActivity(), "Zu Item hinzu", Toast.LENGTH_SHORT).show();
+				//de.uniulm.bagception.client.ui.launcher.AllItemsFragment
+			}
+		});
+		
+		dialogAlert.create().show();
+	}
+	
 
 	private void debugMessage(ContainerStateUpdate update){
 		StringBuilder sb = new StringBuilder();

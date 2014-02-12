@@ -75,4 +75,16 @@ public class AllLocationsFragment extends BasicListEntitiesFragment<Location> {
 		return LocationCommand.remove(listAdapter.getItem(pos));
 	}
 
+	@Override
+	protected String getFragmentName() {
+		// TODO Auto-generated method stub
+		return "de.uniulm.bagception.client.ui.launcher.CreateNewPlaceFragment";
+	}
+
+	@Override
+	protected long itemSelected(Location e) {
+		// TODO Auto-generated method stub
+		return e.getId();
+	}
+
 }

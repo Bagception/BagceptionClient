@@ -3,6 +3,7 @@ package de.uniulm.bagception.client.ui.launcher;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -32,8 +33,6 @@ public class CreateNewPlaceFragment extends Fragment {
 	Button cancel;
 	Button bt;
 	Button wlan;
-	ListView btListView;
-	ListAdapter adapter;
 
 	public static Fragment newInstance(Context context) {
 		CreateNewPlaceFragment f = new CreateNewPlaceFragment();
@@ -61,14 +60,45 @@ public class CreateNewPlaceFragment extends Fragment {
 			public void onClick(View v) {
 				String names[] = {"1", "2"};
 				// TODO Auto-generated method stub
-				AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
+				AlertDialog.Builder btAlert = new AlertDialog.Builder(
 						getActivity());
-				dialogAlert.setTitle("BT");
-				ListView lv = (ListView) root.findViewById(R.id.btListview);
-				final String[] test = {"1", "2"};
-				ListAdapter ladapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, test);
-				lv.setAdapter(ladapter);
-				dialogAlert.create().show();
+				
+				btAlert.setTitle("BT");
+
+				final CharSequence[] test = {"1", "2"};
+				btAlert.setItems(test, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+				btAlert.create().show();
+			}
+		});
+		
+		wlan.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				String names[] = {"1", "2"};
+				// TODO Auto-generated method stub
+				AlertDialog.Builder wlanAlert = new AlertDialog.Builder(
+						getActivity());
+				
+				wlanAlert.setTitle("BT");
+
+				final CharSequence[] test = {"1", "2"};
+				wlanAlert.setItems(test, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+				wlanAlert.create().show();
 			}
 		});
 

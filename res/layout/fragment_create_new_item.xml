@@ -66,20 +66,15 @@
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dip" >
 
-            <TextView
-                android:id="@+id/itemVisibility"
-                android:layout_gravity="center"
-                android:layout_marginLeft="15dp"
-                android:text="Kategorie"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/text" />
-
-            <Spinner
-                android:id="@+id/visibility"
-                android:layout_height="40dp"
-                android:layout_marginRight="15dp"
-                android:entries="@array/visibility"
-                android:textAlignment="center" />
+            <Button
+                android:id="@+id/addCategory"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:drawable/list_selector_background"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:text="Kategorie hinzufügen" />
         </TableRow>
 
         <View

@@ -46,6 +46,18 @@ public class AllItemsFragment extends BasicListEntitiesFragment<Item> {
 		return ItemCommand.remove(listAdapter.getItem(pos));
 	}
 
+	@Override
+	protected String getFragmentName() {
+		
+		return "de.uniulm.bagception.client.ui.launcher.CreateNewItemFragment";
+	}
+
+	@Override
+	protected long itemSelected(Item e) {
+		
+		return e.getId();
+	}
+
 
 
 }

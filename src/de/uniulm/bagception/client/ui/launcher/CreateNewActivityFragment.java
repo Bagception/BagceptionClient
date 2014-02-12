@@ -1,7 +1,9 @@
 package de.uniulm.bagception.client.ui.launcher;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,6 +26,7 @@ public class CreateNewActivityFragment extends Fragment {
 	EditText editName;
 	Button send;
 	Button cancel;
+	Button addPlace;
 
 	public static Fragment newInstance(Context context) {
 		CreateNewItemFragment f = new CreateNewItemFragment();
@@ -39,14 +42,38 @@ public class CreateNewActivityFragment extends Fragment {
 		editName = (EditText) root.findViewById(R.id.editActivity);
 		send = (Button) root.findViewById(R.id.sendActivity);
 		cancel = (Button) root.findViewById(R.id.cancelActivity);
+		addPlace = (Button) root.findViewById(R.id.addLocation);
+
+		addPlace.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				String names[] = { "1", "2" };
+				// TODO Auto-generated method stub
+				AlertDialog.Builder placeAlert = new AlertDialog.Builder(
+						getActivity());
+
+				placeAlert.setTitle("BT");
+
+				final CharSequence[] test = { "1", "2" };
+				placeAlert.setItems(test, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+
+					}
+				});
+				placeAlert.create().show();
+			}
+		});
 
 		send.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
-				
-				Activity activity = new Activity(editName.getText().toString());
 
+				Activity activity = new Activity(editName.getText().toString());
 
 				BundleMessageHelper helper = new BundleMessageHelper(
 						getActivity());
@@ -59,17 +86,17 @@ public class CreateNewActivityFragment extends Fragment {
 
 			}
 		});
-		
+
 		cancel.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				editName.setText("");
-				
+
 			}
 		});
-		
+
 		return root;
 	}
 

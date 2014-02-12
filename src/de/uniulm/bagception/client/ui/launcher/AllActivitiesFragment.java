@@ -84,4 +84,18 @@ public class AllActivitiesFragment extends BasicListEntitiesFragment<Activity>{
 		return ActivityCommand.remove(listAdapter.getItem(pos));
 	}
 
+
+	@Override
+	protected String getFragmentName() {
+		// TODO Auto-generated method stub
+		return "de.uniulm.bagception.client.ui.launcher.CreateNewActivityFragment";
+	}
+
+
+	@Override
+	protected long itemSelected(Activity e) {
+		// TODO Auto-generated method stub
+		return e.getId();
+	}
+
 }
