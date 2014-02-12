@@ -42,6 +42,17 @@ public class CreateNewPlaceFragment extends Fragment implements BundleMessageRea
 	}
 
 	@Override
+	public void onResume() {
+		actor.register(getActivity());
+		super.onResume();
+	}
+	
+	@Override
+	public void onPause() {
+		actor.unregister(getActivity());
+		super.onPause();
+	}
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		final ViewGroup root = (ViewGroup) inflater.inflate(
@@ -55,6 +66,7 @@ public class CreateNewPlaceFragment extends Fragment implements BundleMessageRea
 		actor = new BundleMessageActor(this);
 		
 
+			
 		bt.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -63,7 +75,6 @@ public class CreateNewPlaceFragment extends Fragment implements BundleMessageRea
 				// TODO Auto-generated method stub
 				new BundleMessageHelper(getActivity()).sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.WIFI_SEARCH_REQUEST, null));
 				
-				actor.register(getActivity());
 				
 				AlertDialog.Builder btAlert = new AlertDialog.Builder(
 						getActivity());
@@ -141,13 +152,16 @@ public class CreateNewPlaceFragment extends Fragment implements BundleMessageRea
 		return root;
 	}
 
+
+	
 	@Override
 	public void onBundleMessageRecv(Bundle b) {
+		log("bundle received");
 		// TODO Auto-generated method stub
 		switch(BundleMessage.getInstance().getBundleMessageType(b)){
 		case WIFI_SEARCH_REPLY:{
 			WifiBTDevice device = WifiBTDevice.fromJSON(BundleMessage.getInstance().extractObject(b));
-			Log.d("TAAAAADAAA", device.getName() + " " + device.getMac());
+			log(device.getName() + " " + device.getMac());
 			break;
 		}
 		default:break;
@@ -189,5 +203,7 @@ public class CreateNewPlaceFragment extends Fragment implements BundleMessageRea
 		// TODO Auto-generated method stub
 		
 	}
-
+	public void log(String s){
+		Log.d("CreateNewPlaceFragment", s);
+	}
 }
