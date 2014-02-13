@@ -43,6 +43,7 @@ public class AllActivitiesFragment extends BasicListEntitiesFragment<Activity>{
 							android.R.layout.simple_list_item_1, null);
 				}
 				Activity activity = getItem(position);
+				Log.w("TEST", "Activity: " + activity);
 				if (activity != null) {
 					TextView itemView = (TextView) view
 							.findViewById(android.R.id.text1);
