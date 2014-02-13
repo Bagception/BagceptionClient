@@ -1,5 +1,7 @@
 package de.uniulm.bagception.client.ui.launcher;
 
+import java.util.ArrayList;
+
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
@@ -11,8 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TwoLineListItem;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
@@ -24,7 +28,8 @@ import de.uniulm.bagception.bundlemessageprotocol.entities.administration.Locati
 import de.uniulm.bagception.client.R;
 import de.uniulm.bagception.client.osm.ShowMap;
 
-public class CreateNewPlaceFragment extends Fragment implements BundleMessageReactor{
+public class CreateNewPlaceFragment extends Fragment implements
+		BundleMessageReactor {
 
 	EditText editName;
 	Button send;
@@ -33,24 +38,32 @@ public class CreateNewPlaceFragment extends Fragment implements BundleMessageRea
 	Button bt;
 	Button wlan;
 	BundleMessageActor actor;
+	WifiBTDevice device;
+	AlertDialog.Builder btAlert;
+	AlertDialog.Builder wifiAlert;
+	ArrayAdapter<String> btArrayAdapter;
+	ArrayAdapter<String> wifiArrayAdapter;
+	ArrayList<String> btDevices = new ArrayList<String>();
+	ArrayList<String> wifiDevices = new ArrayList<String>();
 
-	
 	static Fragment newInstance(Context context) {
 		CreateNewPlaceFragment f = new CreateNewPlaceFragment();
 
 		return f;
 	}
-
-	@Override
-	public void onResume() {
-		actor.register(getActivity());
-		super.onResume();
-	}
 	
 	@Override
-	public void onPause() {
+	public void onStart() {
+		
+		super.onStart();
+		actor.register(getActivity());
+	}
+
+	@Override
+	public void onStop() {
+		
+		super.onStop();
 		actor.unregister(getActivity());
-		super.onPause();
 	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,60 +77,55 @@ public class CreateNewPlaceFragment extends Fragment implements BundleMessageRea
 		wlan = (Button) root.findViewById(R.id.wlanButton);
 		showMap = new ShowMap();
 		actor = new BundleMessageActor(this);
-		
 
-			
 		bt.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				String names[] = {"1", "2"};
-				// TODO Auto-generated method stub
-				new BundleMessageHelper(getActivity()).sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.WIFI_SEARCH_REQUEST, null));
+				btDevices.clear();
+				btAlert = new AlertDialog.Builder(getActivity());
+				btAlert.setTitle("Bluetooth Devices");
 				
+				btArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_selectable_list_item, btDevices);
 				
-				AlertDialog.Builder btAlert = new AlertDialog.Builder(
-						getActivity());
-				
-				
-				
-				btAlert.setTitle("BT");
+				new BundleMessageHelper(getActivity())
+						.sendMessageSendBundle(BundleMessage.getInstance()
+								.createBundle(BUNDLE_MESSAGE.BLUETOOTH_SEARCH_REQUEST, null));
+				btAlert.setAdapter(btArrayAdapter, new DialogInterface.OnClickListener() {
 
-				final CharSequence[] test = {"1", "2"};
-				btAlert.setItems(test, new DialogInterface.OnClickListener() {
-					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
-						
-						
+						Log.d("TEST", "item clicked:" + which);
+						Log.d("TEST", "items name: " + btDevices.get(which));
 					}
 				});
 				btAlert.create().show();
 			}
 		});
-		
+
 		wlan.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				String names[] = {"1", "2"};
-				// TODO Auto-generated method stub
-				AlertDialog.Builder wlanAlert = new AlertDialog.Builder(
+				wifiDevices.clear();
+				wifiAlert = new AlertDialog.Builder(
 						getActivity());
-				
-				wlanAlert.setTitle("BT");
 
-				final CharSequence[] test = {"1", "2"};
-				wlanAlert.setItems(test, new DialogInterface.OnClickListener() {
-					
+				wifiAlert.setTitle("Access Points");
+				wifiArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_selectable_list_item, wifiDevices);
+				
+				new BundleMessageHelper(getActivity())
+						.sendMessageSendBundle(BundleMessage.getInstance()
+								.createBundle(BUNDLE_MESSAGE.WIFI_SEARCH_REQUEST,	null));
+				wifiAlert.setAdapter(wifiArrayAdapter, new DialogInterface.OnClickListener() {
+
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
-						
+						Log.d("TEST", "item clicked:" + which);
+						Log.d("TEST", "items name: " + wifiDevices.get(which));
 					}
 				});
-				wlanAlert.create().show();
+				wifiAlert.create().show();
 			}
 		});
 
@@ -152,52 +160,65 @@ public class CreateNewPlaceFragment extends Fragment implements BundleMessageRea
 		return root;
 	}
 
-
-	
 	@Override
 	public void onBundleMessageRecv(Bundle b) {
-		switch(BundleMessage.getInstance().getBundleMessageType(b)){
-		case WIFI_SEARCH_REPLY:{
-			WifiBTDevice device = WifiBTDevice.fromJSON(BundleMessage.getInstance().extractObject(b));
+		Log.d("TEST", "Kam was an");
+		switch (BundleMessage.getInstance().getBundleMessageType(b)) {
+		case WIFI_SEARCH_REPLY: {
+			device = WifiBTDevice.fromJSON(BundleMessage.getInstance()
+					.extractObject(b));
+			Log.d("TEST", device.getName() + " " + device.getMac());
+			wifiDevices.add(device.getName() + " " + device.getMac());
+			wifiArrayAdapter.notifyDataSetChanged();
+
 			break;
 		}
-		default:break;
+		case BLUETOOTH_SEARCH_REPLY:{
+			device = WifiBTDevice.fromJSON(BundleMessage.getInstance()
+					.extractObject(b));
+			Log.d("TEST", device.getName() + " " + device.getMac());
+			btDevices.add(device.getMac());
+			btArrayAdapter.notifyDataSetChanged();
+			break;
+		}
+		default:
+			break;
 		}
 	}
 
 	@Override
 	public void onBundleMessageSend(Bundle b) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onResponseMessage(Bundle b) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onResponseAnswerMessage(Bundle b) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onStatusMessage(Bundle b) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onCommandMessage(Bundle b) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onError(Exception e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

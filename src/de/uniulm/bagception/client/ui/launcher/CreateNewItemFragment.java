@@ -295,13 +295,13 @@ public class CreateNewItemFragment extends Fragment implements
 					item.setImage(((MainGUI) getActivity()).currentPicturetaken);
 				}
 				
-				
+				Log.d("TEST", item.toString());
 				BundleMessageHelper helper = new BundleMessageHelper(
 						getActivity());
 				helper.sendMessageSendBundle(BundleMessage.getInstance()
 						.createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
 								ItemCommand.add(item)));
-				
+				Log.d("TEST", item.toString());
 				Intent intent = new Intent(getActivity(), MainGUI.class);
 				startActivity(intent);
 			}
