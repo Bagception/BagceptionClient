@@ -91,9 +91,7 @@ public class BTClient implements Runnable {
 		while (listening) {
 			try {
 				// Read from the InputStream
-				Log.d("bt", "before read");
 				bytes = clientSocketInStream.read(buffer);
-				Log.d("bt", "after read");
 				if (bytes == -1) {
 					// connection remotely closed
 					listening = false;

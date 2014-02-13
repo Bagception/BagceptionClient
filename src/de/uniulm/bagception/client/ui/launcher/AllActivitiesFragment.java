@@ -72,7 +72,6 @@ public class AllActivitiesFragment extends BasicListEntitiesFragment<Activity>{
 				Activity[] theActivitiesWeWantToDisplay = a.getPayloadObjects();
 				listAdapter.clear();
 				listAdapter.addAll(theActivitiesWeWantToDisplay);
-				Log.d("inhalt adapter: ", listAdapter.toString());
 			}
 		};
 		a_cmd.accept(adminCommandProcessor);

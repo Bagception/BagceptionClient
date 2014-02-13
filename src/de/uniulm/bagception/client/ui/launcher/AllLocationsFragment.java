@@ -42,7 +42,6 @@ public class AllLocationsFragment extends BasicListEntitiesFragment<Location> {
 
 					if (itemView != null) {
 						itemView.setText(loc.getName());
-						Log.d("testausgabe", loc.getName() + "");
 					}
 				}
 				return view;
@@ -64,7 +63,6 @@ public class AllLocationsFragment extends BasicListEntitiesFragment<Location> {
 				Location[] theLocationsWeWantToDisplay = l.getPayloadObjects();
 				listAdapter.clear();
 				listAdapter.addAll(theLocationsWeWantToDisplay);
-				Log.d("inhalt adapter: ", listAdapter.toString());
 			}
 		};
 		a_cmd.accept(adminCommandProcessor);

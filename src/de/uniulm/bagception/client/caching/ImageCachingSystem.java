@@ -86,7 +86,6 @@ public class ImageCachingSystem implements BundleMessageReactor{
 	public void onBundleMessageRecv(Bundle b) {
 		switch (BundleMessage.getInstance().getBundleMessageType(b)){
 			case IMAGE_REPLY:
-				Log.d("debug", "image reply");
 				JSONObject obj = BundleMessage.getInstance().extractObject(b);
 				String deserImg = obj.get("img").toString();
 				long id = Long.parseLong(obj.get("id").toString());

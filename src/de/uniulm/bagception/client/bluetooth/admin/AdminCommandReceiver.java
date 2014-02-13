@@ -20,7 +20,6 @@ public class AdminCommandReceiver extends AdministrationCommandProcessor impleme
 			JSONObject json = BundleMessage.getInstance().extractObject(b);
 			AdministrationCommand<?> a_cmd = AdministrationCommand.fromJSONObject(json);
 			a_cmd.accept(this);
-			Log.d("admin_command","admin command ack");
 		break;
 		default: break;
 		}

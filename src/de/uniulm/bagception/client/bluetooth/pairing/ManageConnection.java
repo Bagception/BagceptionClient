@@ -30,11 +30,9 @@ public class ManageConnection extends AsyncTask<BluetoothDevice, Integer, Void> 
 		bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		new_BLUETOOTH_DEVICE = devices[0].getName();
 		this.device = devices[0];
-		Log.d(TAG, new_BLUETOOTH_DEVICE + " is the device");
 		bluetoothAdapter.cancelDiscovery();
 
 		try {
-			Log.d("So ein dreck", "bla " + devices[0]);
 			bluetoothSocket = devices[0].createRfcommSocketToServiceRecord(UUID
 					.fromString(BT_UUID));
 		} catch (IOException e) {
@@ -48,7 +46,6 @@ public class ManageConnection extends AsyncTask<BluetoothDevice, Integer, Void> 
 			// Connect the device through the socket
 			bluetoothSocket.connect();
 			
-			Log.d("BT SOCKET OUTPUT", bluetoothSocket.toString());
 			Set<BluetoothDevice> pairedDevices = bluetoothAdapter
 					.getBondedDevices();
 			// If there are paired devices
@@ -57,12 +54,10 @@ public class ManageConnection extends AsyncTask<BluetoothDevice, Integer, Void> 
 				for (BluetoothDevice device : pairedDevices) {
 					// Add the name and address to an array adapter to show in a
 					// ListView
-					Log.d("Bereits da", "device: " + device.getName());
 				}
 			} 
 		} catch (IOException connectException) {
 
-			Log.d("Socket", "is not connected");
 			
 			try {
 				bluetoothSocket.close();
@@ -82,7 +77,6 @@ public class ManageConnection extends AsyncTask<BluetoothDevice, Integer, Void> 
 
 	public void sendString(String string) {
 		try {
-			Log.d("neuer BT SOCKET", bluetoothSocket + "");
 			bluetoothSocket.getOutputStream().write(string.getBytes());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
