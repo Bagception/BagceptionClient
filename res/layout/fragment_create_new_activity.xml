@@ -83,7 +83,6 @@
              	android:layout_height="fill_parent" >
                 
             </ListView>
-            
            
         </TableRow>
         

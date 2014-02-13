@@ -45,7 +45,8 @@ public class CreateNewActivityFragment extends Fragment implements BundleMessage
 	Button addActivityItems;
 	BundleMessageActor bmActor;
 	ListView listView;
-	ArrayAdapter<Item> listadapter;
+	ArrayAdapter<String> listadapter;
+	
 	public static Fragment newInstance(Context context) {
 		CreateNewItemFragment f = new CreateNewItemFragment();
 
@@ -62,7 +63,6 @@ public class CreateNewActivityFragment extends Fragment implements BundleMessage
 		cancel = (Button) root.findViewById(R.id.cancelActivity);
 		addPlace = (Button) root.findViewById(R.id.addLocation);
 		listView = (ListView) root.findViewById(R.id.itemView);
-
 		listView.setAdapter(listadapter);
 		
 		bmActor = new BundleMessageActor(this);
@@ -110,8 +110,12 @@ public class CreateNewActivityFragment extends Fragment implements BundleMessage
 			@Override
 			public void onClick(View arg0) {
 
-				Activity activity = new Activity(editName.getText().toString(), itemsForActivity);
-
+				Log.w("TEST", "ItemsForActivity wird jetzt in Activity gepackt: " + itemsForActivity);
+				String name = editName.getText().toString();
+				
+				Activity activity = new Activity(name, itemsForActivity);
+				Log.w("TEST", "Die erstellte Activity: " + activity);
+				
 				BundleMessageHelper helper = new BundleMessageHelper(
 						getActivity());
 				helper.sendMessageSendBundle(BundleMessage.getInstance()
@@ -167,14 +171,22 @@ public class CreateNewActivityFragment extends Fragment implements BundleMessage
 						
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							ArrayList<Item> selectedItems  = new ArrayList<Item>();
+							
+							ArrayList<String> selectedItems  = new ArrayList<String>();
+							ArrayList<Item> itemsSelected = new ArrayList<Item>();
+							
 							for (int checked: checkedItems){
-								selectedItems.add(items[checked]);
+								selectedItems.add(items[checked].getName());
+								itemsSelected.add(items[checked]);
 							}
-							itemsForActivity = selectedItems;
-							Log.w("TEST", "ItemsForActivity: " + itemsForActivity);
-//							listadapter = new ArrayAdapter<Item>(getActivity(), R.layout.fragment_create_new_activity, itemsForActivity);
+							
+							itemsForActivity = itemsSelected;
+							Log.w("TEST", "ItemsForActivity wird gefüllt mit: " + itemsForActivity);
+							
+							listadapter = new ArrayAdapter<String>(getActivity(), R.id.itemView, selectedItems);
+							listadapter.notifyDataSetChanged();
 						}
+						
 					});
 					itemAlert.create().show();
 					

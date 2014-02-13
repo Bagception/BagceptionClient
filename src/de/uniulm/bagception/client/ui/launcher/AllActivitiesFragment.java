@@ -19,7 +19,10 @@ import de.uniulm.bagception.bundlemessageprotocol.entities.administration.Admini
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ItemCommand;
 import de.uniulm.bagception.client.R;
 
-public class AllActivitiesFragment extends BasicListEntitiesFragment<Activity>{
+public class AllActivitiesFragment extends BasicListActivityEntitiesFragment<Activity>{
+
+	public long activity_id = -1;
+	
 
 	
 	public static Fragment newInstance(Context context) {
@@ -44,13 +47,15 @@ public class AllActivitiesFragment extends BasicListEntitiesFragment<Activity>{
 				}
 				Activity activity = getItem(position);
 				Log.w("TEST", "Activity: " + activity);
+
 				if (activity != null) {
-					TextView itemView = (TextView) view
-							.findViewById(android.R.id.text1);
+					TextView itemView = (TextView) view.findViewById(android.R.id.text1);
 
 					if (itemView != null) {
 						itemView.setText(activity.getName());
 					}
+					
+					activity_id = activity.getId();
 				}
 				return view;
 			}

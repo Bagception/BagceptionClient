@@ -218,7 +218,9 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 					}
 				}
 			};
-			cmd.accept(p);
+			if(p != null){
+				cmd.accept(p);
+			}
 			break;
 
 		default:
