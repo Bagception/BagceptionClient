@@ -176,7 +176,6 @@ public class CreateNewActivityFragment extends Fragment implements BundleMessage
 							Log.w("TEST", "ItemsForActivity: " + itemsForActivity);
 							
 							listadapter = new ArrayAdapter<Item>(getActivity(), R.layout.fragment_create_new_activity, itemsForActivity);
-							Log.w("TEST", "ListAdapter: " + listadapter);
 						}
 					});
 					itemAlert.create().show();
