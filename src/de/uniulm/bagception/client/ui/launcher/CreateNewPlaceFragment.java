@@ -42,19 +42,20 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 		return f;
 	}
-
+	
 	@Override
-	public void onResume() {
+	public void onStart() {
+		
+		super.onStart();
 		actor.register(getActivity());
-		super.onResume();
 	}
 
 	@Override
-	public void onPause() {
+	public void onStop() {
+		
+		super.onStop();
 		actor.unregister(getActivity());
-		super.onPause();
 	}
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
