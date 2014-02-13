@@ -253,9 +253,9 @@ public class CreateNewItemFragment extends Fragment implements
 			public void onClick(View arg0) {
 				Item item;
 				if (tagId != null) {
-
 					tagIDs.add(tagId);
-
+				} else{
+					tagIDs = null;
 				}
 
 				if (warmOn == null && coldOn == null) {
@@ -293,6 +293,8 @@ public class CreateNewItemFragment extends Fragment implements
 				item = new Item(-1, editName.getText().toString(),
 						categoryForActivity, alwaysChecked, independetChecked,
 						attributes, tagIDs);
+				
+				Log.w("TEST", "Item ohne Bild: " + item);
 
 				item.setImage(((MainGUI) getActivity()).currentPicturetaken);
 				
@@ -301,7 +303,8 @@ public class CreateNewItemFragment extends Fragment implements
 				helper.sendMessageSendBundle(BundleMessage.getInstance()
 						.createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
 								ItemCommand.add(item)));
-				Log.d("TEST", item.toString());
+				
+				Log.d("TEST", "Erstelltes Item: " + item);
 				Intent intent = new Intent(getActivity(), MainGUI.class);
 				startActivity(intent);
 			}
