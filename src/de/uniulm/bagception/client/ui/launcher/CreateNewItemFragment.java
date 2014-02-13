@@ -1,6 +1,7 @@
 package de.uniulm.bagception.client.ui.launcher;
 
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.HashSet;
 
 import android.app.AlertDialog;
@@ -292,7 +293,10 @@ public class CreateNewItemFragment extends Fragment implements
 				
 				Log.w("TEST", "Item ohne Bild: " + item);
 
-				item.setImage(((MainGUI) getActivity()).currentPicturetaken);
+				if (((MainGUI)getActivity()).currentPicturetaken != null){
+					item.setImage(((MainGUI) getActivity()).currentPicturetaken);
+				}
+				
 				
 				BundleMessageHelper helper = new BundleMessageHelper(
 						getActivity());
