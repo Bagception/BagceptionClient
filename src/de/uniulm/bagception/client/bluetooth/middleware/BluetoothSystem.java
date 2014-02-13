@@ -9,7 +9,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 import de.philipphock.android.lib.logging.LOG;
 import de.uniulm.bagception.bluetooth.BagceptionBTServiceInterface;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
@@ -312,7 +311,9 @@ public class BluetoothSystem implements CheckReachableCallback,
 		case DISCONNECT:
 			Log.d("bt_dc", "disconnect recv");
 			try {
-				btclient.cancel();
+				if (btclient != null){
+					btclient.cancel();	
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

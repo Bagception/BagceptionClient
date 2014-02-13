@@ -2,6 +2,7 @@ package de.uniulm.bagception.client.ui.launcher;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
@@ -29,6 +30,7 @@ public class AllItemsFragment extends BasicListEntitiesFragment<Item> {
 				Item[] theItemsWeWantToDisplay = i.getPayloadObjects();
 				listAdapter.clear();
 				listAdapter.addAll(theItemsWeWantToDisplay);
+				Log.d("TEST", "items: " + theItemsWeWantToDisplay);
 			}
 		};
 		a_cmd.accept(adminCommandProcessor);
