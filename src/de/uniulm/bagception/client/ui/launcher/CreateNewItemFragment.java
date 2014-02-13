@@ -291,8 +291,6 @@ public class CreateNewItemFragment extends Fragment implements
 						categoryForActivity, alwaysChecked, independetChecked,
 						attributes, tagIDs);
 				
-				Log.w("TEST", "Item ohne Bild: " + item);
-
 				if (((MainGUI)getActivity()).currentPicturetaken != null){
 					item.setImage(((MainGUI) getActivity()).currentPicturetaken);
 				}
@@ -304,7 +302,6 @@ public class CreateNewItemFragment extends Fragment implements
 						.createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
 								ItemCommand.add(item)));
 				
-				Log.d("TEST", "Erstelltes Item: " + item);
 				Intent intent = new Intent(getActivity(), MainGUI.class);
 				startActivity(intent);
 			}
