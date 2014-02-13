@@ -40,18 +40,32 @@ public class CreateNewPlaceFragment extends Fragment implements BundleMessageRea
 
 		return f;
 	}
-
-	@Override
-	public void onResume() {
-		actor.register(getActivity());
-		super.onResume();
-	}
 	
 	@Override
-	public void onPause() {
-		actor.unregister(getActivity());
-		super.onPause();
+	public void onStart() {
+		
+		super.onStart();
+		actor.register(getActivity());
 	}
+
+	@Override
+	public void onStop() {
+		
+		super.onStop();
+		actor.unregister(getActivity());
+	}
+	
+//	@Override
+//	public void onResume() {
+//		actor.register(getActivity());
+//		super.onResume();
+//	}
+//	
+//	@Override
+//	public void onPause() {
+//		actor.unregister(getActivity());
+//		super.onPause();
+//	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
