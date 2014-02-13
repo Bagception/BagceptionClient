@@ -1,5 +1,7 @@
 package de.uniulm.bagception.client.ui.launcher;
 
+import java.util.ArrayList;
+
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
@@ -11,8 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TwoLineListItem;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
@@ -36,6 +40,11 @@ public class CreateNewPlaceFragment extends Fragment implements
 	BundleMessageActor actor;
 	WifiBTDevice device;
 	AlertDialog.Builder btAlert;
+	AlertDialog.Builder wifiAlert;
+	ArrayAdapter<String> btArrayAdapter;
+	ArrayAdapter<String> wifiArrayAdapter;
+	ArrayList<String> btDevices = new ArrayList<String>();
+	ArrayList<String> wifiDevices = new ArrayList<String>();
 
 	static Fragment newInstance(Context context) {
 		CreateNewPlaceFragment f = new CreateNewPlaceFragment();
@@ -73,25 +82,21 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-				String names[] = { "1", "2" };
-				// TODO Auto-generated method stub
+				btDevices.clear();
+				btAlert = new AlertDialog.Builder(getActivity());
+				btAlert.setTitle("Bluetooth Devices");
+				
+				btArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_selectable_list_item, btDevices);
+				
 				new BundleMessageHelper(getActivity())
 						.sendMessageSendBundle(BundleMessage.getInstance()
-								.createBundle(
-										BUNDLE_MESSAGE.WIFI_SEARCH_REQUEST,
-										null));
-
-				btAlert = new AlertDialog.Builder(getActivity());
-
-				btAlert.setTitle("BT");
-
-				final CharSequence[] test = { "1", "2" };
-				btAlert.setItems(test, new DialogInterface.OnClickListener() {
+								.createBundle(BUNDLE_MESSAGE.BLUETOOTH_SEARCH_REQUEST, null));
+				btAlert.setAdapter(btArrayAdapter, new DialogInterface.OnClickListener() {
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
-
+						Log.d("TEST", "item clicked:" + which);
+						Log.d("TEST", "items name: " + btDevices.get(which));
 					}
 				});
 				btAlert.create().show();
@@ -102,23 +107,25 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-				String names[] = { "1", "2" };
-				// TODO Auto-generated method stub
-				AlertDialog.Builder wlanAlert = new AlertDialog.Builder(
+				wifiDevices.clear();
+				wifiAlert = new AlertDialog.Builder(
 						getActivity());
 
-				wlanAlert.setTitle("BT");
-
-				final CharSequence[] test = { "1", "2" };
-				wlanAlert.setItems(test, new DialogInterface.OnClickListener() {
+				wifiAlert.setTitle("Access Points");
+				wifiArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_selectable_list_item, wifiDevices);
+				
+				new BundleMessageHelper(getActivity())
+						.sendMessageSendBundle(BundleMessage.getInstance()
+								.createBundle(BUNDLE_MESSAGE.WIFI_SEARCH_REQUEST,	null));
+				wifiAlert.setAdapter(wifiArrayAdapter, new DialogInterface.OnClickListener() {
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
-
+						Log.d("TEST", "item clicked:" + which);
+						Log.d("TEST", "items name: " + wifiDevices.get(which));
 					}
 				});
-				wlanAlert.create().show();
+				wifiAlert.create().show();
 			}
 		});
 
@@ -161,7 +168,17 @@ public class CreateNewPlaceFragment extends Fragment implements
 			device = WifiBTDevice.fromJSON(BundleMessage.getInstance()
 					.extractObject(b));
 			Log.d("TEST", device.getName() + " " + device.getMac());
+			wifiDevices.add(device.getName() + " " + device.getMac());
+			wifiArrayAdapter.notifyDataSetChanged();
 
+			break;
+		}
+		case BLUETOOTH_SEARCH_REPLY:{
+			device = WifiBTDevice.fromJSON(BundleMessage.getInstance()
+					.extractObject(b));
+			Log.d("TEST", device.getName() + " " + device.getMac());
+			btDevices.add(device.getMac());
+			btArrayAdapter.notifyDataSetChanged();
 			break;
 		}
 		default:
