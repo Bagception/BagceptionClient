@@ -68,7 +68,6 @@ public class AllCategoriesFragment extends BasicListEntitiesFragment<Category> {
 				Category[] theCategoriesWeWantToDisplay = c.getPayloadObjects();
 				listAdapter.clear();
 				listAdapter.addAll(theCategoriesWeWantToDisplay);
-				Log.d("inhalt adapter: ", listAdapter.toString());
 			}
 		};
 		a_cmd.accept(adminCommandProcessor);

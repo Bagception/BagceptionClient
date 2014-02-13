@@ -309,7 +309,6 @@ public class BluetoothSystem implements CheckReachableCallback,
 			}
 			break;
 		case DISCONNECT:
-			Log.d("bt_dc", "disconnect recv");
 			try {
 				if (btclient != null){
 					btclient.cancel();	

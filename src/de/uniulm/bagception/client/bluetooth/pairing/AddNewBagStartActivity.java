@@ -133,7 +133,6 @@ public class AddNewBagStartActivity extends Activity {
 				noPairedDevices = (TextView) findViewById(R.id.noPairedDevices);
 				noPairedDevices.setVisibility(View.INVISIBLE);
 				arrayAdapterPairedDevices.add(device);
-				Log.d("Bereits da", "device: " + device);
 			}
 		} else {
 			noPairedDevices = (TextView) findViewById(R.id.noPairedDevices);
@@ -143,7 +142,6 @@ public class AddNewBagStartActivity extends Activity {
 
 	// Starts the asynctask for the pairing and connection
 	public void handleListViewDiscoveredDevicesClick(BluetoothDevice device) {
-		Log.d(TAG, "bla test");
 		if (arrayAdapterDiscoveredDevices.getCount() > 0) {
 			listviewDiscoveredDevices.setClickable(true);
 			ManageConnection mg = new ManageConnection(AddNewBagStartActivity.this);
@@ -222,33 +220,25 @@ public class AddNewBagStartActivity extends Activity {
 			// When discovery finds a device
 			if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 				// Get the BluetoothDevice object from the Intent
-				Log.d(TAG, "Device found");
 
 				BluetoothDevice device = intent
 						.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-				Log.d(TAG, device + " the extra device");
 				if (discoveredDevices.contains(device))
 					return;
 				discoveredDevices.add(device);
 
 			} else if (intent.getAction().equals(
 					BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
-				Log.d(TAG, "Nach UUIDs suchen");
-				Log.d(TAG, intent.getAction() + " intent");
-				Log.d(TAG, BluetoothDevice.ACTION_UUID + " uuid");
 				// device discovery finished
 				for (BluetoothDevice d : discoveredDevices) {
-					Log.d(TAG, d + " device");
 					if (d.fetchUuidsWithSdp()) {
 						// sdp successful
 						bt_sdp_count++;
-						Log.d(TAG, "count up device..." + bt_sdp_count);
 					}
 
 				}
 			} else if (intent.getAction().equals(BluetoothDevice.ACTION_UUID)) {
 				bt_sdp_count--;
-				Log.d(TAG, "count down device..." + bt_sdp_count);
 				BluetoothDevice device = intent
 						.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 				Parcelable[] extras = intent
@@ -258,11 +248,9 @@ public class AddNewBagStartActivity extends Activity {
 
 					for (int i = 0; i < extras.length; i++) {
 						uuid[i] = (ParcelUuid) extras[i];
-						Log.d(TAG, " " + uuid[i].toString());
 
 						if (uuid[i].getUuid().toString()
 								.equalsIgnoreCase(BT_UUID)) {
-							Log.d(TAG, "add the device now");
 							if (arrayAdapterDiscoveredDevices
 									.getPosition(device) != -1)
 								return;
@@ -275,7 +263,6 @@ public class AddNewBagStartActivity extends Activity {
 				}
 
 				if (bt_sdp_count <= 0) {
-					Log.d(TAG, "SDP finished");
 					if (dialog == null)
 						return;
 					dialog.dismiss();

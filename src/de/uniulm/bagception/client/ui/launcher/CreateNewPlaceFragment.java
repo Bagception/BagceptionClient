@@ -156,12 +156,9 @@ public class CreateNewPlaceFragment extends Fragment implements BundleMessageRea
 	
 	@Override
 	public void onBundleMessageRecv(Bundle b) {
-		log("bundle received");
-		// TODO Auto-generated method stub
 		switch(BundleMessage.getInstance().getBundleMessageType(b)){
 		case WIFI_SEARCH_REPLY:{
 			WifiBTDevice device = WifiBTDevice.fromJSON(BundleMessage.getInstance().extractObject(b));
-			log(device.getName() + " " + device.getMac());
 			break;
 		}
 		default:break;
@@ -202,8 +199,5 @@ public class CreateNewPlaceFragment extends Fragment implements BundleMessageRea
 	public void onError(Exception e) {
 		// TODO Auto-generated method stub
 		
-	}
-	public void log(String s){
-		Log.d("CreateNewPlaceFragment", s);
 	}
 }
