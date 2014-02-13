@@ -172,10 +172,8 @@ public class CreateNewActivityFragment extends Fragment implements BundleMessage
 								selectedItems.add(items[checked]);
 							}
 							itemsForActivity = selectedItems;
-						
 							Log.w("TEST", "ItemsForActivity: " + itemsForActivity);
-							
-							listadapter = new ArrayAdapter<Item>(getActivity(), R.layout.fragment_create_new_activity, itemsForActivity);
+//							listadapter = new ArrayAdapter<Item>(getActivity(), R.layout.fragment_create_new_activity, itemsForActivity);
 						}
 					});
 					itemAlert.create().show();
