@@ -109,8 +109,6 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 				R.drawable.ic_drawer, R.string.drawer_open,
 				R.string.drawer_close);
 
-		Log.d("Mudit",
-				"mDrawerToggle" + mDrawerToggle.isDrawerIndicatorEnabled());
 
 		drawer.setDrawerListener(mDrawerToggle);
 

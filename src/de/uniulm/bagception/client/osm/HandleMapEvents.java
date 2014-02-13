@@ -53,7 +53,6 @@ public class HandleMapEvents extends MapView {
 	public boolean onTouchEvent(MotionEvent event) {
 		if (event.getAction() == 1 && lastEventId == 0
 				&& event.getPointerCount() == 1) {
-			Log.d("touch", "tap");
 			tap((int) event.getX(), (int) event.getY());
 		}
 		lastEventId = event.getAction();
@@ -93,14 +92,12 @@ public class HandleMapEvents extends MapView {
 
 				@Override
 				public boolean onItemLongPress(int arg0, OverlayItem arg1) {
-					Log.d("touch", "whyyyyyyyyyyyyyy");
 
 					return false;
 				}
 
 				@Override
 				public boolean onItemSingleTapUp(int arg0, OverlayItem arg1) {
-					Log.d("touch", "ääääääääääääää");
 
 					return false;
 				}

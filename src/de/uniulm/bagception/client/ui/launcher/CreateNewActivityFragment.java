@@ -10,12 +10,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
@@ -39,7 +44,8 @@ public class CreateNewActivityFragment extends Fragment implements BundleMessage
 	Button addPlace;
 	Button addActivityItems;
 	BundleMessageActor bmActor;
-
+	ListView listView;
+	ArrayAdapter<Item> listadapter;
 	public static Fragment newInstance(Context context) {
 		CreateNewItemFragment f = new CreateNewItemFragment();
 
@@ -55,6 +61,9 @@ public class CreateNewActivityFragment extends Fragment implements BundleMessage
 		send = (Button) root.findViewById(R.id.sendActivity);
 		cancel = (Button) root.findViewById(R.id.cancelActivity);
 		addPlace = (Button) root.findViewById(R.id.addLocation);
+		listView = (ListView) root.findViewById(R.id.itemView);
+
+		listView.setAdapter(listadapter);
 		
 		bmActor = new BundleMessageActor(this);
 		
@@ -163,18 +172,20 @@ public class CreateNewActivityFragment extends Fragment implements BundleMessage
 								selectedItems.add(items[checked]);
 							}
 							itemsForActivity = selectedItems;
-							
+							Log.w("TEST", "ItemsForActivity: " + itemsForActivity);
+//							listadapter = new ArrayAdapter<Item>(getActivity(), R.layout.fragment_create_new_activity, itemsForActivity);
 						}
 					});
 					itemAlert.create().show();
-					
 					
 					
 				}
 				
 			};
 			AdministrationCommand.fromJSONObject(BundleMessage.getInstance().extractObject(b)).accept(p);
-
+			
+			//listadapter = new ArrayAdapter<Item>(getActivity(), R.layout.fragment_create_new_activity, R.id.itemTextView, itemsForActivity);
+			
 		}
 		
 		default:
