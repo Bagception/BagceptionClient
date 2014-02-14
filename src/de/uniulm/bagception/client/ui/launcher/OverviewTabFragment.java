@@ -24,12 +24,13 @@ public abstract class OverviewTabFragment extends Fragment {
 			return;
 		}
 		if (update == null) return; 
+		
 		ItemListArrayAdapter adapter = (ItemListArrayAdapter)itemsStatusView.getAdapter();
 		List<Item> list = getCorrespondingItemList(update);
 		adapter.clear();
 		adapter.addAll(list);
 		onUpdateView((ItemListArrayAdapter)itemsStatusView.getAdapter());
-		//itemsStatusView.invalidate();
+//		itemsStatusView.invalidate();
 
 		
 	}

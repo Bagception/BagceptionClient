@@ -92,6 +92,8 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment impl
 					public void onClick(DialogInterface dialog, int which) {
 						
 						onItemClicked(listAdapter.getItem(id));
+						Intent intent = new Intent(getActivity(), MainGUI.class);
+						startActivity(intent);
 					}
 				});
 				
