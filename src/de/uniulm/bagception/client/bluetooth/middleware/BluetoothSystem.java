@@ -24,6 +24,7 @@ public class BluetoothSystem implements CheckReachableCallback,
 		ResponseSystem.Interaction, BundleProtocolCallback,
 		BTClient.ClientStatusCallback, BundleMessageReactor {
 
+	private boolean isConnecting=false;
 	private BTClient btclient;
 	private boolean lastConnectionState_connected = false;
 
@@ -248,6 +249,7 @@ public class BluetoothSystem implements CheckReachableCallback,
 		responseSystem.makeResponse_bluetoothConnection(true,
 				lastConnectionState_connected != true);
 		lastConnectionState_connected = true;
+		isConnecting=false;
 	}
 
 	@Override
@@ -256,10 +258,12 @@ public class BluetoothSystem implements CheckReachableCallback,
 		responseSystem.makeResponse_bluetoothConnection(false,
 				lastConnectionState_connected != false);
 		lastConnectionState_connected = false;
+		isConnecting=false;
 	}
 
 	@Override
 	public void onConnecting() {
+		isConnecting=true;
 		mainService.bmHelper.sendStatusBundle(StatusCode.CONNECTING.toBundle());
 	}
 	
@@ -315,7 +319,12 @@ public class BluetoothSystem implements CheckReachableCallback,
 			if (btclient.isConnected()) {
 				onConnect();
 			} else {
-				onDisconnect();
+				if (isConnecting){
+					onConnecting();
+				}else{
+					onDisconnect();	
+				}
+				
 			}
 			break;
 		case DISCONNECT:
