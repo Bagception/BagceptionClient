@@ -9,6 +9,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 import de.philipphock.android.lib.logging.LOG;
 import de.uniulm.bagception.bluetooth.BagceptionBTServiceInterface;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
@@ -147,6 +148,8 @@ public class BluetoothSystem implements CheckReachableCallback,
 			}
 
 		} else {
+			Toast.makeText(mainService, "multiple devices found", Toast.LENGTH_SHORT).show();
+			LOG.out(this, "multiple devices found");
 			responseSystem
 					.makeResponse_askForSpecificDevice(bagceptionDevicesInRange);
 		}
@@ -165,6 +168,8 @@ public class BluetoothSystem implements CheckReachableCallback,
 				pendingDeviceFeedbacks++;
 				BagceptionBluetoothUtil.checkReachable(device, serviceUUID,
 						this);
+			}else{
+				LOG.out(this, "no bagception device: " + device.getName());
 			}
 		}
 
@@ -280,7 +285,6 @@ public class BluetoothSystem implements CheckReachableCallback,
 	@Override
 	public void onCommandMessage(Bundle b) {
 		Command command = Command.getCommand(b);
-		LOG.out(this, "command recv " + command.getCommandCode());
 		switch (command) {
 		case TRIGGER_SCAN_DEVICES:
 			getPairedBagceptionDevicesInRangeAsync();
@@ -292,12 +296,10 @@ public class BluetoothSystem implements CheckReachableCallback,
 		case PONG:
 			// nothing to do here, Pong is only on client side
 		case POLL_ALL_RESPONSES:
-			LOG.out(this, "POLL");
 			responseSystem.resendAll();
 			break;
 
 		case RESEND_STATUS:
-			LOG.out(this, "RESEND");
 			if (btclient == null) {
 				onDisconnect();
 				return;
