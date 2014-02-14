@@ -19,7 +19,7 @@ import de.uniulm.bagception.bundlemessageprotocol.entities.administration.Admini
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ItemCommand;
 import de.uniulm.bagception.client.R;
 
-public class AllActivitiesFragment extends BasicListActivityEntitiesFragment<Activity>{
+public class AllActivitiesFragment extends BasicListEntitiesFragment<Activity>{
 
 	public long activity_id = -1;
 	

@@ -151,8 +151,8 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			sb.append("\n");
 
 			sb.append("\n");
-			Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG)
-					.show();
+//			Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG)
+//					.show();
 			break;
 
 		case ITEM_NOT_FOUND:

@@ -69,8 +69,10 @@ public class CreateNewActivityFragment extends Fragment implements
 		send = (Button) root.findViewById(R.id.sendActivity);
 		cancel = (Button) root.findViewById(R.id.cancelActivity);
 		addPlace = (Button) root.findViewById(R.id.addLocation);
+
 		listView = (ListView) root.findViewById(R.id.itemView);
 		placeView = (TextView) root.findViewById(R.id.viewPlace);
+		listadapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1);
 		listView.setAdapter(listadapter);
 
 		bmActor = new BundleMessageActor(this);
@@ -115,7 +117,7 @@ public class CreateNewActivityFragment extends Fragment implements
 								+ itemsForActivity);
 				String name = editName.getText().toString();
 
-				Activity activity = new Activity(name, itemsForActivity);
+				Activity activity = new Activity(name, itemsForActivity, locationForActivity);
 				Log.w("TEST", "Die erstellte Activity: " + activity);
 
 				BundleMessageHelper helper = new BundleMessageHelper(
@@ -217,17 +219,26 @@ public class CreateNewActivityFragment extends Fragment implements
 										selectedItems.add(items[checked]
 												.getName());
 										itemsSelected.add(items[checked]);
+									
+										Log.d("TEST", selectedItems.toString());
+//											Toast.makeText(getActivity(),
+//													selectedItems.toString(),
+//													Toast.LENGTH_LONG).show();
+											
+										// listadapter.add("klkl");
 									}
-
+									Toast.makeText(getActivity(), selectedItems.toString(), Toast.LENGTH_LONG).show();
+									listadapter.addAll(selectedItems);
+									listView.invalidate();
 									itemsForActivity = itemsSelected;
 									Log.w("TEST",
 											"ItemsForActivity wird gefüllt mit: "
 													+ itemsForActivity);
 
-									listadapter = new ArrayAdapter<String>(
-											getActivity(), R.id.itemView,
-											selectedItems);
-									listadapter.notifyDataSetChanged();
+									// listadapter = new ArrayAdapter<String>(
+									// getActivity(), R.id.itemView,
+									// selectedItems);
+									// listadapter.add("fd");
 								}
 
 							});

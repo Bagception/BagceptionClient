@@ -22,6 +22,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
@@ -46,6 +47,7 @@ public class CreateNewItemFragment extends Fragment implements
 	Button send;
 	Button cancel;
 	Button addCategory;
+	TextView viewCategory;
 	ToggleButton warm;
 	ToggleButton cold;
 	ToggleButton sunny;
@@ -96,6 +98,7 @@ public class CreateNewItemFragment extends Fragment implements
 		dark = (ToggleButton) root.findViewById(R.id.darkButton);
 		always = (CheckBox) root.findViewById(R.id.always);
 		independet = (CheckBox) root.findViewById(R.id.independent);
+		viewCategory = (TextView) root.findViewById(R.id.viewCategory);
 
 		bmActor = new BundleMessageActor(this);
 		addCategory.setOnClickListener(new OnClickListener() {
@@ -351,6 +354,7 @@ public class CreateNewItemFragment extends Fragment implements
 									// TODO Auto-generated method stub
 									categoryForActivity = new Category(
 											categoryStrings[which]);
+									viewCategory.setText(categoryStrings[which]);
 								}
 							});
 					categoryAlert.create().show();
