@@ -52,7 +52,21 @@
                 android:paddingRight="4dp"
                 android:text="Ort hinzufügen" />
         </TableRow>
-        
+
+        <TableRow
+            android:id="@+id/tableRow12"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dip"
+            android:layout_marginTop="10dip" >
+
+            <TextView
+                android:id="@+id/viewPlace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Noch kein Ort ausgewählt" />
+        </TableRow>
+
         <TableRow
             android:id="@+id/tableRow6"
             android:layout_width="fill_parent"
@@ -70,22 +84,20 @@
                 android:text="Items hinzufügen" />
         </TableRow>
 
-         <TableRow
+        <TableRow
             android:id="@+id/tableRow7"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dip"
             android:layout_marginTop="10dip" >
 
-            <ListView 
-             	android:id="@+id/itemView"
-             	android:layout_width="fill_parent"
-             	android:layout_height="fill_parent" >
-                
+            <ListView
+                android:id="@+id/itemView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
             </ListView>
-           
         </TableRow>
-        
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

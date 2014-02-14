@@ -333,7 +333,6 @@ public class CreateNewItemFragment extends Fragment implements
 						de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand<de.uniulm.bagception.bundlemessageprotocol.entities.Category> i) {
 					// TODO Auto-generated method stub
 					final Category[] categories = i.getPayloadObjects();
-					final HashSet<Integer> checkedCategories = new HashSet<Integer>();
 					final String[] categoryStrings = new String[categories.length];
 					for (int iter = 0; iter < categoryStrings.length; iter++) {
 						categoryStrings[iter] = categories[iter].getName();
