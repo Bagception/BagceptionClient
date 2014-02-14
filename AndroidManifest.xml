@@ -99,6 +99,10 @@
             android:name="de.uniulm.bagception.client.EditItemActivity"
             android:label="@string/title_activity_edit_item" >
         </activity>
+        <activity
+            android:name="de.uniulm.bagception.client.ConnectToDevice"
+            android:label="@string/title_activity_connect_to_device" >
+        </activity>
     </application>
 
 </manifest>
