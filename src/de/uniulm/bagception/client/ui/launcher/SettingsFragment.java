@@ -126,18 +126,7 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 					bmHelper.sendCommandBundle(Command.DISCONNECT.toBundle());	
 				}else{
 					bmHelper.sendCommandBundle(Command.TRIGGER_SCAN_DEVICES.toBundle());
-					Handler h = new Handler();
-					h.postDelayed(new Runnable() {
-						
-						@Override
-						public void run() {
-							if (!isConnected){
-								bt_status.setText("disconnected");
-								bt_status.setTextColor(Color.RED);
-							}
-							
-						}
-					}, 10000);
+					
 				}
 			}
 				
@@ -168,8 +157,10 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 	@Override
 	public void onStart() {
 		bmActor = new BundleMessageActor(this);
+		bmActor.register(getActivity());
 		//bmActor.register(getActivity());
 		bmHelper = new BundleMessageHelper(getActivity());
+		
 		soActor = new ServiceObservationActor(this, "de.uniulm.bagception.client.service.BagceptionClientService");
 		soActor.register(getActivity());
 		
@@ -188,7 +179,7 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 	@Override
 	public void onResume() {
 		notificationText.setText("");
-		bmActor.register(getActivity());
+		//bmActor.register(getActivity());
 
 		bmHelper.sendCommandBundle(Command.RESEND_STATUS.toBundle());
 		if (ServiceUtil.isServiceRunning(getActivity(), BagceptionClientService.class)){
@@ -202,7 +193,7 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 	
 	@Override
 	public void onPause() {
-		bmActor.unregister(getActivity());
+		//bmActor.unregister(getActivity());
 
 		super.onPause();
 	}
@@ -210,6 +201,7 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 	@Override
 	public void onStop() {
 		soActor.unregister(getActivity());
+		bmActor.unregister(getActivity());
 		super.onStop();
 	}
 	
@@ -314,9 +306,19 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 			break;
 			
 		case CONNECTING:
-			
 			bt_status.setText("connecting...");
 			bt_status.setTextColor(Color.YELLOW);
+			Handler h = new Handler();
+			h.postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					if (!isConnected){
+						bt_status.setText("disconnected");
+						bt_status.setTextColor(Color.RED);
+					}
+					
+				}
+			}, 10000);
 		default: break;
 		
 		}

@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import de.philipphock.android.lib.logging.LOG;
 import de.uniulm.bagception.protocol.bundle.BundleProtocolCallback;
+import de.uniulm.bagception.protocol.bundle.constants.StatusCode;
 
 public class BTClient implements Runnable {
 	private Thread recvThread;
@@ -66,7 +67,7 @@ public class BTClient implements Runnable {
 				// until it succeeds or throws an exception.
 
 			clientSocket = device.createRfcommSocketToServiceRecord(uuid);
-
+			
 			clientcallback.onConnecting();
 			clientSocket.connect();
 			
