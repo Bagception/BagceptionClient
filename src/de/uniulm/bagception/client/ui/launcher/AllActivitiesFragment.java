@@ -53,6 +53,7 @@ public class AllActivitiesFragment extends BasicListEntitiesFragment<Activity>{
 
 					if (itemView != null) {
 						itemView.setText(activity.getName());
+						
 					}
 					
 					activity_id = activity.getId();

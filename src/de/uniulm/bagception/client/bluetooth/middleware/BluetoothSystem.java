@@ -9,7 +9,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 import de.philipphock.android.lib.logging.LOG;
 import de.uniulm.bagception.bluetooth.BagceptionBTServiceInterface;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
@@ -18,12 +17,14 @@ import de.uniulm.bagception.bluetoothclientmessengercommunication.util.CheckReac
 import de.uniulm.bagception.client.service.BagceptionClientService;
 import de.uniulm.bagception.protocol.bundle.BundleProtocolCallback;
 import de.uniulm.bagception.protocol.bundle.constants.Command;
+import de.uniulm.bagception.protocol.bundle.constants.Response;
 import de.uniulm.bagception.protocol.bundle.constants.StatusCode;
 
 public class BluetoothSystem implements CheckReachableCallback,
 		ResponseSystem.Interaction, BundleProtocolCallback,
 		BTClient.ClientStatusCallback, BundleMessageReactor {
 
+	private boolean isConnecting=false;
 	private BTClient btclient;
 	private boolean lastConnectionState_connected = false;
 
@@ -96,6 +97,7 @@ public class BluetoothSystem implements CheckReachableCallback,
 	// connect
 
 	protected void connectToAvailableContainer(BluetoothDevice device) {
+
 		try {
 			btclient = new BTClient(device,
 					BagceptionBTServiceInterface.BT_UUID, this, this);
@@ -248,6 +250,7 @@ public class BluetoothSystem implements CheckReachableCallback,
 		responseSystem.makeResponse_bluetoothConnection(true,
 				lastConnectionState_connected != true);
 		lastConnectionState_connected = true;
+		isConnecting=false;
 	}
 
 	@Override
@@ -256,8 +259,15 @@ public class BluetoothSystem implements CheckReachableCallback,
 		responseSystem.makeResponse_bluetoothConnection(false,
 				lastConnectionState_connected != false);
 		lastConnectionState_connected = false;
+		isConnecting=false;
 	}
 
+	@Override
+	public void onConnecting() {
+		isConnecting=true;
+		mainService.bmHelper.sendStatusBundle(StatusCode.CONNECTING.toBundle());
+	}
+	
 	/*
 	 * **********************************
 	 * End BTClient.ClientStatusCallback**********************************
@@ -287,6 +297,9 @@ public class BluetoothSystem implements CheckReachableCallback,
 		Command command = Command.getCommand(b);
 		switch (command) {
 		case TRIGGER_SCAN_DEVICES:
+			mainService.bmHelper.sendStatusBundle(StatusCode.CONNECTING.toBundle());
+			mainService.bmHelper.sendResponseBundle(Response.CLEAR_RESPONSES.toBundle());
+
 			getPairedBagceptionDevicesInRangeAsync();
 			break;
 		case PING:
@@ -307,7 +320,12 @@ public class BluetoothSystem implements CheckReachableCallback,
 			if (btclient.isConnected()) {
 				onConnect();
 			} else {
-				onDisconnect();
+				if (isConnecting){
+					onConnecting();
+				}else{
+					onDisconnect();	
+				}
+				
 			}
 			break;
 		case DISCONNECT:
@@ -349,9 +367,13 @@ public class BluetoothSystem implements CheckReachableCallback,
 		}
 	}
 	
+	
+	
 	private void onCannotSendDueToNotConnected(){
 		mainService.bmHelper.sendStatusBundle(StatusCode.UNABLE_TO_SEND_DATA.toBundle());
 	}
+
+	
 
 	/*
 	 * **********************************

@@ -1,14 +1,19 @@
 package de.uniulm.bagception.client.ui.launcher;
 
+import java.util.ArrayList;
+
 import org.json.simple.JSONObject;
 
 import android.app.Fragment;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,10 +31,12 @@ import de.uniulm.bagception.bluetoothclientmessengercommunication.service.Bundle
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.bundlemessageprotocol.entities.ContainerStateUpdate;
+import de.uniulm.bagception.client.ConnectToDevice;
 import de.uniulm.bagception.client.Loader;
 import de.uniulm.bagception.client.R;
 import de.uniulm.bagception.client.service.BagceptionClientService;
 import de.uniulm.bagception.protocol.bundle.constants.Command;
+import de.uniulm.bagception.protocol.bundle.constants.Response;
 import de.uniulm.bagception.protocol.bundle.constants.StatusCode;
 
 public class SettingsFragment extends Fragment implements BundleMessageReactor, ServiceObservationReactor{
@@ -43,7 +50,7 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 	private ImageView battery;
 	private TextView batteryPercentage;
 	private TextView bt_connected_with;
-	
+	private TextView notificationText;
 	private boolean isConnected = false;
 	
 	//communication
@@ -52,7 +59,7 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 	
 	private ServiceObservationActor soActor;
 	private Bitmap batteryArray[] = new Bitmap[6];
-	
+	private Intent notificationIntent=null;
 	public static Fragment newInstance(Context context) {
 		SettingsFragment f = new SettingsFragment();
 
@@ -73,6 +80,19 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 		batteryPercentage = (TextView) root.findViewById(R.id.batteryPercentage);
 		battery = (ImageView) root.findViewById(R.id.battery_status);
 		bt_connected_with = (TextView) root.findViewById(R.id.bt_connected_with);
+		notificationText = (TextView) root.findViewById(R.id.notificationText);
+		
+		notificationText.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				//
+				if (notificationIntent!=null){
+					startActivity(notificationIntent);
+				}
+				
+			}
+		});
 		
 		bt_button.setOnTouchListener(new OnTouchListener() {
 			
@@ -106,20 +126,7 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 					bmHelper.sendCommandBundle(Command.DISCONNECT.toBundle());	
 				}else{
 					bmHelper.sendCommandBundle(Command.TRIGGER_SCAN_DEVICES.toBundle());
-					bt_status.setText("connecting..");
 					
-					Handler h = new Handler();
-					h.postDelayed(new Runnable() {
-						
-						@Override
-						public void run() {
-							if (!isConnected){
-								bt_status.setText("disconnected");
-								bt_status.setTextColor(Color.RED);
-							}
-							
-						}
-					}, 10000);
 				}
 			}
 				
@@ -150,8 +157,10 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 	@Override
 	public void onStart() {
 		bmActor = new BundleMessageActor(this);
+		bmActor.register(getActivity());
 		//bmActor.register(getActivity());
 		bmHelper = new BundleMessageHelper(getActivity());
+		
 		soActor = new ServiceObservationActor(this, "de.uniulm.bagception.client.service.BagceptionClientService");
 		soActor.register(getActivity());
 		
@@ -169,7 +178,8 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 	
 	@Override
 	public void onResume() {
-		bmActor.register(getActivity());
+		notificationText.setText("");
+		//bmActor.register(getActivity());
 
 		bmHelper.sendCommandBundle(Command.RESEND_STATUS.toBundle());
 		if (ServiceUtil.isServiceRunning(getActivity(), BagceptionClientService.class)){
@@ -178,11 +188,12 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 			onServiceStopped(null);
 		}
 		super.onResume();
+		bmHelper.sendCommandBundle(Command.POLL_ALL_RESPONSES.toBundle());
 	}
 	
 	@Override
 	public void onPause() {
-		bmActor.unregister(getActivity());
+		//bmActor.unregister(getActivity());
 
 		super.onPause();
 	}
@@ -190,6 +201,7 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 	@Override
 	public void onStop() {
 		soActor.unregister(getActivity());
+		bmActor.unregister(getActivity());
 		super.onStop();
 	}
 	
@@ -234,6 +246,28 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 	@Override
 	public void onResponseMessage(Bundle b) {
 		
+		Response r = Response.getResponse(b);
+		
+		//Bundle ack=null;
+		switch (r) {
+		case Ask_For_Specific_Device:
+			ArrayList<BluetoothDevice> ds =  b.getParcelableArrayList(Response.EXTRA_KEYS.PAYLOAD);
+			notificationText.setText("Es wurden " +ds.size()+ " Taschen gefunden");
+			notificationIntent = new Intent(getActivity(),ConnectToDevice.class);
+			notificationIntent.putParcelableArrayListExtra(Response.EXTRA_KEYS.PAYLOAD,ds);
+			break;
+
+		case Confirm_Established_Connection:
+			BluetoothDevice d = (BluetoothDevice) b.getParcelable(Response.EXTRA_KEYS.PAYLOAD);
+			notificationText.setText("Es wurde die Tasche \"" + d.getName() + "\" gefunden");
+			break;
+			
+		case CLEAR_RESPONSES:
+			//ArrayList<Integer> ids=b.getIntegerArrayList(Response.EXTRA_KEYS.NOTIFICATIONS_TO_CLEAR);
+			notificationText.setText("");
+			break;
+		default: break;
+		}
 	}
 
 	@Override
@@ -271,6 +305,20 @@ public class SettingsFragment extends Fragment implements BundleMessageReactor, 
 			isConnected = false;
 			break;
 			
+		case CONNECTING:
+			bt_status.setText("connecting...");
+			bt_status.setTextColor(Color.YELLOW);
+			Handler h = new Handler();
+			h.postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					if (!isConnected){
+						bt_status.setText("disconnected");
+						bt_status.setTextColor(Color.RED);
+					}
+					
+				}
+			}, 10000);
 		default: break;
 		
 		}
