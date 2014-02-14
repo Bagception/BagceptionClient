@@ -6,5 +6,6 @@
 	<color name="text">#3a3a3a</color>
 	<color name="dark_text">#000000</color>
 	<color name="listitem">#767676</color>
+	<color name="notify">#FFD500</color>
     
 </resources>

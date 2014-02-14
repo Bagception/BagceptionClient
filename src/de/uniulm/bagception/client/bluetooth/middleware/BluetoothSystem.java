@@ -9,7 +9,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 import de.philipphock.android.lib.logging.LOG;
 import de.uniulm.bagception.bluetooth.BagceptionBTServiceInterface;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
@@ -286,6 +285,7 @@ public class BluetoothSystem implements CheckReachableCallback,
 		Command command = Command.getCommand(b);
 		switch (command) {
 		case TRIGGER_SCAN_DEVICES:
+			mainService.bmHelper.sendStatusBundle(StatusCode.CONNECTING.toBundle());
 			getPairedBagceptionDevicesInRangeAsync();
 			break;
 		case PING:
@@ -348,9 +348,16 @@ public class BluetoothSystem implements CheckReachableCallback,
 		}
 	}
 	
+	@Override
+	public void onConnecting() {Log.d("notify", "connecting.......1");
+		mainService.bmHelper.sendStatusBundle(StatusCode.CONNECTING.toBundle());
+	}
+	
 	private void onCannotSendDueToNotConnected(){
 		mainService.bmHelper.sendStatusBundle(StatusCode.UNABLE_TO_SEND_DATA.toBundle());
 	}
+
+	
 
 	/*
 	 * **********************************

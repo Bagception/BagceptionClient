@@ -10,6 +10,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.os.Bundle;
 import android.util.Log;
+import de.philipphock.android.lib.logging.LOG;
 import de.uniulm.bagception.protocol.bundle.BundleProtocolCallback;
 
 public class BTClient implements Runnable {
@@ -66,7 +67,7 @@ public class BTClient implements Runnable {
 
 			clientSocket = device.createRfcommSocketToServiceRecord(uuid);
 
-			
+			clientcallback.onConnecting();
 			clientSocket.connect();
 			
 			clientSocketInStream = clientSocket.getInputStream();
@@ -144,6 +145,7 @@ public class BTClient implements Runnable {
 	public interface ClientStatusCallback{
 		public void onConnect();
 		public void onDisconnect();
+		public void onConnecting();
 		public void onError(Exception e);
 		
 	}
