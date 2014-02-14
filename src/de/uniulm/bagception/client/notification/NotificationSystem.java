@@ -14,6 +14,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 import de.philipphock.android.lib.services.observation.ConstantFactory;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
+import de.uniulm.bagception.client.ConnectToDevice;
 import de.uniulm.bagception.client.R;
 import de.uniulm.bagception.client.service.BagceptionClientService;
 import de.uniulm.bagception.protocol.bundle.constants.Command;
@@ -56,6 +57,9 @@ public class NotificationSystem implements BundleMessageReactor{
 	public void updateNotification(String text,Bundle b){
 		updateNotification(b,text,BagceptionClientService.class,true);
 	}
+	public void updateNotification(String text,Bundle b,Class<?> c){
+		updateNotification(b,text,c,true);
+	}
 	public void updateNotification(Bundle response,String text,Class<?> targetOnTouch,boolean targetIsService){
 		NotificationManager notificationManager = (NotificationManager) 
 				  mainService.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -96,10 +100,7 @@ public class NotificationSystem implements BundleMessageReactor{
 		case Ask_For_Specific_Device:
 			//ack = ResponseAnswer.Ask_For_Specific_Device.getACK();
 			ArrayList<BluetoothDevice> ds =  b.getParcelableArrayList(Response.EXTRA_KEYS.PAYLOAD);
-			
-			updateNotification("Es wurden " +ds.size()+ " Taschen gefunden",b);
-			
-			
+			updateNotification(b, "Es wurden " +ds.size()+ " Taschen gefunden", ConnectToDevice.class, false);
 			break;
 
 		case Confirm_Established_Connection:
