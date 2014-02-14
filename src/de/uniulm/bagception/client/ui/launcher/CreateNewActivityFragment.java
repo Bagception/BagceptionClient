@@ -62,6 +62,7 @@ public class CreateNewActivityFragment extends Fragment implements BundleMessage
 		send = (Button) root.findViewById(R.id.sendActivity);
 		cancel = (Button) root.findViewById(R.id.cancelActivity);
 		addPlace = (Button) root.findViewById(R.id.addLocation);
+		
 		listView = (ListView) root.findViewById(R.id.itemView);
 		listView.setAdapter(listadapter);
 		
@@ -183,7 +184,7 @@ public class CreateNewActivityFragment extends Fragment implements BundleMessage
 							itemsForActivity = itemsSelected;
 							Log.w("TEST", "ItemsForActivity wird gefüllt mit: " + itemsForActivity);
 							
-							listadapter = new ArrayAdapter<String>(getActivity(), R.id.itemView, selectedItems);
+							listadapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, selectedItems);
 							listadapter.notifyDataSetChanged();
 						}
 						
