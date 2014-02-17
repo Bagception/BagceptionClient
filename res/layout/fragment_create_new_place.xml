@@ -101,13 +101,13 @@
             android:layout_marginBottom="10dip"
             android:layout_marginTop="10dip" >
 
-            <TextView 
+            <TextView
                 android:id="@+id/longitudeView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Long: " />
-            
-            <TextView 
+
+            <TextView
                 android:id="@+id/latitudeView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -134,6 +134,26 @@
                 android:layout_height="wrap_content"
                 android:onClick="startMap"
                 android:text="WLAN" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow28"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:layout_marginTop="10dip" >
+
+            <TextView
+                android:id="@+id/btView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BT: " />
+
+            <TextView
+                android:id="@+id/wlanView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WLAN: " />
         </TableRow>
 
         <LinearLayout

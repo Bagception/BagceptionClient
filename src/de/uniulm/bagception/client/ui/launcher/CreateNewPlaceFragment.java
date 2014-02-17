@@ -7,7 +7,6 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Address;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TwoLineListItem;
+import android.widget.TextView;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
@@ -34,6 +33,8 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 	EditText editName;
 	EditText editAddress;
+	TextView btView;
+	TextView wlanView;
 	Button send;
 	ShowMap showMap;
 	Button cancel;
@@ -55,20 +56,21 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 		return f;
 	}
-	
+
 	@Override
 	public void onStart() {
-		
+
 		super.onStart();
 		actor.register(getActivity());
 	}
 
 	@Override
 	public void onStop() {
-		
+
 		super.onStop();
 		actor.unregister(getActivity());
 	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -76,6 +78,8 @@ public class CreateNewPlaceFragment extends Fragment implements
 				R.layout.fragment_create_new_place, null);
 		editName = (EditText) root.findViewById(R.id.editName);
 		editAddress = (EditText) root.findViewById(R.id.editAddress);
+		btView = (TextView) root.findViewById(R.id.btView);
+		wlanView = (TextView) root.findViewById(R.id.wlanView);
 		send = (Button) root.findViewById(R.id.send);
 		cancel = (Button) root.findViewById(R.id.cancelPlace);
 		bt = (Button) root.findViewById(R.id.btButton);
@@ -83,19 +87,21 @@ public class CreateNewPlaceFragment extends Fragment implements
 		resolveAddress = (Button) root.findViewById(R.id.resolveAddress);
 		showMap = new ShowMap();
 		actor = new BundleMessageActor(this);
-		
-		resolveAddress.setOnClickListener(new OnClickListener(
-				) {
-			
+
+		resolveAddress.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Location locAddress = new Location(editAddress.getText().toString(), "");
+				Location locAddress = new Location(editAddress.getText()
+						.toString(), "");
 				Log.d("TEST", "Adresse: " + editAddress.getText().toString());
 				new BundleMessageHelper(getActivity())
-				.sendMessageSendBundle(BundleMessage.getInstance()
-						.createBundle(BUNDLE_MESSAGE.RESOLVE_ADDRESS_REQUEST, locAddress));
-				
+						.sendMessageSendBundle(BundleMessage.getInstance()
+								.createBundle(
+										BUNDLE_MESSAGE.RESOLVE_ADDRESS_REQUEST,
+										locAddress));
+
 			}
 		});
 
@@ -106,20 +112,28 @@ public class CreateNewPlaceFragment extends Fragment implements
 				btDevices.clear();
 				btAlert = new AlertDialog.Builder(getActivity());
 				btAlert.setTitle("Bluetooth Devices");
-				
-				btArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_selectable_list_item, btDevices);
-				
-				new BundleMessageHelper(getActivity())
-						.sendMessageSendBundle(BundleMessage.getInstance()
-								.createBundle(BUNDLE_MESSAGE.BLUETOOTH_SEARCH_REQUEST, null));
-				btAlert.setAdapter(btArrayAdapter, new DialogInterface.OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						Log.d("TEST", "item clicked:" + which);
-						Log.d("TEST", "items name: " + btDevices.get(which));
-					}
-				});
+				btArrayAdapter = new ArrayAdapter<String>(getActivity(),
+						android.R.layout.simple_selectable_list_item, btDevices);
+
+				new BundleMessageHelper(getActivity())
+						.sendMessageSendBundle(BundleMessage
+								.getInstance()
+								.createBundle(
+										BUNDLE_MESSAGE.BLUETOOTH_SEARCH_REQUEST,
+										null));
+				btAlert.setAdapter(btArrayAdapter,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								Log.d("TEST", "item clicked:" + which);
+								Log.d("TEST",
+										"items name: " + btDevices.get(which));
+								btView.setText("BT: " + btDevices.get(which).toString());
+							}
+						});
 				btAlert.create().show();
 			}
 		});
@@ -129,23 +143,30 @@ public class CreateNewPlaceFragment extends Fragment implements
 			@Override
 			public void onClick(View v) {
 				wifiDevices.clear();
-				wifiAlert = new AlertDialog.Builder(
-						getActivity());
+				wifiAlert = new AlertDialog.Builder(getActivity());
 
 				wifiAlert.setTitle("Access Points");
-				wifiArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_selectable_list_item, wifiDevices);
-				
+				wifiArrayAdapter = new ArrayAdapter<String>(getActivity(),
+						android.R.layout.simple_selectable_list_item,
+						wifiDevices);
+
 				new BundleMessageHelper(getActivity())
 						.sendMessageSendBundle(BundleMessage.getInstance()
-								.createBundle(BUNDLE_MESSAGE.WIFI_SEARCH_REQUEST,	null));
-				wifiAlert.setAdapter(wifiArrayAdapter, new DialogInterface.OnClickListener() {
+								.createBundle(
+										BUNDLE_MESSAGE.WIFI_SEARCH_REQUEST,
+										null));
+				wifiAlert.setAdapter(wifiArrayAdapter,
+						new DialogInterface.OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						Log.d("TEST", "item clicked:" + which);
-						Log.d("TEST", "items name: " + wifiDevices.get(which));
-					}
-				});
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								Log.d("TEST", "item clicked:" + which);
+								Log.d("TEST",
+										"items name: " + wifiDevices.get(which));
+								wlanView.setText("WLAN: " + wifiDevices.get(which).toString());
+							}
+						});
 				wifiAlert.create().show();
 			}
 		});
@@ -154,9 +175,11 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-				//TODO !!!
-				
-				Location location = new Location(-1, editName.getText().toString(), resultLocation.getLat(), resultLocation.getLng(), resultLocation.getRadius(), "5");
+				// TODO !!!
+
+				Location location = new Location(-1, editName.getText()
+						.toString(), resultLocation.getLat(), resultLocation
+						.getLng(), resultLocation.getRadius(), "5");
 				BundleMessageHelper helper = new BundleMessageHelper(
 						getActivity());
 				helper.sendMessageSendBundle(BundleMessage.getInstance()
@@ -193,7 +216,7 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 			break;
 		}
-		case BLUETOOTH_SEARCH_REPLY:{
+		case BLUETOOTH_SEARCH_REPLY: {
 			device = WifiBTDevice.fromJSON(BundleMessage.getInstance()
 					.extractObject(b));
 			Log.d("TEST", device.getName() + " " + device.getMac());
@@ -201,14 +224,15 @@ public class CreateNewPlaceFragment extends Fragment implements
 			btArrayAdapter.notifyDataSetChanged();
 			break;
 		}
-		case RESOLVE_ADDRESS_REPLY:{
-			//Location location 
+		case RESOLVE_ADDRESS_REPLY: {
+			// Location location
 			resultLocation = Location.fromJSON(BundleMessage.getInstance()
 					.extractObject(b));
-			Log.d("TEST", resultLocation.getLat() + " " + resultLocation.getLng());
+			Log.d("TEST",
+					resultLocation.getLat() + " " + resultLocation.getLng());
 			break;
 		}
-		case RESOLVE_COORDS_REPLY:{
+		case RESOLVE_COORDS_REPLY: {
 			resultLocation = Location.fromJSON(BundleMessage.getInstance()
 					.extractObject(b));
 			Log.d("TEST", resultLocation.getName());

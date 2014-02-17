@@ -293,7 +293,7 @@ public class CreateNewItemFragment extends Fragment implements
 				ItemAttribute attributes = new ItemAttribute(temperature,
 						weather, lightness);
 				item = new Item(-1, editName.getText().toString(),
-						categoryForActivity, alwaysChecked, independetChecked,
+						categoryForActivity, independetChecked, alwaysChecked, 
 						attributes, tagIDs);
 				
 				if (((MainGUI)getActivity()).currentPicturetaken != null){
