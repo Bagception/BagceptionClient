@@ -252,11 +252,11 @@ public class CreateNewItemFragment extends Fragment implements
 			@Override
 			public void onClick(View arg0) {
 				Item item;
-				
+
 				Log.w("TEST", "TAGID: " + tagId);
 				if (tagId != null) {
 					tagIDs.add(tagId);
-				} else{
+				} else {
 					tagIDs = null;
 				}
 
@@ -292,14 +292,15 @@ public class CreateNewItemFragment extends Fragment implements
 
 				ItemAttribute attributes = new ItemAttribute(temperature,
 						weather, lightness);
+
 				item = new Item(-1, editName.getText().toString(),
-						categoryForActivity, independetChecked, alwaysChecked, 
+						categoryForActivity, alwaysChecked, independetChecked,
 						attributes, tagIDs);
-				
-				if (((MainGUI)getActivity()).currentPicturetaken != null){
+
+				if (((MainGUI) getActivity()).currentPicturetaken != null) {
 					item.setImage(((MainGUI) getActivity()).currentPicturetaken);
 				}
-				
+
 				Log.d("TEST", item.toString());
 				BundleMessageHelper helper = new BundleMessageHelper(
 						getActivity());
@@ -356,7 +357,8 @@ public class CreateNewItemFragment extends Fragment implements
 									// TODO Auto-generated method stub
 									categoryForActivity = new Category(
 											categoryStrings[which]);
-									viewCategory.setText(categoryStrings[which]);
+									viewCategory
+											.setText(categoryStrings[which]);
 								}
 							});
 					categoryAlert.create().show();

@@ -7,5 +7,6 @@
 	<color name="dark_text">#000000</color>
 	<color name="listitem">#767676</color>
 	<color name="notify">#FFD500</color>
+	<color name="dividerDrawer">#404040</color>
     
 </resources>

@@ -59,36 +59,35 @@
                 android:text="Neues Foto" />
         </TableRow>
 
-        <TableRow
-            android:id="@+id/tableRow4"
+        <View
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dip" >
-
-            <Button
-                android:id="@+id/addCategory"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@android:drawable/list_selector_background"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
-                android:text="Kategorie hinzufügen" />
-        </TableRow>
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
 
         <TableRow
-            android:id="@+id/tableRow10"
+            android:id="@+id/tableRow5"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
             android:layout_marginTop="10dip" >
 
             <TextView
                 android:id="@+id/viewCategory"
                 android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="15dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:text="Keine Kategorie" />
+
+           <Button
+                android:id="@+id/addCategory"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Noch keine Kategorie ausgewählt" />
+                android:layout_gravity="left"
+                android:layout_marginLeft="20dp"
+                android:text="+ Kategorie" />
         </TableRow>
 
         <View
@@ -124,7 +123,9 @@
                 android:layout_weight="1"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
-                android:text="Warm" />
+                android:text="Warm"
+                android:textOff="Warm"
+                android:textOn="Warm" />
 
             <ToggleButton
                 android:id="@+id/coldButton"
@@ -133,7 +134,9 @@
                 android:layout_weight="1"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
-                android:text="Kalt" />
+                android:text="Kalt"
+                android:textOff="Kalt"
+                android:textOn="Kalt" />
         </TableRow>
 
         <View
@@ -169,7 +172,9 @@
                 android:layout_weight="1"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
-                android:text="Sonne" />
+                android:text="Sonne"
+                android:textOff="Sonne"
+                android:textOn="Sonne" />
 
             <ToggleButton
                 android:id="@+id/rainButton"
@@ -178,7 +183,9 @@
                 android:layout_weight="1"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
-                android:text="Regen" />
+                android:text="Regen"
+                android:textOff="Regen"
+                android:textOn="Regen" />
         </TableRow>
 
         <View
@@ -214,7 +221,9 @@
                 android:layout_weight="1"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
-                android:text="Hell" />
+                android:text="Hell"
+                android:textOff="Hell"
+                android:textOn="Hell" />
 
             <ToggleButton
                 android:id="@+id/darkButton"
@@ -223,7 +232,9 @@
                 android:layout_weight="1"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
-                android:text="Dunkel" />
+                android:text="Dunkel"
+                android:textOff="Dunkel"
+                android:textOn="Dunkel" />
         </TableRow>
 
         <View

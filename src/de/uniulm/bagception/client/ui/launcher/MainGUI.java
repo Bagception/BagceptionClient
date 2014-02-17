@@ -66,7 +66,6 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 			"de.uniulm.bagception.client.ui.launcher.CreateNewActivityFragment",
 			"de.uniulm.bagception.client.ui.launcher.NewBagFragment" };
 
-//	final String[] data2 = { "Test1", "Test2" };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +74,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 		bmHelper = new BundleMessageHelper(this);
 		setContentView(R.layout.activity_main_gui);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActionBar()
-				.getThemedContext(), android.R.layout.simple_list_item_1, data);
+				.getThemedContext(), R.layout.drawer_layout, R.id.drawerText, data);
 
 		drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 		drawRightLayout = findViewById(R.id.drawerRight);

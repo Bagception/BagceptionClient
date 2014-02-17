@@ -60,6 +60,11 @@
             </EditText>
         </TableRow>
 
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
         <TableRow
             android:id="@+id/tableRow2"
             android:layout_width="fill_parent"
@@ -74,24 +79,14 @@
                 android:gravity="left"
                 android:onClick="resolveAddress"
                 android:text="Adresse auswerten" />
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tableRow4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="25dip"
-            android:layout_marginTop="10dip" >
-
-            <TextView android:layout_width="wrap_content" />
 
             <Button
                 android:id="@+id/addWithMap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="left"
+                android:layout_marginLeft="20dp"
                 android:onClick="startMap"
-                android:text="Karte verwenden" />
+                android:text="Karte" />
         </TableRow>
 
         <TableRow
@@ -113,6 +108,11 @@
                 android:layout_height="wrap_content"
                 android:text="Lat: " />
         </TableRow>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
 
         <TableRow
             android:id="@+id/tableRow10"
