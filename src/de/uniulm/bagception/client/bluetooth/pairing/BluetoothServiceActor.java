@@ -22,6 +22,9 @@ public class BluetoothServiceActor extends BroadcastActor<BluetoothServiceReacto
 
 	}
 
+	public void clear(){
+		devices.clear();
+	}
 	@Override
 	public void onReceive(Context context, Intent intent) {
 	     if(intent.getAction().equals(BluetoothDevice.ACTION_FOUND)) {

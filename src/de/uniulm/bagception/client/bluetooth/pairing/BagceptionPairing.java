@@ -13,7 +13,7 @@ import android.util.Log;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.util.BagceptionBluetoothUtil;
 
 public class BagceptionPairing{
-	private boolean DEBUG = false;
+	private boolean DEBUG = true;
 
 	private final BagceptionPairingCallbacks callbacks;
 	private final List<BluetoothDevice> foundBTDevices =  Collections.synchronizedList(new  ArrayList<BluetoothDevice>());
@@ -27,8 +27,13 @@ public class BagceptionPairing{
 	public BagceptionPairing(BagceptionPairingCallbacks callbacks) {
 		this.callbacks = callbacks;
 		bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+		
 		discoveredDevices.clear();
 		foundBTDevices.clear();
+		foundBagceptionDevices.clear();
+		sdpFinished = false;
+		ddFinished = false;
+		
 		discoveredDevices.addAll(bluetoothAdapter.getBondedDevices());
 		actor = new BluetoothServiceActor(btServicereactor);
 	}
@@ -41,6 +46,13 @@ public class BagceptionPairing{
 	}
 	
 	public void startScan(){
+		discoveredDevices.clear();
+		foundBTDevices.clear();
+		actor.clear();
+		foundBagceptionDevices.clear();
+		discoveredDevices.addAll(bluetoothAdapter.getBondedDevices());
+		sdpFinished = false;
+		ddFinished = false;
 		bluetoothAdapter.startDiscovery();
 		Handler h = new Handler();
 		h.postDelayed(new Runnable() {
@@ -112,9 +124,10 @@ public class BagceptionPairing{
 		
 		@Override
 		public void onServicesDiscovered(BluetoothDevice device) {
-			if (sdpCount<=0){
-				sdpFinished();
-			}
+//			sdpCount--;
+//			if (sdpCount<=0){
+//				sdpFinished();
+//			}
 		}
 		
 		@Override
@@ -139,7 +152,7 @@ public class BagceptionPairing{
 		@Override
 		public void onDeviceDiscoveryFinished(BluetoothDevice[] devices,
 				ConcurrentHashMap<String, BluetoothDevice> devicesAsMap) {
-				deviceDiscoveryFinished();
+				
 		}
 	};
 	
