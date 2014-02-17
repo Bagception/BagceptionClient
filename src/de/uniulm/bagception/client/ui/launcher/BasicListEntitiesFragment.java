@@ -1,5 +1,9 @@
 package de.uniulm.bagception.client.ui.launcher;
 
+import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -20,6 +24,7 @@ import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMe
 import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
+import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
 import de.uniulm.bagception.client.EditItemActivity;
 import de.uniulm.bagception.client.R;
@@ -55,7 +60,8 @@ public abstract class BasicListEntitiesFragment<E> extends Fragment implements
 
 	protected abstract String getFragmentName();
 
-	protected abstract long itemSelected(E e);
+	protected abstract long getId(E e);
+	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -82,8 +88,11 @@ public abstract class BasicListEntitiesFragment<E> extends Fragment implements
 					long arg3) {
 				Intent intent = new Intent(getActivity(), MainGUI.class);
 				intent.putExtra("FRAGMENT", getFragmentName());
-				long id = itemSelected(listAdapter.getItem(arg2));
-				intent.putExtra("ID",id );
+				long id = getId(listAdapter.getItem(arg2));
+				String serializedString = listAdapter.getItem(arg2).toString();
+				intent.putExtra("ID",id);
+				intent.putExtra("ITEMSTRING",serializedString);
+				
 				startActivity(intent);
 			}
 		});
