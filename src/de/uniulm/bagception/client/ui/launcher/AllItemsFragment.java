@@ -30,7 +30,6 @@ public class AllItemsFragment extends BasicListEntitiesFragment<Item> {
 				Item[] theItemsWeWantToDisplay = i.getPayloadObjects();
 				listAdapter.clear();
 				listAdapter.addAll(theItemsWeWantToDisplay);
-				Log.d("TEST", "items: " + theItemsWeWantToDisplay);
 			}
 		};
 		a_cmd.accept(adminCommandProcessor);
