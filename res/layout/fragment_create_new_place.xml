@@ -160,7 +160,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginTop="220dp"
+            android:layout_marginTop="180dp"
             android:background="@color/background"
             android:divider="?android:attr/listDivider"
             android:dividerPadding="12dp"

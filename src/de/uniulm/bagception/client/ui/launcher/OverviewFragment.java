@@ -10,6 +10,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,12 +60,12 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		currentActivityView = (TextView) root.findViewById(R.id.test);
 
 		ActionBar actionBar = getActivity().getActionBar();
+		actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0099CC")));
 		actionBar.removeAllTabs();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		// initiating both tabs and set text to it.
 		itemsInTab = actionBar.newTab().setText("Enthalten (0)");
 		itemsMissTab = actionBar.newTab().setText("Fehlend (0)");
-		// itemsNeedlessTab = actionBar.newTab().setText("�berfl�ssig (0)");
 		itemsSuggTab = actionBar.newTab().setText("Vorschlag");
 
 		itemsInFragment = new ItemsInFragment();
