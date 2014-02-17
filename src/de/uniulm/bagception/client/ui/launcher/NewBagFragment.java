@@ -1,5 +1,4 @@
 package de.uniulm.bagception.client.ui.launcher;
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -37,10 +36,13 @@ public class NewBagFragment extends ListFragment{
 		mAdapter = new BluetoothDeviceArrayAdapter(getActivity());
 		pairingHelper = new BagceptionPairing(callback);
 		super.onActivityCreated(savedInstanceState);
-	    setListAdapter(mAdapter);	
+	    setListAdapter(mAdapter);
+	    if (dialog!=null)
+	    	dialog.dismiss();
+	    
 	    dialog = ProgressDialog.show(getActivity(), "suche..",
 				"Suche nach Geräten... bitte warten\n\nDer Bagception Server muss auf dem fremden Gerät eingeschaltet sein"); 
-
+	    pairingHelper.startScan();
 	    
 	}
 
@@ -48,7 +50,6 @@ public class NewBagFragment extends ListFragment{
 	public void pairingStatus(BluetoothDevice d, boolean success){
 		pairingDialog.dismiss();
        	mAdapter.clear();
-		pairingHelper = new BagceptionPairing(callback);
 		if (success){
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			builder.setMessage("Pairing erfolgreich")
@@ -68,7 +69,7 @@ public class NewBagFragment extends ListFragment{
 					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						 dialog = ProgressDialog.show(getActivity(), "suche..",
+						NewBagFragment.this.dialog = ProgressDialog.show(getActivity(), "suche..",
 									"Suche nach Geräten... bitte warten\n\nDer Bagception Server muss auf dem fremden Gerät eingeschaltet sein"); 
 						pairingHelper.startScan();
 					}
@@ -87,6 +88,8 @@ public class NewBagFragment extends ListFragment{
 	  
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
+		if (pairingDialog!=null)
+			pairingDialog.dismiss();
 		pairingDialog = ProgressDialog.show(getActivity(), "Pairing..",
 				"Pairing wird durchgeführt"); 
 		BluetoothDevice d = mAdapter.getItem(position);
@@ -99,9 +102,6 @@ public class NewBagFragment extends ListFragment{
 		//scan for devices
 		super.onStart();
 		pairingHelper.register(getActivity());
-		pairingHelper.startScan();
-		
-		
 	}
 	
 	@Override
@@ -118,16 +118,13 @@ public class NewBagFragment extends ListFragment{
 		}catch(Exception e){}
 	}
 	
-	public void onScanFinished(ArrayList<BluetoothDevice> foundDevices){
-		
-	}
+
 
 	
 	private final BagceptionPairingCallbacks callback = new BagceptionPairingCallbacks() {
 		
 		@Override
 		public void onScanStart() {
-			dialog.show();	
 		}
 		
 		@Override

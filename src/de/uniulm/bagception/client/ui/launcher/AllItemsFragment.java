@@ -28,9 +28,13 @@ public class AllItemsFragment extends BasicListEntitiesFragment<Item> {
 			public void onItemList(AdministrationCommand<Item> i) {
 				//item list
 				Item[] theItemsWeWantToDisplay = i.getPayloadObjects();
+				
+				for(int j = 0; j < theItemsWeWantToDisplay.length; j++){
+					Log.w("TEST", "Item " + j + ": " + theItemsWeWantToDisplay[j]);
+				}
+					
 				listAdapter.clear();
 				listAdapter.addAll(theItemsWeWantToDisplay);
-				Log.d("TEST", "items: " + theItemsWeWantToDisplay);
 			}
 		};
 		a_cmd.accept(adminCommandProcessor);
@@ -51,14 +55,17 @@ public class AllItemsFragment extends BasicListEntitiesFragment<Item> {
 	@Override
 	protected String getFragmentName() {
 		
-		return "de.uniulm.bagception.client.ui.launcher.CreateNewItemFragment";
+//		return "de.uniulm.bagception.client.ui.launcher.CreateNewItemFragment";
+		return "de.uniulm.bagception.client.ui.launcher.EditItemFragment";
 	}
 
 	@Override
-	protected long itemSelected(Item e) {
+	protected long getId(Item e) {
 		
 		return e.getId();
 	}
+
+	
 
 
 

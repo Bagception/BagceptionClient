@@ -24,7 +24,7 @@ public class ItemEditActivity extends FragmentActivity {
 			Bundle args = new Bundle();
 			
 			// TODO
-			// Hier müssen die Daten aus der Datenbank geholt werden
+			// Hier mï¿½ssen die Daten aus der Datenbank geholt werden
 			
 			args.putString("Test", null); // DummyContent!
 			
