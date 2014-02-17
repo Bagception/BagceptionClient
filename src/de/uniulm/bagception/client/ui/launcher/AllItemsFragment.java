@@ -29,10 +29,6 @@ public class AllItemsFragment extends BasicListEntitiesFragment<Item> {
 				//item list
 				Item[] theItemsWeWantToDisplay = i.getPayloadObjects();
 				
-				for(int j = 0; j < theItemsWeWantToDisplay.length; j++){
-					Log.w("TEST", "Item " + j + ": " + theItemsWeWantToDisplay[j]);
-				}
-					
 				listAdapter.clear();
 				listAdapter.addAll(theItemsWeWantToDisplay);
 			}

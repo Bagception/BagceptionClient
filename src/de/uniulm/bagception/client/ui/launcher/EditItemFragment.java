@@ -12,6 +12,8 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,6 +43,8 @@ import de.uniulm.bagception.bundlemessageprotocol.entities.administration.Admini
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.CategoryCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ItemCommand;
 import de.uniulm.bagception.client.R;
+import de.uniulm.bagception.client.caching.ImageCachingSystem;
+import de.uniulm.bagception.client.items.AutoUpdateableItemView;
 
 public class EditItemFragment extends Fragment implements
 BundleMessageReactor {
@@ -114,11 +118,10 @@ JSONParser p = new JSONParser();
 try {
 	obj = (org.json.simple.JSONObject) p.parse(i);
 	item = Item.fromJSON(obj);
-	Log.w("TEST", "Item: " + item);
 } catch (ParseException e) {
 	e.printStackTrace();
 }
-
+final Item oldItem = item;
 
 bmActor = new BundleMessageActor(this);
 addCategory.setOnClickListener(new OnClickListener() {
@@ -145,10 +148,58 @@ if(item.getCategory() != null){
 	viewCategory.setText(item.getCategory().getName());
 }
 
-if(item.getImage() != null){
-	iv.setImageBitmap(item.getImage());
+if(item.getImageString() != null){
+	//TODO
+	// get image
+	AutoUpdateableItemView auiv = new AutoUpdateableItemView(getActivity(), item);
+	Item tmp = auiv.getItem();
+	
+	if (tmp.getImage() == null){
+		Bitmap bmp = ImageCachingSystem.getInstance().getImage(tmp);
+		if (bmp == null){
+			//put pending image here
+			BitmapFactory.decodeResource(getResources(), R.drawable.service_icon);
+		}else{
+			iv.setImageBitmap(bmp);
+		}
+	}else{
+		iv.setImageBitmap(item.getImage());
+	}
 }
 
+if(item.getAttribute() != null){
+	ItemAttribute iA = item.getAttribute();
+	
+	String weather = iA.getWeather();
+	String temperature = iA.getTemperature();
+	String lightness = iA.getLightness();
+	
+	if(temperature.equals("cold")){
+		cold.setChecked(true);
+	} else if(temperature.equals("warm")){
+		warm.setChecked(true);
+	}
+	
+	if(weather.equals("sunny")){
+		sunny.setChecked(true);
+	} else if(weather.equals("rainy")){
+		rainy.setChecked(true);
+	}
+	
+	if(lightness.equals("light")){
+		light.setChecked(true);
+	} else if(lightness.equals("cold")){
+		dark.setChecked(true);
+	}
+	
+	if(item.getContextItem() == true){
+		independet.setChecked(true);
+	}
+	
+	if(item.getIndependentItem() == true){
+		always.setChecked(true);
+	}
+}
 
 
 if (getArguments() == null) {
@@ -177,7 +228,6 @@ warm.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView,
 			boolean isChecked) {
-		// TODO Auto-generated method stub
 		if (isChecked) {
 			warmOn = "warm";
 		} else {
@@ -191,7 +241,6 @@ cold.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView,
 			boolean isChecked) {
-		// TODO Auto-generated method stub
 		if (isChecked) {
 			coldOn = "cold";
 		} else {
@@ -205,7 +254,6 @@ rainy.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView,
 			boolean isChecked) {
-		// TODO Auto-generated method stub
 		if (isChecked) {
 			rainyOn = "rainy";
 		} else {
@@ -219,7 +267,6 @@ sunny.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView,
 			boolean isChecked) {
-		// TODO Auto-generated method stub
 		if (isChecked) {
 			sunnyOn = "sunny";
 		} else {
@@ -233,7 +280,6 @@ light.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView,
 			boolean isChecked) {
-		// TODO Auto-generated method stub
 		if (isChecked) {
 			lightOn = "light";
 		} else {
@@ -247,7 +293,6 @@ dark.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView,
 			boolean isChecked) {
-		// TODO Auto-generated method stub
 		if (isChecked) {
 			darkOn = "cold";
 		} else {
@@ -261,7 +306,6 @@ always.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView,
 			boolean isChecked) {
-		// TODO Auto-generated method stub
 		if (isChecked) {
 			alwaysChecked = true;
 		} else {
@@ -275,7 +319,6 @@ independet.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView,
 			boolean isChecked) {
-		// TODO Auto-generated method stub
 		if (isChecked) {
 			independetChecked = true;
 		} else {
@@ -288,9 +331,8 @@ send.setOnClickListener(new OnClickListener() {
 
 	@Override
 	public void onClick(View arg0) {
-		Item item;
+		Item newItem;
 		
-		Log.w("TEST", "TAGID: " + tagId);
 		if (tagId != null) {
 			tagIDs.add(tagId);
 		} else{
@@ -329,21 +371,21 @@ send.setOnClickListener(new OnClickListener() {
 
 		ItemAttribute attributes = new ItemAttribute(temperature,
 				weather, lightness);
-		item = new Item(-1, editName.getText().toString(),
+		newItem = new Item(-1, editName.getText().toString(),
 				categoryForActivity, independetChecked, alwaysChecked, 
 				attributes, tagIDs);
 		
 		if (((MainGUI)getActivity()).currentPicturetaken != null){
-			item.setImage(((MainGUI) getActivity()).currentPicturetaken);
+			newItem.setImage(((MainGUI) getActivity()).currentPicturetaken);
 		}
 		
-		Log.d("TEST", item.toString());
+		Log.d("TEST", newItem.toString());
 		BundleMessageHelper helper = new BundleMessageHelper(
 				getActivity());
 		helper.sendMessageSendBundle(BundleMessage.getInstance()
 				.createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
-						ItemCommand.add(item)));
-		Log.d("TEST", item.toString());
+						ItemCommand.edit(oldItem, newItem)));
+		Log.d("TEST", newItem.toString());
 		Intent intent = new Intent(getActivity(), MainGUI.class);
 		startActivity(intent);
 	}
@@ -353,7 +395,6 @@ cancel.setOnClickListener(new OnClickListener() {
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		editName.setText("");
 		iv.setImageResource(R.drawable.ic_launcher);
 
@@ -365,7 +406,6 @@ return root;
 
 @Override
 public void onBundleMessageRecv(Bundle b) {
-// TODO Auto-generated method stub
 switch (BundleMessage.getInstance().getBundleMessageType(b)) {
 case ADMINISTRATION_COMMAND: {
 	AdministrationCommandProcessor p = new AdministrationCommandProcessor() {
@@ -373,7 +413,6 @@ case ADMINISTRATION_COMMAND: {
 		@Override
 		public void onCategoryList(
 				de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand<de.uniulm.bagception.bundlemessageprotocol.entities.Category> i) {
-			// TODO Auto-generated method stub
 			final Category[] categories = i.getPayloadObjects();
 			final String[] categoryStrings = new String[categories.length];
 			for (int iter = 0; iter < categoryStrings.length; iter++) {
@@ -390,7 +429,6 @@ case ADMINISTRATION_COMMAND: {
 						@Override
 						public void onClick(DialogInterface dialog,
 								int which) {
-							// TODO Auto-generated method stub
 							categoryForActivity = new Category(
 									categoryStrings[which]);
 							viewCategory.setText(categoryStrings[which]);
@@ -415,51 +453,43 @@ default:
 
 @Override
 public void onResume() {
-// TODO Auto-generated method stub
 bmActor.register(getActivity());
 super.onResume();
 }
 
 @Override
 public void onPause() {
-// TODO Auto-generated method stub
 bmActor.unregister(getActivity());
 super.onPause();
 }
 
 @Override
 public void onBundleMessageSend(Bundle b) {
-// TODO Auto-generated method stub
 
 }
 
 @Override
 public void onResponseMessage(Bundle b) {
-// TODO Auto-generated method stub
 
 }
 
 @Override
 public void onResponseAnswerMessage(Bundle b) {
-// TODO Auto-generated method stub
 
 }
 
 @Override
 public void onStatusMessage(Bundle b) {
-// TODO Auto-generated method stub
 
 }
 
 @Override
 public void onCommandMessage(Bundle b) {
-// TODO Auto-generated method stub
 
 }
 
 @Override
 public void onError(Exception e) {
-// TODO Auto-generated method stub
 
 }
 
