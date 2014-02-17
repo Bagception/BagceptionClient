@@ -340,7 +340,9 @@ public class CreateNewItemFragment extends Fragment implements
 					// TODO Auto-generated method stub
 					final Category[] categories = i.getPayloadObjects();
 					final String[] categoryStrings = new String[categories.length];
+					final long[] categoryIDs = new long[categories.length];
 					for (int iter = 0; iter < categoryStrings.length; iter++) {
+						categoryIDs[iter] = categories[iter].getId();
 						categoryStrings[iter] = categories[iter].getName();
 					}
 
@@ -355,8 +357,7 @@ public class CreateNewItemFragment extends Fragment implements
 								public void onClick(DialogInterface dialog,
 										int which) {
 									// TODO Auto-generated method stub
-									categoryForActivity = new Category(
-											categoryStrings[which]);
+									categoryForActivity = new Category(categoryIDs[which], categoryStrings[which]);
 									viewCategory
 											.setText(categoryStrings[which]);
 								}
