@@ -1,6 +1,8 @@
 package de.uniulm.bagception.client.ui.launcher;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.osmdroid.google.wrapper.GeoPoint;
 
 import android.app.ActionBar;
@@ -119,7 +121,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 		if (s != null) {
 			fragmentToLoad = s;
 		}
-
+		
 		FragmentTransaction tx = getFragmentManager().beginTransaction();
 
 		tx.replace(R.id.main, Fragment.instantiate(MainGUI.this,
