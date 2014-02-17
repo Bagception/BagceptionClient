@@ -15,7 +15,6 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,7 +34,6 @@ import de.uniulm.bagception.bundlemessageprotocol.entities.Location;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommandProcessor;
 import de.uniulm.bagception.client.R;
-import de.uniulm.bagception.client.bluetooth.pairing.AddNewBagStartActivity;
 import de.uniulm.bagception.client.osm.ShowMap;
 import de.uniulm.bagception.protocol.bundle.constants.StatusCode;
 
@@ -45,7 +43,6 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 	CreateNewItemFragment newItemfragment;
 	private BundleMessageActor bmActor;
 
-	private boolean lastConnected = false;
 
 	private BundleMessageHelper bmHelper;
 	private DrawerLayout drawer;
@@ -149,10 +146,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void onScanClick(View view) {
-		Intent intent = new Intent(this, AddNewBagStartActivity.class);
-		startActivity(intent);
-	}
+
 
 	public void startMap(View view) {
 		Intent intent = new Intent(this, ShowMap.class);
@@ -305,13 +299,11 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 
 	@Override
 	public void onCommandMessage(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onError(Exception e) {
-		// TODO Auto-generated method stub
 
 	}
 
