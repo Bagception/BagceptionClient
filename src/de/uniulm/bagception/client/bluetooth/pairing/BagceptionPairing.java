@@ -5,16 +5,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import de.philipphock.android.lib.BroadcastActor;
-import de.uniulm.bagception.bluetoothclientmessengercommunication.util.BagceptionBluetoothUtil;
-
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
+import android.util.Log;
+import de.uniulm.bagception.bluetoothclientmessengercommunication.util.BagceptionBluetoothUtil;
 
 public class BagceptionPairing{
+	private boolean DEBUG = false;
 
 	private final BagceptionPairingCallbacks callbacks;
 	private final List<BluetoothDevice> foundBTDevices =  Collections.synchronizedList(new  ArrayList<BluetoothDevice>());
@@ -23,10 +22,13 @@ public class BagceptionPairing{
 	private final ArrayList<BluetoothDevice> discoveredDevices = new ArrayList<BluetoothDevice>();
 	private int sdpCount=0;
 	private final BluetoothServiceActor actor;
-	
+	private volatile boolean sdpFinished = false;
+	private volatile boolean ddFinished = false;
 	public BagceptionPairing(BagceptionPairingCallbacks callbacks) {
 		this.callbacks = callbacks;
 		bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+		discoveredDevices.clear();
+		foundBTDevices.clear();
 		discoveredDevices.addAll(bluetoothAdapter.getBondedDevices());
 		actor = new BluetoothServiceActor(btServicereactor);
 	}
@@ -46,30 +48,7 @@ public class BagceptionPairing{
 			@Override
 			public void run() {
 				//device discovery finished
-				bluetoothAdapter.cancelDiscovery();
-				
-				//start sdp
-				for (BluetoothDevice d : foundBTDevices) {
-					if (d.fetchUuidsWithSdp()) {
-						sdpCount++;
-					}
-				}
-				
-				Handler h2 = new Handler();
-				h2.postDelayed(new Runnable() {
-					
-					@Override
-					public void run() {
-						//SDP finished
-						for (BluetoothDevice d: foundBTDevices){
-							if (BagceptionBluetoothUtil.isBagceptionServer(d)){
-								foundBagceptionDevices.add(d);
-							}
-						}
-						callbacks.onScanFinished(foundBagceptionDevices);
-						
-					}
-				}, 15000);
+				deviceDiscoveryFinished();
 			}
 		}, 15000);
 	}
@@ -77,12 +56,65 @@ public class BagceptionPairing{
 //		
 //	}
 	//callbacks.onScanFinished(foundBagceptionDevices);
+	private synchronized void sdpFinished(){
+		if (sdpFinished)return;
+		sdpFinished=true;
+		//SDP finished
+		if (DEBUG)
+			Log.d("bt", "sdp finished");
+		for (BluetoothDevice d: foundBTDevices){
+			if (DEBUG)
+				Log.d("bt", "device found: "+d.getName());
+
+			if (BagceptionBluetoothUtil.isBagceptionServer(d)){
+				if (DEBUG)
+					Log.d("bt", "device is bacgeption: "+d.getName());
+
+				foundBagceptionDevices.add(d);
+			}
+		}
+		callbacks.onScanFinished(foundBagceptionDevices);
+	}
+	private synchronized void deviceDiscoveryFinished(){
+		if (ddFinished)return;
+		ddFinished=true;
+		if (DEBUG)
+			Log.d("bt", "device discovery finished");
+
+		bluetoothAdapter.cancelDiscovery();
+		
+		//start sdp
+		for (BluetoothDevice d : foundBTDevices) {
+			if (DEBUG)
+				Log.d("bt", "start sdp for: "+d.getName());
+			if (d.fetchUuidsWithSdp()) {
+				if (DEBUG)
+					Log.d("bt", "sdp started for: "+d.getName());
+
+				sdpCount++;
+			}
+			
+		}
+		
+		Handler h2 = new Handler();
+		h2.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				sdpFinished();
+				
+			}
+		}, 15000);
+		
+	}
 	
 	private final BluetoothServiceReactor btServicereactor = new BluetoothServiceReactor() {
 		
 		@Override
 		public void onServicesDiscovered(BluetoothDevice device) {
-			
+			if (sdpCount<=0){
+				sdpFinished();
+			}
 		}
 		
 		@Override
@@ -93,14 +125,21 @@ public class BagceptionPairing{
 		@Override
 		public void onDeviceFound(BluetoothDevice device) {
 			if (!discoveredDevices.contains(device)){
-				foundBTDevices.add(device);	
+				if (device.getName() != null){
+					if (DEBUG)
+						Log.d("bt", "is not bound: "+device.getName());
+					foundBTDevices.add(device);	
+				}
+			}else{
+				if (DEBUG)
+					Log.d("bt", "is bound: "+device.getName());
 			}
 		}
 		
 		@Override
 		public void onDeviceDiscoveryFinished(BluetoothDevice[] devices,
 				ConcurrentHashMap<String, BluetoothDevice> devicesAsMap) {
-			
+				deviceDiscoveryFinished();
 		}
 	};
 	

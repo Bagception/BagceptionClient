@@ -8,20 +8,19 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.os.AsyncTask;
-import android.util.Log;
+import de.uniulm.bagception.client.ui.launcher.NewBagFragment;
 
 public class ManageConnection extends AsyncTask<BluetoothDevice, Integer, Void> {
 
-	private final String TAG = getClass().getName();
 	private BluetoothSocket bluetoothSocket;
 	private BluetoothDevice device;
 	public BluetoothAdapter bluetoothAdapter;
 	public static final String BT_UUID = "1bcc9340-2c29-11e3-8224-0800200c9a66";
 	public String new_BLUETOOTH_DEVICE;
 
-	public AddNewBagStartActivity context;
+	public NewBagFragment context;
 
-	public ManageConnection(AddNewBagStartActivity c) {
+	public ManageConnection(NewBagFragment c) {
 		context = c;
 	}
 
@@ -51,10 +50,10 @@ public class ManageConnection extends AsyncTask<BluetoothDevice, Integer, Void> 
 			// If there are paired devices
 			if (pairedDevices.size() > 0) {
 				// Loop through paired devices
-				for (BluetoothDevice device : pairedDevices) {
-					// Add the name and address to an array adapter to show in a
-					// ListView
-				}
+//				for (BluetoothDevice device : pairedDevices) {
+//					// Add the name and address to an array adapter to show in a
+//					// ListView
+//				}
 			} 
 		} catch (IOException connectException) {
 
@@ -72,7 +71,7 @@ public class ManageConnection extends AsyncTask<BluetoothDevice, Integer, Void> 
 	@Override
 	protected void onCancelled() {
 		super.onCancelled();
-		context.devicesNotPaired(device);
+		context.pairingStatus(device,false);
 	}
 
 	public void sendString(String string) {
@@ -92,8 +91,7 @@ public class ManageConnection extends AsyncTask<BluetoothDevice, Integer, Void> 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		context.updatePairedDevices();
-		context.devicesSuccessfullyPaired(device);
+		context.pairingStatus(device,true);	
 	}
 
 }
