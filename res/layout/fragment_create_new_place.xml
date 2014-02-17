@@ -52,12 +52,28 @@
                 android:textSize="20dp" />
 
             <EditText
-                android:id="@+id/editAdress"
+                android:id="@+id/editAddress"
                 android:layout_width="wrap_content"
                 android:ems="10"
                 android:inputType="text"
                 android:textColor="@color/text" >
             </EditText>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:layout_marginTop="10dip" >
+
+            <Button
+                android:id="@+id/resolveAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:onClick="resolveAddress"
+                android:text="Adresse auswerten" />
         </TableRow>
 
         <TableRow
@@ -76,6 +92,26 @@
                 android:gravity="left"
                 android:onClick="startMap"
                 android:text="Karte verwenden" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:layout_marginTop="10dip" >
+
+            <TextView 
+                android:id="@+id/longitudeView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Long: " />
+            
+            <TextView 
+                android:id="@+id/latitudeView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lat: " />
         </TableRow>
 
         <TableRow

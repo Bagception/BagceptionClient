@@ -11,6 +11,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.location.Location;
 import android.location.LocationListener;
@@ -32,10 +33,9 @@ public class ShowMap extends Activity implements LocationListener {
 	private String latitude;
 	private String longitude;
 	private HandleMapEvents mapView;
-	private TextView meterIndicatior;
+	private TextView meterIndicator;
 
 	private final int INIT_RADIUS = 100;
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class ShowMap extends Activity implements LocationListener {
 		mapView.setClickable(true);
 		mapView.setTileSource(TileSourceFactory.CYCLEMAP);
 		mapView.setBuiltInZoomControls(true);
-		meterIndicatior = (TextView) findViewById(R.id.meter);
+		meterIndicator = (TextView) findViewById(R.id.meter);
 		final SeekBar meterSlider = (SeekBar) findViewById(R.id.meterSlider);
 		meterSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
@@ -64,7 +64,7 @@ public class ShowMap extends Activity implements LocationListener {
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
-				meterIndicatior.setText("" + progress);
+				meterIndicator.setText("" + progress);
 				mapView.setRadius(progress);
 			}
 		});
@@ -178,7 +178,15 @@ public class ShowMap extends Activity implements LocationListener {
 		Toast.makeText(this,
 				mapView.getGeoPoint().toString() + " " + mapView.getRadius(),
 				Toast.LENGTH_SHORT).show();
-		ShowMap.this.finish();
+		
+		Intent payload = new Intent();
+		payload.putExtra("LAT", mapView.getGeoPoint().getLatitude());
+		payload.putExtra("LNG", mapView.getGeoPoint().getLongitude());
+		payload.putExtra("RAD",mapView.getRadius());
+		
+		setResult(Activity.RESULT_OK,payload);
+		
+		finish();
 	}
 
 }

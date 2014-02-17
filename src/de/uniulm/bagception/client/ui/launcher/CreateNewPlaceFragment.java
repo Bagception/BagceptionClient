@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Address;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,13 +33,16 @@ public class CreateNewPlaceFragment extends Fragment implements
 		BundleMessageReactor {
 
 	EditText editName;
+	EditText editAddress;
 	Button send;
 	ShowMap showMap;
 	Button cancel;
 	Button bt;
 	Button wlan;
+	Button resolveAddress;
 	BundleMessageActor actor;
 	WifiBTDevice device;
+	Location resultLocation;
 	AlertDialog.Builder btAlert;
 	AlertDialog.Builder wifiAlert;
 	ArrayAdapter<String> btArrayAdapter;
@@ -71,12 +75,29 @@ public class CreateNewPlaceFragment extends Fragment implements
 		final ViewGroup root = (ViewGroup) inflater.inflate(
 				R.layout.fragment_create_new_place, null);
 		editName = (EditText) root.findViewById(R.id.editName);
+		editAddress = (EditText) root.findViewById(R.id.editAddress);
 		send = (Button) root.findViewById(R.id.send);
 		cancel = (Button) root.findViewById(R.id.cancelPlace);
 		bt = (Button) root.findViewById(R.id.btButton);
 		wlan = (Button) root.findViewById(R.id.wlanButton);
+		resolveAddress = (Button) root.findViewById(R.id.resolveAddress);
 		showMap = new ShowMap();
 		actor = new BundleMessageActor(this);
+		
+		resolveAddress.setOnClickListener(new OnClickListener(
+				) {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Location locAddress = new Location(editAddress.getText().toString(), "");
+				Log.d("TEST", "Adresse: " + editAddress.getText().toString());
+				new BundleMessageHelper(getActivity())
+				.sendMessageSendBundle(BundleMessage.getInstance()
+						.createBundle(BUNDLE_MESSAGE.RESOLVE_ADDRESS_REQUEST, locAddress));
+				
+			}
+		});
 
 		bt.setOnClickListener(new OnClickListener() {
 
@@ -133,10 +154,9 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-
-				Location location = new Location(editName.getText().toString(),
-						"testMAC");
-
+				//TODO !!!
+				
+				Location location = new Location(-1, editName.getText().toString(), resultLocation.getLat(), resultLocation.getLng(), resultLocation.getRadius(), "5");
 				BundleMessageHelper helper = new BundleMessageHelper(
 						getActivity());
 				helper.sendMessageSendBundle(BundleMessage.getInstance()
@@ -180,6 +200,21 @@ public class CreateNewPlaceFragment extends Fragment implements
 			btDevices.add(device.getMac());
 			btArrayAdapter.notifyDataSetChanged();
 			break;
+		}
+		case RESOLVE_ADDRESS_REPLY:{
+			//Location location 
+			resultLocation = Location.fromJSON(BundleMessage.getInstance()
+					.extractObject(b));
+			Log.d("TEST", resultLocation.getLat() + " " + resultLocation.getLng());
+			break;
+		}
+		case RESOLVE_COORDS_REPLY:{
+			resultLocation = Location.fromJSON(BundleMessage.getInstance()
+					.extractObject(b));
+			Log.d("TEST", resultLocation.getName());
+			editAddress.setText(resultLocation.getName());
+			break;
+
 		}
 		default:
 			break;

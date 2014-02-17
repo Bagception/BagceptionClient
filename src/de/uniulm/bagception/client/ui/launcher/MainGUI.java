@@ -1,6 +1,7 @@
 package de.uniulm.bagception.client.ui.launcher;
 
 import org.json.simple.JSONObject;
+import org.osmdroid.google.wrapper.GeoPoint;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -22,6 +23,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
@@ -29,6 +31,7 @@ import de.uniulm.bagception.bluetoothclientmessengercommunication.service.Bundle
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
+import de.uniulm.bagception.bundlemessageprotocol.entities.Location;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommandProcessor;
 import de.uniulm.bagception.client.R;
@@ -52,7 +55,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 	final String[] data = { "Übersicht", "Alle Items", "Alle Locations",
 			"Alle Kategorien", "Alle Aktivitäten", "Item erstellen",
 			"Ort erstellen", "Kategorie erstellen", "Aktivität erstellen",
-			"Neue Tasche"};
+			"Neue Tasche" };
 	final String[] menueFragments = {
 			"de.uniulm.bagception.client.ui.launcher.OverviewFragment",
 			"de.uniulm.bagception.client.ui.launcher.AllItemsFragment",
@@ -63,8 +66,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 			"de.uniulm.bagception.client.ui.launcher.CreateNewPlaceFragment",
 			"de.uniulm.bagception.client.ui.launcher.CreateNewCategoryFragment",
 			"de.uniulm.bagception.client.ui.launcher.CreateNewActivityFragment",
-			"de.uniulm.bagception.client.ui.launcher.NewBagFragment"
-			 };
+			"de.uniulm.bagception.client.ui.launcher.NewBagFragment" };
 
 	final String[] data2 = { "Test1", "Test2" };
 
@@ -76,8 +78,6 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 		setContentView(R.layout.activity_main_gui);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActionBar()
 				.getThemedContext(), android.R.layout.simple_list_item_1, data);
-		
-
 
 		drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 		drawRightLayout = findViewById(R.id.drawerRight);
@@ -109,25 +109,23 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 				R.drawable.ic_drawer, R.string.drawer_open,
 				R.string.drawer_close);
 
-
 		drawer.setDrawerListener(mDrawerToggle);
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
 		getActionBar().setDisplayShowHomeEnabled(true);
-		
+
 		String fragmentToLoad = menueFragments[0];
 		String s = getIntent().getStringExtra("FRAGMENT");
-		if (s != null){
+		if (s != null) {
 			fragmentToLoad = s;
 		}
-		
-		
+
 		FragmentTransaction tx = getFragmentManager().beginTransaction();
-		
-		tx.replace(R.id.main,
-				Fragment.instantiate(MainGUI.this, fragmentToLoad,getIntent().getExtras()));
+
+		tx.replace(R.id.main, Fragment.instantiate(MainGUI.this,
+				fragmentToLoad, getIntent().getExtras()));
 		tx.commit();
 	}
 
@@ -158,16 +156,16 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 
 	public void startMap(View view) {
 		Intent intent = new Intent(this, ShowMap.class);
-		startActivity(intent);
+		startActivityForResult(intent, REQUEST_LOCATION);
 	}
 
 	private final int REQUEST_IMAGE_CAPTURE = 1;
+	public static final int REQUEST_LOCATION = 2;
 
 	public void ontakePictureButtonClick(View v) {
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 			startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-
 		}
 
 	}
@@ -186,6 +184,26 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 			ImageView img = (ImageView) findViewById(R.id.itemIcon);
 			img.setImageBitmap(imageBitmap);
 			currentPicturetaken = imageBitmap;
+		} 
+			else if (requestCode == REQUEST_LOCATION) {
+			if(resultCode != Activity.RESULT_OK){
+				Log.d("TEST", "WHY U NOT WORKING?");
+			}
+			Bundle extras = data.getExtras();
+			if (extras == null)
+				return;
+			float lat =(float) extras.getDouble("LAT");
+			float longt = (float) extras.getDouble("LNG");
+			int rad = extras.getInt("RAD");
+			TextView latView = (TextView) findViewById(R.id.latitudeView);
+			TextView lonView = (TextView) findViewById(R.id.longitudeView);
+
+			latView.setText("lat: " + lat);
+			lonView.setText("lng: " + longt);
+			Location locCoords = new Location("", lat, longt, rad);
+			new BundleMessageHelper(this)
+			.sendMessageSendBundle(BundleMessage.getInstance()
+					.createBundle(BUNDLE_MESSAGE.RESOLVE_COORDS_REQUEST, locCoords));
 		}
 	}
 
@@ -218,7 +236,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 					}
 				}
 			};
-			if(p != null){
+			if (p != null) {
 				cmd.accept(p);
 			}
 			break;
@@ -248,7 +266,8 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 		StatusCode c = StatusCode.getStatusCode(b);
 		switch (c) {
 		case CONNECTED: {
-			boolean hasChanged = b.getBoolean(StatusCode.EXTRA_KEYS.CONNECTION_CHANGED);
+			boolean hasChanged = b
+					.getBoolean(StatusCode.EXTRA_KEYS.CONNECTION_CHANGED);
 			if (!hasChanged)
 				return;
 			drawer.openDrawer(drawRightLayout);
@@ -265,14 +284,17 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 			break;
 		}
 		case DISCONNECTED: {
-			boolean hasChanged = b.getBoolean(StatusCode.EXTRA_KEYS.CONNECTION_CHANGED);
+			boolean hasChanged = b
+					.getBoolean(StatusCode.EXTRA_KEYS.CONNECTION_CHANGED);
 			if (!hasChanged)
 				return;
 			drawer.openDrawer(drawRightLayout);
 			break;
 		}
-		case UNABLE_TO_SEND_DATA:{
-			Toast.makeText(this, "unable to send data, not connected with remote endpoint",Toast.LENGTH_SHORT).show();
+		case UNABLE_TO_SEND_DATA: {
+			Toast.makeText(this,
+					"unable to send data, not connected with remote endpoint",
+					Toast.LENGTH_SHORT).show();
 			break;
 		}
 		default:
