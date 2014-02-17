@@ -72,7 +72,7 @@ public class CreateNewItemFragment extends Fragment implements
 	BundleMessageActor bmActor;
 
 	private String tagId;
-	private ArrayList<String> tagIDs;
+	private ArrayList<String> tagIDs = new ArrayList<String>();
 
 	static Fragment newInstance(Context context) {
 		CreateNewItemFragment f = new CreateNewItemFragment();
@@ -252,6 +252,8 @@ public class CreateNewItemFragment extends Fragment implements
 			@Override
 			public void onClick(View arg0) {
 				Item item;
+				
+				Log.w("TEST", "TAGID: " + tagId);
 				if (tagId != null) {
 					tagIDs.add(tagId);
 				} else{

@@ -68,7 +68,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 			"de.uniulm.bagception.client.ui.launcher.CreateNewActivityFragment",
 			"de.uniulm.bagception.client.ui.launcher.NewBagFragment" };
 
-	final String[] data2 = { "Test1", "Test2" };
+//	final String[] data2 = { "Test1", "Test2" };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

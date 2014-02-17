@@ -2,28 +2,26 @@ package de.uniulm.bagception.client.ui.launcher;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
+import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
+import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
+import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Activity;
-import de.uniulm.bagception.bundlemessageprotocol.entities.Category;
-import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ActivityCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommandProcessor;
-import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ItemCommand;
-import de.uniulm.bagception.client.R;
 
-public class AllActivitiesFragment extends BasicListEntitiesFragment<Activity>{
+public class AllActivitiesFragment extends BasicActivityListEntitiesFragment<Activity>{
 
 	public long activity_id = -1;
 	
-
+	public long getActivityId(){
+		return this.activity_id;
+	}
 	
 	public static Fragment newInstance(Context context) {
 		AllActivitiesFragment f = new AllActivitiesFragment();
@@ -46,7 +44,6 @@ public class AllActivitiesFragment extends BasicListEntitiesFragment<Activity>{
 							android.R.layout.simple_list_item_1, null);
 				}
 				Activity activity = getItem(position);
-				Log.w("TEST", "Activity: " + activity);
 
 				if (activity != null) {
 					TextView itemView = (TextView) view.findViewById(android.R.id.text1);
@@ -58,6 +55,7 @@ public class AllActivitiesFragment extends BasicListEntitiesFragment<Activity>{
 					
 					activity_id = activity.getId();
 				}
+				
 				return view;
 			}
 		};
@@ -102,6 +100,12 @@ public class AllActivitiesFragment extends BasicListEntitiesFragment<Activity>{
 	protected long itemSelected(Activity e) {
 		// TODO Auto-generated method stub
 		return e.getId();
+	}
+
+	@Override
+	protected void onItemClicked(Activity elem) {
+		new BundleMessageHelper(getActivity()).sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,ActivityCommand.start(elem)));
+		
 	}
 
 }
