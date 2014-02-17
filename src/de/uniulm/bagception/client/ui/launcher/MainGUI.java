@@ -12,6 +12,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -75,6 +76,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 		bmActor = new BundleMessageActor(this);
 		bmHelper = new BundleMessageHelper(this);
 		setContentView(R.layout.activity_main_gui);
+		currentPicturetaken = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActionBar()
 				.getThemedContext(), R.layout.drawer_layout, R.id.drawerText, data);
 
