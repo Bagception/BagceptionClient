@@ -239,8 +239,6 @@ public class CreateNewPlaceFragment extends Fragment implements
 			Log.w("TEST", "Hole mir jetzt die Location");
 			resultLocation = Location.fromJSON(BundleMessage.getInstance()
 					.extractObject(b));
-//			Log.d("TEST",
-//					resultLocation.getLat() + " " + resultLocation.getLng());
 			latView.setText(""+resultLocation.getLat());
 			lngView.setText(""+resultLocation.getLng());
 			break;

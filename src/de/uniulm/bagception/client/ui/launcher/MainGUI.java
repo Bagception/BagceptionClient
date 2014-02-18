@@ -155,6 +155,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 	public void startMap(View view) {
 		Intent intent = new Intent(this, ShowMap.class);
 		startActivityForResult(intent, REQUEST_LOCATION);
+		
 	}
 
 	private final int REQUEST_IMAGE_CAPTURE = 1;
@@ -190,13 +191,13 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 			Bundle extras = data.getExtras();
 			if (extras == null)
 				return;
-			float lat =(float) extras.getDouble("LAT");
+			float lat = (float) extras.getDouble("LAT");
 			float longt = (float) extras.getDouble("LNG");
-			Log.d("TEST", "casted lat: " + lat);
-			Log.d("TEST", "casted lng: " + longt);
 			int rad = extras.getInt("RAD");
 			TextView latView = (TextView) findViewById(R.id.latitudeView);
-			TextView lonView = (TextView) findViewById(R.id.longitudeView);
+			TextView lngView = (TextView) findViewById(R.id.longitudeView);
+			latView.setText(""+lat);
+			lngView.setText(""+longt);
 
 			Log.w("TEST", "Lat: " + lat);
 			Log.w("TEST", "Lon: " + longt);

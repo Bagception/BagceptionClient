@@ -125,7 +125,7 @@ public class ShowMap extends Activity implements LocationListener {
 
 				latitude = String.valueOf(location.getLatitude());
 				longitude = String.valueOf(location.getLongitude());
-
+				
 				double newLat = Double.parseDouble(latitude);
 				double newLon = Double.parseDouble(longitude);
 				GeoPoint here = new GeoPoint(newLat, newLon);
