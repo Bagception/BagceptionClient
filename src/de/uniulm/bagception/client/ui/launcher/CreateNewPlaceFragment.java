@@ -33,6 +33,8 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 	EditText editName;
 	EditText editAddress;
+	TextView latView;
+	TextView lngView;
 	TextView btView;
 	TextView wlanView;
 	Button send;
@@ -79,6 +81,8 @@ public class CreateNewPlaceFragment extends Fragment implements
 		editName = (EditText) root.findViewById(R.id.editName);
 		editAddress = (EditText) root.findViewById(R.id.editAddress);
 		btView = (TextView) root.findViewById(R.id.btView);
+		latView = (TextView) root.findViewById(R.id.latitudeView);
+		lngView = (TextView) root.findViewById(R.id.longitudeView);
 		wlanView = (TextView) root.findViewById(R.id.wlanView);
 		send = (Button) root.findViewById(R.id.send);
 		cancel = (Button) root.findViewById(R.id.cancelPlace);
@@ -228,8 +232,10 @@ public class CreateNewPlaceFragment extends Fragment implements
 			// Location location
 			resultLocation = Location.fromJSON(BundleMessage.getInstance()
 					.extractObject(b));
-			Log.d("TEST",
-					resultLocation.getLat() + " " + resultLocation.getLng());
+//			Log.d("TEST",
+//					resultLocation.getLat() + " " + resultLocation.getLng());
+			latView.setText(""+resultLocation.getLat());
+			lngView.setText(""+resultLocation.getLng());
 			break;
 		}
 		case RESOLVE_COORDS_REPLY: {
