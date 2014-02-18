@@ -324,7 +324,7 @@ public class CreateNewItemFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-				getFragmentManager().popBackStack();
+//				getFragmentManager().popBackStack();
 				editName.setText("");
 				iv.setImageResource(R.drawable.ic_launcher);
 
@@ -399,7 +399,7 @@ public class CreateNewItemFragment extends Fragment implements
 	public void onPause() {
 		// TODO Auto-generated method stub
 		bmActor.unregister(getActivity());
-		getFragmentManager().popBackStack();
+//		getFragmentManager().popBackStack();
 		super.onPause();
 	}
 

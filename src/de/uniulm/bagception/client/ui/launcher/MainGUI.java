@@ -181,7 +181,9 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 			// send as string (this would work over bluetooth)
 			Toast.makeText(this, "picture taken", Toast.LENGTH_SHORT).show();
 			ImageView img = (ImageView) findViewById(R.id.itemIcon);
-			img.setImageBitmap(imageBitmap);
+			if (img != null){
+				img.setImageBitmap(imageBitmap);
+			}
 			currentPicturetaken = imageBitmap;
 		} 
 			else if (requestCode == REQUEST_LOCATION) {

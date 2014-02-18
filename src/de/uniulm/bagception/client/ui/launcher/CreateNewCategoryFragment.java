@@ -63,7 +63,7 @@ public class CreateNewCategoryFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				getFragmentManager().popBackStack();
+//				getFragmentManager().popBackStack();
 				editName.setText("");
 
 			}
@@ -74,7 +74,7 @@ public class CreateNewCategoryFragment extends Fragment {
 
 	@Override
 	public void onPause() {
-		getFragmentManager().popBackStack();
+//		getFragmentManager().popBackStack();
 		super.onPause();
 	}
 }
