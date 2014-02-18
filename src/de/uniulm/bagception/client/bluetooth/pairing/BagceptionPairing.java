@@ -10,7 +10,6 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
-import de.uniulm.bagception.bluetoothclientmessengercommunication.util.BagceptionBluetoothUtil;
 
 public class BagceptionPairing{
 	private boolean DEBUG = true;
@@ -77,12 +76,12 @@ public class BagceptionPairing{
 			if (DEBUG)
 				Log.d("bt", "device found: "+d.getName());
 
-			if (BagceptionBluetoothUtil.isBagceptionServer(d)){
-				if (DEBUG)
-					Log.d("bt", "device is bacgeption: "+d.getName());
+//			if (BagceptionBluetoothUtil.isBagceptionServer(d)){
+//				if (DEBUG)
+//					Log.d("bt", "device is bacgeption: "+d.getName());
 
 				foundBagceptionDevices.add(d);
-			}
+//			}
 		}
 		callbacks.onScanFinished(foundBagceptionDevices);
 	}

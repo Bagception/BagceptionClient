@@ -150,7 +150,6 @@ public class BluetoothSystem implements CheckReachableCallback,
 			}
 
 		} else {
-			Toast.makeText(mainService, "multiple devices found!", Toast.LENGTH_SHORT).show();
 			LOG.out(this, "multiple devices found");
 			responseSystem
 					.makeResponse_askForSpecificDevice(bagceptionDevicesInRange);

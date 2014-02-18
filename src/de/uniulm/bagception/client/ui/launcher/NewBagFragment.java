@@ -51,6 +51,7 @@ public class NewBagFragment extends ListFragment {
 	public void pairingStatus(BluetoothDevice d, boolean success) {
 		pairingDialog.dismiss();
 		mAdapter.clear();
+		if (getActivity()==null)return;
 		if (success) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			builder.setMessage("Pairing erfolgreich")
@@ -124,6 +125,7 @@ public class NewBagFragment extends ListFragment {
 			if (pairingHelper != null)
 				pairingHelper.unregister(getActivity());
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -144,8 +146,11 @@ public class NewBagFragment extends ListFragment {
 			mAdapter.addAll(devices);
 			dialog.dismiss();
 			if (devices.size() == 0) {
-				Toast.makeText(getActivity(), "Keine Geräte gefunden",
-						Toast.LENGTH_SHORT).show();
+				if (getActivity()!=null){
+					Toast.makeText(getActivity(), "Keine Geräte gefunden",
+							Toast.LENGTH_SHORT).show();	
+				}
+				
 			}
 		}
 
