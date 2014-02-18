@@ -25,6 +25,9 @@ import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.bundlemessageprotocol.entities.ContainerStateUpdate;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
+import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
+import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommandProcessor;
+import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ItemCommand;
 import de.uniulm.bagception.client.R;
 import de.uniulm.bagception.protocol.bundle.constants.Command;
 import de.uniulm.bagception.protocol.bundle.constants.StatusCode;
@@ -46,6 +49,8 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 	private ActionBar.Tab itemsMissTab;
 	// ActionBar.Tab itemsNeedlessTab;
 	ActionBar.Tab itemsSuggTab;
+	
+	private Item unknownItem;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -165,6 +170,10 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 			dialog(unknownItem);
 			break;
+			
+		case ADMINISTRATION_COMMAND:{
+			onAdminCommand(b);
+		}
 		default:
 			break;
 		}
@@ -177,10 +186,6 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-				// dialog.cancel();
-				Toast.makeText(getActivity(), "Neues Item", Toast.LENGTH_SHORT)
-						.show();
 				Intent intent = new Intent(getActivity(), MainGUI.class);
 				intent.putExtra("FRAGMENT",
 						"de.uniulm.bagception.client.ui.launcher.CreateNewItemFragment");
@@ -195,32 +200,37 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				Toast.makeText(getActivity(), "Zu Item hinzu",
-						Toast.LENGTH_SHORT).show();
-				// de.uniulm.bagception.client.ui.launcher.AllItemsFragment
+				unknownItem = item;
+				new BundleMessageHelper(getActivity())
+				.sendMessageSendBundle(BundleMessage.getInstance()
+						.createBundle(
+								BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
+								ItemCommand.list()));
+
+				
 			}
 		});
 
 		dialogAlert.create().show();
 	}
 
-	private void debugMessage(ContainerStateUpdate update) {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("Update: \n");
-		sb.append("Items in Bag:");
-		sb.append("\n");
-
-		sb.append("\n");
-		sb.append("Activity: ");
-		sb.append(statusUpdate.getActivity().getName());
-		sb.append("\n");
-		sb.append("Items for activity:");
-		sb.append("\n");
-
-		sb.append("\n");
-		Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG).show();
-	}
+//	private void debugMessage(ContainerStateUpdate update) {
+//		StringBuilder sb = new StringBuilder();
+//
+//		sb.append("Update: \n");
+//		sb.append("Items in Bag:");
+//		sb.append("\n");
+//
+//		sb.append("\n");
+//		sb.append("Activity: ");
+//		sb.append(statusUpdate.getActivity().getName());
+//		sb.append("\n");
+//		sb.append("Items for activity:");
+//		sb.append("\n");
+//
+//		sb.append("\n");
+//		Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG).show();
+//	}
 
 	public synchronized ContainerStateUpdate getItemUpdate() {
 		return statusUpdate;
@@ -289,5 +299,63 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		bmActor.unregister(getActivity());
 
 	}
+	
+	//add tagid to item
+	private void onAdminCommand(Bundle b){
+		
+				AdministrationCommandProcessor p = new AdministrationCommandProcessor() {
+					@Override
+					public void onItemList(AdministrationCommand<Item> i) {
+						final Item[] items = i.getPayloadObjects();
+						String[] itemStrings = new String[items.length];
+						
+						for (int iter = 0; iter < itemStrings.length; iter++) {
+							itemStrings[iter] = items[iter].getName();
+						}
+
+						AlertDialog.Builder itemAlert = new AlertDialog.Builder(
+								getActivity());
+						itemAlert.setTitle("Tag zu Item hinzufügen");
+						itemAlert.setSingleChoiceItems(itemStrings,-1,new OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								Item selected = items[which];
+								if (unknownItem != null){
+									selected.getIds().add(unknownItem.getIds().get(0));
+									bmHelper.sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND, ItemCommand.edit(selected, selected)));
+								}else{
+									Toast.makeText(getActivity(), "ERROR: selected item is null", Toast.LENGTH_SHORT).show();
+								}
+								dialog.dismiss();
+							}
+						});
+//						itemAlert.setPositiveButton("ok",new OnClickListener() {
+//							
+//							@Override
+//							public void onClick(DialogInterface dialog, int which) {
+//								// TODO Auto-generated method stub
+//								
+//							}
+//						});
+						itemAlert.setNegativeButton("abbrechen", new OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.dismiss();
+							}
+						});
+						itemAlert.create().show();
+					}
+				};
+				
+				AdministrationCommand.fromJSONObject(
+						BundleMessage.getInstance().extractObject(b)).accept(p);
+
+
+			
+	}
 
 }
+
+//
+
+
