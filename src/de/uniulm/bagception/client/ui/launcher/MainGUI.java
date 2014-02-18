@@ -241,7 +241,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 				public void onItemEdit(Item toEdit, Item editValues,
 						AdministrationCommand<Item> i) {
 					String e="";
-					if (i.isSuccessful()){
+					if (!i.isSuccessful()){
 						e=" nicht";
 					}
 					Toast.makeText(
