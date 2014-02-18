@@ -155,16 +155,27 @@ public class CreateNewActivityFragment extends Fragment implements
 				public void onLocationList(
 						de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand<de.uniulm.bagception.bundlemessageprotocol.entities.Location> i) {
 					final Location[] locations = i.getPayloadObjects();
-					final String[] locationStrings = new String[locations.length];
-					for (int iter = 0; iter < locationStrings.length; iter++) {
-						locationStrings[iter] = locations[iter].getName();
+					final long[] locationIDs = new long[locations.length];
+					final String[] locationNames = new String[locations.length];
+					final float[] locationLat = new float[locations.length];
+					final float[] locationLon = new float[locations.length];
+					final int[] locationRadius = new int[locations.length];
+					final String[] locationMAC = new String[locations.length];
+					
+					for (int iter = 0; iter < locationNames.length; iter++) {
+						locationIDs[iter] = locations[iter].getId();
+						locationNames[iter] = locations[iter].getName();
+						locationLat[iter] = locations[iter].getLat();
+						locationLon[iter] = locations[iter].getLng();
+						locationRadius[iter] = locations[iter].getRadius();
+						locationMAC[iter] = locations[iter].getMac();
 					}
 
 					AlertDialog.Builder locationAlert = new AlertDialog.Builder(
 							getActivity());
-					locationAlert.setTitle("Items zur Activity hinzufügen");
+					locationAlert.setTitle("Ort zur Activity hinzufügen");
 
-					locationAlert.setItems(locationStrings,
+					locationAlert.setItems(locationNames,
 							new DialogInterface.OnClickListener() {
 
 								@Override
@@ -172,8 +183,11 @@ public class CreateNewActivityFragment extends Fragment implements
 										int which) {
 									// TODO Auto-generated method stub
 									locationForActivity = new Location(
-											locationStrings[which], null);
-									placeView.setText(locationStrings[which]);
+											locationNames[which], null);
+									locationForActivity = new Location(locationIDs[which], 
+											locationNames[which], locationLat[which], locationLon[which], locationRadius[which], locationMAC[which]);
+									
+									placeView.setText(locationNames[which]);
 								}
 							});
 					locationAlert.create().show();

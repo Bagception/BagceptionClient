@@ -148,11 +148,9 @@ if(item.getCategory() != null){
 	viewCategory.setText(item.getCategory().getName());
 }
 
-if(item.getImageString() != null){
-	//TODO
-	// get image
+//TODO
+// get image
 
-}
 
 if(item.getAttribute() != null){
 	ItemAttribute iA = item.getAttribute();
