@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
@@ -27,6 +28,7 @@ import de.uniulm.bagception.bundlemessageprotocol.entities.ContainerStateUpdate;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommandProcessor;
+import de.uniulm.bagception.bundlemessageprotocol.entities.administration.CategoryCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ItemCommand;
 import de.uniulm.bagception.client.R;
 import de.uniulm.bagception.protocol.bundle.constants.Command;
@@ -49,8 +51,14 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 	private ActionBar.Tab itemsMissTab;
 	// ActionBar.Tab itemsNeedlessTab;
 	ActionBar.Tab itemsSuggTab;
-	
+
 	private Item unknownItem;
+	Button changeActivity;
+
+	static Fragment newInstance(Context context) {
+		OverviewFragment f = new OverviewFragment();
+		return f;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,9 +71,11 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		getActivity().setTitle("Übersicht");
 
 		currentActivityView = (TextView) root.findViewById(R.id.test);
+		changeActivity = (Button) root.findViewById(R.id.changeActivity);
 
 		ActionBar actionBar = getActivity().getActionBar();
-		actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0099CC")));
+		actionBar.setBackgroundDrawable(new ColorDrawable(Color
+				.parseColor("#0099CC")));
 		actionBar.removeAllTabs();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		// initiating both tabs and set text to it.
@@ -93,6 +103,20 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		// actionBar.addTab(itemsNeedlessTab);
 		actionBar.addTab(itemsSuggTab);
 		actionBar.getTabAt(0).select();
+
+		changeActivity.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				new BundleMessageHelper(getActivity())
+						.sendMessageSendBundle(BundleMessage.getInstance()
+								.createBundle(
+										BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
+										CategoryCommand.list()));
+			}
+		});
+
 		return root;
 	}
 
@@ -158,8 +182,8 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			sb.append("\n");
 
 			sb.append("\n");
-//			Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG)
-//					.show();
+			// Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG)
+			// .show();
 			break;
 
 		case ITEM_NOT_FOUND:
@@ -170,8 +194,8 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 			dialog(unknownItem);
 			break;
-			
-		case ADMINISTRATION_COMMAND:{
+
+		case ADMINISTRATION_COMMAND: {
 			onAdminCommand(b);
 		}
 		default:
@@ -202,35 +226,34 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			public void onClick(DialogInterface dialog, int which) {
 				unknownItem = item;
 				new BundleMessageHelper(getActivity())
-				.sendMessageSendBundle(BundleMessage.getInstance()
-						.createBundle(
-								BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
-								ItemCommand.list()));
+						.sendMessageSendBundle(BundleMessage.getInstance()
+								.createBundle(
+										BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
+										ItemCommand.list()));
 
-				
 			}
 		});
 
 		dialogAlert.create().show();
 	}
 
-//	private void debugMessage(ContainerStateUpdate update) {
-//		StringBuilder sb = new StringBuilder();
-//
-//		sb.append("Update: \n");
-//		sb.append("Items in Bag:");
-//		sb.append("\n");
-//
-//		sb.append("\n");
-//		sb.append("Activity: ");
-//		sb.append(statusUpdate.getActivity().getName());
-//		sb.append("\n");
-//		sb.append("Items for activity:");
-//		sb.append("\n");
-//
-//		sb.append("\n");
-//		Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG).show();
-//	}
+	// private void debugMessage(ContainerStateUpdate update) {
+	// StringBuilder sb = new StringBuilder();
+	//
+	// sb.append("Update: \n");
+	// sb.append("Items in Bag:");
+	// sb.append("\n");
+	//
+	// sb.append("\n");
+	// sb.append("Activity: ");
+	// sb.append(statusUpdate.getActivity().getName());
+	// sb.append("\n");
+	// sb.append("Items for activity:");
+	// sb.append("\n");
+	//
+	// sb.append("\n");
+	// Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG).show();
+	// }
 
 	public synchronized ContainerStateUpdate getItemUpdate() {
 		return statusUpdate;
@@ -292,6 +315,8 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		bmHelper.sendCommandBundle(Command.RESEND_STATUS.toBundle());
 
 	}
+	
+	
 
 	@Override
 	public void onStop() {
@@ -299,63 +324,70 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		bmActor.unregister(getActivity());
 
 	}
-	
-	//add tagid to item
-	private void onAdminCommand(Bundle b){
-		
-				AdministrationCommandProcessor p = new AdministrationCommandProcessor() {
-					@Override
-					public void onItemList(AdministrationCommand<Item> i) {
-						final Item[] items = i.getPayloadObjects();
-						String[] itemStrings = new String[items.length];
-						
-						for (int iter = 0; iter < itemStrings.length; iter++) {
-							itemStrings[iter] = items[iter].getName();
-						}
 
-						AlertDialog.Builder itemAlert = new AlertDialog.Builder(
-								getActivity());
-						itemAlert.setTitle("Tag zu Item hinzufügen");
-						itemAlert.setSingleChoiceItems(itemStrings,-1,new OnClickListener() {
+	// add tagid to item
+	private void onAdminCommand(Bundle b) {
+
+		AdministrationCommandProcessor p = new AdministrationCommandProcessor() {
+			@Override
+			public void onItemList(AdministrationCommand<Item> i) {
+				final Item[] items = i.getPayloadObjects();
+				String[] itemStrings = new String[items.length];
+
+				for (int iter = 0; iter < itemStrings.length; iter++) {
+					itemStrings[iter] = items[iter].getName();
+				}
+
+				AlertDialog.Builder itemAlert = new AlertDialog.Builder(
+						getActivity());
+				itemAlert.setTitle("Tag zu Item hinzufügen");
+				itemAlert.setSingleChoiceItems(itemStrings, -1,
+						new OnClickListener() {
 							@Override
-							public void onClick(DialogInterface dialog, int which) {
+							public void onClick(DialogInterface dialog,
+									int which) {
 								Item selected = items[which];
-								if (unknownItem != null){
-									selected.getIds().add(unknownItem.getIds().get(0));
-									bmHelper.sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND, ItemCommand.edit(selected, selected)));
-								}else{
-									Toast.makeText(getActivity(), "ERROR: selected item is null", Toast.LENGTH_SHORT).show();
+								if (unknownItem != null) {
+									selected.getIds().add(
+											unknownItem.getIds().get(0));
+									bmHelper.sendMessageSendBundle(BundleMessage
+											.getInstance()
+											.createBundle(
+													BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
+													ItemCommand.edit(selected,
+															selected)));
+								} else {
+									Toast.makeText(getActivity(),
+											"ERROR: selected item is null",
+											Toast.LENGTH_SHORT).show();
 								}
 								dialog.dismiss();
 							}
 						});
-//						itemAlert.setPositiveButton("ok",new OnClickListener() {
-//							
-//							@Override
-//							public void onClick(DialogInterface dialog, int which) {
-//								// TODO Auto-generated method stub
-//								
-//							}
-//						});
-						itemAlert.setNegativeButton("abbrechen", new OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								dialog.dismiss();
-							}
-						});
-						itemAlert.create().show();
+				// itemAlert.setPositiveButton("ok",new OnClickListener() {
+				//
+				// @Override
+				// public void onClick(DialogInterface dialog, int which) {
+				// // TODO Auto-generated method stub
+				//
+				// }
+				// });
+				itemAlert.setNegativeButton("abbrechen", new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
 					}
-				};
-				
-				AdministrationCommand.fromJSONObject(
-						BundleMessage.getInstance().extractObject(b)).accept(p);
+				});
+				itemAlert.create().show();
+			}
+		};
 
+		AdministrationCommand.fromJSONObject(
+				BundleMessage.getInstance().extractObject(b)).accept(p);
 
-			
 	}
 
 }
 
 //
-
 
