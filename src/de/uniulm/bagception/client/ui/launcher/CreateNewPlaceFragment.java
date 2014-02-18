@@ -195,7 +195,7 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-				getFragmentManager().popBackStack();
+//				getFragmentManager().popBackStack();
 				editName.setText("");
 			}
 		});
@@ -205,7 +205,7 @@ public class CreateNewPlaceFragment extends Fragment implements
 	
 	@Override
 	public void onPause() {
-		getFragmentManager().popBackStack();
+//		getFragmentManager().popBackStack();
 		super.onPause();
 	}
 
