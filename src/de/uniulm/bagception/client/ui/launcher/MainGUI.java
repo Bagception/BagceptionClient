@@ -196,8 +196,9 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 			TextView latView = (TextView) findViewById(R.id.latitudeView);
 			TextView lonView = (TextView) findViewById(R.id.longitudeView);
 
-			latView.setText("lat: " + lat);
-			lonView.setText("lng: " + longt);
+			Log.w("TEST", "Lat: " + lat);
+			Log.w("TEST", "Lon: " + longt);
+			
 			Location locCoords = new Location("", lat, longt, rad);
 			new BundleMessageHelper(this)
 			.sendMessageSendBundle(BundleMessage.getInstance()
