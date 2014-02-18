@@ -63,7 +63,7 @@ public class CreateNewCategoryFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				getFragmentManager().popBackStack();
 				editName.setText("");
 
 			}
@@ -72,4 +72,9 @@ public class CreateNewCategoryFragment extends Fragment {
 		return root;
 	}
 
+	@Override
+	public void onPause() {
+		getFragmentManager().popBackStack();
+		super.onPause();
+	}
 }

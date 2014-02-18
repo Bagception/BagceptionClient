@@ -175,9 +175,9 @@ public class ShowMap extends Activity implements LocationListener {
 	public void onOkBtnClicked(View v) {
 		// Todo finish activity with result;
 
-		Toast.makeText(this,
-				mapView.getGeoPoint().toString() + " " + mapView.getRadius(),
-				Toast.LENGTH_SHORT).show();
+//		Toast.makeText(this,
+//				mapView.getGeoPoint().toString() + " " + mapView.getRadius(),
+//				Toast.LENGTH_SHORT).show();
 		
 		Intent payload = new Intent();
 		payload.putExtra("LAT", mapView.getGeoPoint().getLatitude());

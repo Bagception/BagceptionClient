@@ -93,6 +93,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 						super.onDrawerClosed(drawerView);
 						FragmentTransaction tx = getFragmentManager()
 								.beginTransaction();
+						tx.addToBackStack(null);
 						getActionBar().setNavigationMode(
 								ActionBar.NAVIGATION_MODE_STANDARD);
 						tx.replace(R.id.main, Fragment.instantiate(

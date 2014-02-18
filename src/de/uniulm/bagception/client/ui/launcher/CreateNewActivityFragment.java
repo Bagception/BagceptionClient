@@ -136,7 +136,7 @@ public class CreateNewActivityFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				getFragmentManager().popBackStack();
 				editName.setText("");
 
 			}
@@ -321,6 +321,7 @@ public class CreateNewActivityFragment extends Fragment implements
 	@Override
 	public void onPause() {
 		bmActor.unregister(getActivity());
+		getFragmentManager().popBackStack();
 		super.onPause();
 	}
 

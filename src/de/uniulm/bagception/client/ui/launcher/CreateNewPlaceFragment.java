@@ -195,12 +195,18 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				getFragmentManager().popBackStack();
 				editName.setText("");
 			}
 		});
 
 		return root;
+	}
+	
+	@Override
+	public void onPause() {
+		getFragmentManager().popBackStack();
+		super.onPause();
 	}
 
 	@Override
