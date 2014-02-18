@@ -166,8 +166,7 @@ public class CreateNewPlaceFragment extends Fragment implements
 							public void onClick(DialogInterface dialog,
 									int which) {
 								Log.d("TEST", "item clicked:" + which);
-								Log.d("TEST",
-										"items name: " + wifiDevices.get(which));
+								Log.d("TEST", "items name: " + wifiDevices.get(which));
 								wlanView.setText("WLAN: " + wifiDevices.get(which).toString());
 							}
 						});
@@ -181,9 +180,10 @@ public class CreateNewPlaceFragment extends Fragment implements
 			public void onClick(View v) {
 				// TODO !!!
 
+				Log.w("TEST", "ResultLocation: " + resultLocation);
 				Location location = new Location(-1, editName.getText()
 						.toString(), resultLocation.getLat(), resultLocation
-						.getLng(), resultLocation.getRadius(), "5");
+						.getLng(), resultLocation.getRadius(), resultLocation.getMac());
 				BundleMessageHelper helper = new BundleMessageHelper(
 						getActivity());
 				helper.sendMessageSendBundle(BundleMessage.getInstance()
@@ -199,7 +199,7 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-				getFragmentManager().popBackStack();
+//				getFragmentManager().popBackStack();
 				editName.setText("");
 			}
 		});
@@ -209,7 +209,7 @@ public class CreateNewPlaceFragment extends Fragment implements
 	
 	@Override
 	public void onPause() {
-		getFragmentManager().popBackStack();
+//		getFragmentManager().popBackStack();
 		super.onPause();
 	}
 
@@ -236,6 +236,7 @@ public class CreateNewPlaceFragment extends Fragment implements
 		}
 		case RESOLVE_ADDRESS_REPLY: {
 			// Location location
+			Log.w("TEST", "Hole mir jetzt die Location");
 			resultLocation = Location.fromJSON(BundleMessage.getInstance()
 					.extractObject(b));
 //			Log.d("TEST",
