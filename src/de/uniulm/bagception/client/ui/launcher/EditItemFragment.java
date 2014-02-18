@@ -151,20 +151,7 @@ if(item.getCategory() != null){
 if(item.getImageString() != null){
 	//TODO
 	// get image
-	AutoUpdateableItemView auiv = new AutoUpdateableItemView(getActivity(), item);
-	Item tmp = auiv.getItem();
-	
-	if (tmp.getImage() == null){
-		Bitmap bmp = ImageCachingSystem.getInstance().getImage(tmp);
-		if (bmp == null){
-			//put pending image here
-			BitmapFactory.decodeResource(getResources(), R.drawable.service_icon);
-		}else{
-			iv.setImageBitmap(bmp);
-		}
-	}else{
-		iv.setImageBitmap(item.getImage());
-	}
+
 }
 
 if(item.getAttribute() != null){
