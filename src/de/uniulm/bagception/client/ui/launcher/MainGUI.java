@@ -192,6 +192,8 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 				return;
 			float lat =(float) extras.getDouble("LAT");
 			float longt = (float) extras.getDouble("LNG");
+			Log.d("TEST", "casted lat: " + lat);
+			Log.d("TEST", "casted lng: " + longt);
 			int rad = extras.getInt("RAD");
 			TextView latView = (TextView) findViewById(R.id.latitudeView);
 			TextView lonView = (TextView) findViewById(R.id.longitudeView);

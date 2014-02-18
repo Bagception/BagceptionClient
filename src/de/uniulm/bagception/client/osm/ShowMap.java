@@ -7,24 +7,19 @@ import org.osmdroid.events.ZoomEvent;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-import android.widget.Toast;
 import de.uniulm.bagception.client.R;
-import de.uniulm.bagception.client.ui.launcher.CreateNewPlaceFragment;
-import de.uniulm.bagception.client.ui.launcher.MainGUI;
 
 public class ShowMap extends Activity implements LocationListener {
 
@@ -175,18 +170,21 @@ public class ShowMap extends Activity implements LocationListener {
 	public void onOkBtnClicked(View v) {
 		// Todo finish activity with result;
 
-//		Toast.makeText(this,
-//				mapView.getGeoPoint().toString() + " " + mapView.getRadius(),
-//				Toast.LENGTH_SHORT).show();
-		
+		// Toast.makeText(this,
+		// mapView.getGeoPoint().toString() + " " + mapView.getRadius(),
+		// Toast.LENGTH_SHORT).show();
+
 		Intent payload = new Intent();
 		payload.putExtra("LAT", mapView.getGeoPoint().getLatitude());
 		payload.putExtra("LNG", mapView.getGeoPoint().getLongitude());
-		payload.putExtra("RAD",mapView.getRadius());
-		
-		setResult(Activity.RESULT_OK,payload);
-		
+		payload.putExtra("RAD", mapView.getRadius());
+
+		setResult(Activity.RESULT_OK, payload);
+
+		Log.d("TEST", "lat: " +  mapView.getGeoPoint().getLatitude());
+		Log.d("TEST", "lng: " + mapView.getGeoPoint().getLongitude());
 		finish();
+
 	}
 
 }
