@@ -93,6 +93,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 						super.onDrawerClosed(drawerView);
 						FragmentTransaction tx = getFragmentManager()
 								.beginTransaction();
+						tx.addToBackStack(null);
 						getActionBar().setNavigationMode(
 								ActionBar.NAVIGATION_MODE_STANDARD);
 						tx.replace(R.id.main, Fragment.instantiate(
@@ -191,12 +192,15 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 				return;
 			float lat =(float) extras.getDouble("LAT");
 			float longt = (float) extras.getDouble("LNG");
+			Log.d("TEST", "casted lat: " + lat);
+			Log.d("TEST", "casted lng: " + longt);
 			int rad = extras.getInt("RAD");
 			TextView latView = (TextView) findViewById(R.id.latitudeView);
 			TextView lonView = (TextView) findViewById(R.id.longitudeView);
 
-			latView.setText("lat: " + lat);
-			lonView.setText("lng: " + longt);
+			Log.w("TEST", "Lat: " + lat);
+			Log.w("TEST", "Lon: " + longt);
+			
 			Location locCoords = new Location("", lat, longt, rad);
 			new BundleMessageHelper(this)
 			.sendMessageSendBundle(BundleMessage.getInstance()

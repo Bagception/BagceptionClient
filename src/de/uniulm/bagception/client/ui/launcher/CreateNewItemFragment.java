@@ -1,11 +1,18 @@
 package de.uniulm.bagception.client.ui.launcher;
 
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.HashSet;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.app.Fragment.SavedState;
+import android.app.FragmentManager.BackStackEntry;
+import android.app.FragmentManager.OnBackStackChangedListener;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -317,7 +324,7 @@ public class CreateNewItemFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				getFragmentManager().popBackStack();
 				editName.setText("");
 				iv.setImageResource(R.drawable.ic_launcher);
 
@@ -357,7 +364,9 @@ public class CreateNewItemFragment extends Fragment implements
 								public void onClick(DialogInterface dialog,
 										int which) {
 									// TODO Auto-generated method stub
-									categoryForActivity = new Category(categoryIDs[which], categoryStrings[which]);
+									categoryForActivity = new Category(
+											categoryIDs[which],
+											categoryStrings[which]);
 									viewCategory
 											.setText(categoryStrings[which]);
 								}
@@ -390,6 +399,7 @@ public class CreateNewItemFragment extends Fragment implements
 	public void onPause() {
 		// TODO Auto-generated method stub
 		bmActor.unregister(getActivity());
+		getFragmentManager().popBackStack();
 		super.onPause();
 	}
 
