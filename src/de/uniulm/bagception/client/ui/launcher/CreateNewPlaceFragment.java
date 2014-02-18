@@ -33,6 +33,8 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 	EditText editName;
 	EditText editAddress;
+	TextView latView;
+	TextView lngView;
 	TextView btView;
 	TextView wlanView;
 	Button send;
@@ -79,6 +81,8 @@ public class CreateNewPlaceFragment extends Fragment implements
 		editName = (EditText) root.findViewById(R.id.editName);
 		editAddress = (EditText) root.findViewById(R.id.editAddress);
 		btView = (TextView) root.findViewById(R.id.btView);
+		latView = (TextView) root.findViewById(R.id.latitudeView);
+		lngView = (TextView) root.findViewById(R.id.longitudeView);
 		wlanView = (TextView) root.findViewById(R.id.wlanView);
 		send = (Button) root.findViewById(R.id.send);
 		cancel = (Button) root.findViewById(R.id.cancelPlace);
@@ -162,8 +166,7 @@ public class CreateNewPlaceFragment extends Fragment implements
 							public void onClick(DialogInterface dialog,
 									int which) {
 								Log.d("TEST", "item clicked:" + which);
-								Log.d("TEST",
-										"items name: " + wifiDevices.get(which));
+								Log.d("TEST", "items name: " + wifiDevices.get(which));
 								wlanView.setText("WLAN: " + wifiDevices.get(which).toString());
 							}
 						});
@@ -177,9 +180,10 @@ public class CreateNewPlaceFragment extends Fragment implements
 			public void onClick(View v) {
 				// TODO !!!
 
+				Log.w("TEST", "ResultLocation: " + resultLocation);
 				Location location = new Location(-1, editName.getText()
 						.toString(), resultLocation.getLat(), resultLocation
-						.getLng(), resultLocation.getRadius(), "5");
+						.getLng(), resultLocation.getRadius(), resultLocation.getMac());
 				BundleMessageHelper helper = new BundleMessageHelper(
 						getActivity());
 				helper.sendMessageSendBundle(BundleMessage.getInstance()
@@ -232,10 +236,13 @@ public class CreateNewPlaceFragment extends Fragment implements
 		}
 		case RESOLVE_ADDRESS_REPLY: {
 			// Location location
+			Log.w("TEST", "Hole mir jetzt die Location");
 			resultLocation = Location.fromJSON(BundleMessage.getInstance()
 					.extractObject(b));
-			Log.d("TEST",
-					resultLocation.getLat() + " " + resultLocation.getLng());
+//			Log.d("TEST",
+//					resultLocation.getLat() + " " + resultLocation.getLng());
+			latView.setText(""+resultLocation.getLat());
+			lngView.setText(""+resultLocation.getLng());
 			break;
 		}
 		case RESOLVE_COORDS_REPLY: {

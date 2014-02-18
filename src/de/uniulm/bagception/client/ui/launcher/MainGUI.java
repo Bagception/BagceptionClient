@@ -225,16 +225,31 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 						Toast.makeText(
 								MainGUI.this,
 								"item : " + a.getName()
-										+ "erfolgreich angelegt ",
+										+ " erfolgreich angelegt ",
 								Toast.LENGTH_SHORT).show();
 					} else {
 						Toast.makeText(
 								MainGUI.this,
 								"item : " + a.getName()
-										+ "nicht erfolgreich angelegt ",
+										+ " nicht erfolgreich angelegt ",
 								Toast.LENGTH_SHORT).show();
 
 					}
+				}
+				
+				@Override
+				public void onItemEdit(Item toEdit, Item editValues,
+						AdministrationCommand<Item> i) {
+					String e="";
+					if (!i.isSuccessful()){
+						e=" nicht";
+					}
+					Toast.makeText(
+							MainGUI.this,
+							"item : " + toEdit.getName()
+									+ e + " erfolgreich geändert",
+							Toast.LENGTH_SHORT).show();
+
 				}
 			};
 			if (p != null) {
