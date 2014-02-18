@@ -96,7 +96,6 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				Location locAddress = new Location(editAddress.getText()
 						.toString(), "");
 				Log.d("TEST", "Adresse: " + editAddress.getText().toString());
@@ -132,9 +131,6 @@ public class CreateNewPlaceFragment extends Fragment implements
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								Log.d("TEST", "item clicked:" + which);
-								Log.d("TEST",
-										"items name: " + btDevices.get(which));
 								btView.setText("BT: " + btDevices.get(which).toString());
 							}
 						});
@@ -165,8 +161,6 @@ public class CreateNewPlaceFragment extends Fragment implements
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								Log.d("TEST", "item clicked:" + which);
-								Log.d("TEST", "items name: " + wifiDevices.get(which));
 								wlanView.setText("WLAN: " + wifiDevices.get(which).toString());
 							}
 						});
@@ -178,9 +172,6 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-				// TODO !!!
-
-				Log.w("TEST", "ResultLocation: " + resultLocation);
 				Location location = new Location(-1, editName.getText()
 						.toString(), resultLocation.getLat(), resultLocation
 						.getLng(), resultLocation.getRadius(), resultLocation.getMac());
@@ -215,7 +206,6 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 	@Override
 	public void onBundleMessageRecv(Bundle b) {
-		Log.d("TEST", "Kam was an");
 		switch (BundleMessage.getInstance().getBundleMessageType(b)) {
 		case WIFI_SEARCH_REPLY: {
 			device = WifiBTDevice.fromJSON(BundleMessage.getInstance()
@@ -239,8 +229,6 @@ public class CreateNewPlaceFragment extends Fragment implements
 			Log.w("TEST", "Hole mir jetzt die Location");
 			resultLocation = Location.fromJSON(BundleMessage.getInstance()
 					.extractObject(b));
-//			Log.d("TEST",
-//					resultLocation.getLat() + " " + resultLocation.getLng());
 			latView.setText(""+resultLocation.getLat());
 			lngView.setText(""+resultLocation.getLng());
 			break;
@@ -260,37 +248,25 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 	@Override
 	public void onBundleMessageSend(Bundle b) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onResponseMessage(Bundle b) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onResponseAnswerMessage(Bundle b) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onStatusMessage(Bundle b) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onCommandMessage(Bundle b) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onError(Exception e) {
-		// TODO Auto-generated method stub
-
 	}
 }
