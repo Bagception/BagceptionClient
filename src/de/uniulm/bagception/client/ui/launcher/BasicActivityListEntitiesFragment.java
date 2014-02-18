@@ -2,18 +2,14 @@ package de.uniulm.bagception.client.ui.launcher;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
@@ -22,7 +18,6 @@ import de.uniulm.bagception.bluetoothclientmessengercommunication.service.Bundle
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
-import de.uniulm.bagception.client.EditItemActivity;
 import de.uniulm.bagception.client.R;
 
 public abstract class BasicActivityListEntitiesFragment<E> extends Fragment implements

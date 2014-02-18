@@ -1,9 +1,6 @@
 package de.uniulm.bagception.client.ui.launcher;
 
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import org.osmdroid.google.wrapper.GeoPoint;
 
 import android.app.ActionBar;
 import android.app.Activity;

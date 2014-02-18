@@ -1,18 +1,9 @@
 package de.uniulm.bagception.client.ui.launcher;
 
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Currency;
-import java.util.HashSet;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.app.Fragment.SavedState;
-import android.app.FragmentManager.BackStackEntry;
-import android.app.FragmentManager.OnBackStackChangedListener;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;

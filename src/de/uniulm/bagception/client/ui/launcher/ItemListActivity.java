@@ -1,14 +1,10 @@
 package de.uniulm.bagception.client.ui.launcher;
 
-import de.uniulm.bagception.client.R;
-import de.uniulm.bagception.client.R.layout;
-import de.uniulm.bagception.client.R.menu;
-import android.os.Bundle;
-import android.app.Activity;
 import android.app.ListActivity;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.view.MenuItem;
+import de.uniulm.bagception.client.R;
 
 public class ItemListActivity extends ListActivity {
 

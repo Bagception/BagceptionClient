@@ -2,17 +2,16 @@ package de.uniulm.bagception.client;
 
 import java.util.ArrayList;
 
-import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
-import de.uniulm.bagception.client.bluetooth.pairing.BluetoothDeviceArrayAdapter;
-import de.uniulm.bagception.protocol.bundle.constants.Response;
-import de.uniulm.bagception.protocol.bundle.constants.ResponseAnswer;
-
 import android.app.ListActivity;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
+import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
+import de.uniulm.bagception.client.bluetooth.pairing.BluetoothDeviceArrayAdapter;
+import de.uniulm.bagception.protocol.bundle.constants.Response;
+import de.uniulm.bagception.protocol.bundle.constants.ResponseAnswer;
 
 public class ConnectToDevice extends ListActivity {
 

@@ -1,12 +1,11 @@
 package de.uniulm.bagception.client.ui.launcher;
 
-import de.uniulm.bagception.client.R;
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.support.v4.app.FragmentActivity;
-import android.widget.Toast;
+import de.uniulm.bagception.client.R;
 
 public class ItemTabListener extends FragmentActivity implements TabListener {
 

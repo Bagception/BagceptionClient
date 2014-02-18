@@ -20,7 +20,6 @@ public class BagceptionPairing{
 	private final List<BluetoothDevice> foundBagceptionDevices = Collections.synchronizedList(new  ArrayList<BluetoothDevice>());
 	public final BluetoothAdapter bluetoothAdapter;
 	private final ArrayList<BluetoothDevice> discoveredDevices = new ArrayList<BluetoothDevice>();
-	private int sdpCount=0;
 	private final BluetoothServiceActor actor;
 	private volatile boolean sdpFinished = false;
 	private volatile boolean ddFinished = false;
@@ -103,7 +102,6 @@ public class BagceptionPairing{
 				if (DEBUG)
 					Log.d("bt", "sdp started for: "+d.getName());
 
-				sdpCount++;
 			}
 			
 		}

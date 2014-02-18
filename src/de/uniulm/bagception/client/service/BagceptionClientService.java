@@ -7,7 +7,6 @@ import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMe
 import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
 import de.uniulm.bagception.client.bluetooth.middleware.BluetoothSystem;
 import de.uniulm.bagception.client.caching.ImageCachingSystem;
-import de.uniulm.bagception.client.items.ItemsSystem;
 import de.uniulm.bagception.client.notification.NotificationSystem;
 import de.uniulm.bagception.client.ui.launcher.MainGUI;
 import de.uniulm.bagception.protocol.bundle.constants.Command;
@@ -16,13 +15,11 @@ public class BagceptionClientService extends ObservableService{
 	
 	private BundleMessageActor bluetoothMessageActor;
 	private BundleMessageActor notificationMessageActor;
-	private BundleMessageActor itemActor;
 
 	private BundleMessageActor imageCachingActor;
 	
 	public BundleMessageHelper bmHelper;
 	
-	private ItemsSystem itemSys; 
 	
 	private BluetoothSystem btSys;
 	private NotificationSystem notifySys;
@@ -46,7 +43,6 @@ public class BagceptionClientService extends ObservableService{
 		
 		btSys = new BluetoothSystem(this);
 		notifySys = new NotificationSystem(this);
-		itemSys = new ItemsSystem(this);
 		
 		bluetoothMessageActor = new BundleMessageActor(btSys);
 		bluetoothMessageActor.register(this);
@@ -56,8 +52,6 @@ public class BagceptionClientService extends ObservableService{
 		
 		
 		
-		itemActor = new BundleMessageActor(itemSys);
-		itemActor.register(this);
 		
 		super.onCreate();
 	}
@@ -77,7 +71,6 @@ public class BagceptionClientService extends ObservableService{
 	public void onDestroy() {
 		bluetoothMessageActor.unregister(this);
 		notificationMessageActor.unregister(this);
-		itemActor.unregister(this);
 		stopForeground(true);
 		imageCachingActor.unregister(this);
 		super.onDestroy();

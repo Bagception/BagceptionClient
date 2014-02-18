@@ -1,11 +1,10 @@
 package de.uniulm.bagception.client.ui.launcher;
 
-import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
-import de.uniulm.bagception.client.R;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import de.uniulm.bagception.client.R;
 
 public class ItemEditActivity extends FragmentActivity {
 

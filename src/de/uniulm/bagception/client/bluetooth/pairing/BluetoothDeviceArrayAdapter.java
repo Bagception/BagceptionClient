@@ -1,6 +1,5 @@
 package de.uniulm.bagception.client.bluetooth.pairing;
 
-import de.uniulm.bagception.client.ui.launcher.NewBagFragment;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -3,7 +3,6 @@ package de.uniulm.bagception.client.bluetooth.admin;
 import org.json.simple.JSONObject;
 
 import android.os.Bundle;
-import android.util.Log;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;

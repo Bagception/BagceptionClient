@@ -9,10 +9,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.os.Bundle;
-import android.util.Log;
-import de.philipphock.android.lib.logging.LOG;
 import de.uniulm.bagception.protocol.bundle.BundleProtocolCallback;
-import de.uniulm.bagception.protocol.bundle.constants.StatusCode;
 
 public class BTClient implements Runnable {
 	private Thread recvThread;

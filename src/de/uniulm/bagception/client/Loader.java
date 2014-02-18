@@ -1,8 +1,8 @@
 package de.uniulm.bagception.client;
 
-import de.uniulm.bagception.client.service.BagceptionClientService;
 import android.content.Context;
 import android.content.Intent;
+import de.uniulm.bagception.client.service.BagceptionClientService;
 
 public class Loader {
 	public static void startService(Context c){

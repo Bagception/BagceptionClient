@@ -1,8 +1,6 @@
 package de.uniulm.bagception.client.ui.launcher;
 
 import java.util.ArrayList;
-import java.util.Currency;
-import java.util.HashSet;
 
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -13,7 +11,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,7 +41,6 @@ import de.uniulm.bagception.bundlemessageprotocol.entities.administration.Catego
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ItemCommand;
 import de.uniulm.bagception.client.R;
 import de.uniulm.bagception.client.caching.ImageCachingSystem;
-import de.uniulm.bagception.client.items.AutoUpdateableItemView;
 
 public class EditItemFragment extends Fragment implements BundleMessageReactor {
 

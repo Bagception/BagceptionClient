@@ -1,6 +1,5 @@
 package de.uniulm.bagception.client.ui.launcher;
 
-import de.uniulm.bagception.client.R;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import de.uniulm.bagception.client.R;
 
 public class ItemEditFragment extends Fragment {
 
