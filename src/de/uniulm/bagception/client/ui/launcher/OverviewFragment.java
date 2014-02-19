@@ -3,6 +3,8 @@ package de.uniulm.bagception.client.ui.launcher;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.simple.JSONObject;
+
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -26,8 +28,6 @@ import de.uniulm.bagception.bluetoothclientmessengercommunication.service.Bundle
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Activity;
-import de.uniulm.bagception.bundlemessageprotocol.entities.ActivityPriorityList;
-import de.uniulm.bagception.bundlemessageprotocol.entities.Category;
 import de.uniulm.bagception.bundlemessageprotocol.entities.ContainerStateUpdate;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ActivityCommand;
@@ -432,9 +432,9 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 				itemAlert.create().show();
 			}
 		};
+		JSONObject o = BundleMessage.getInstance().extractObject(b);
+		AdministrationCommand.fromJSONObject(o).accept(p);
 
-		AdministrationCommand.fromJSONObject(
-				BundleMessage.getInstance().extractObject(b)).accept(p);
 	}
 
 }

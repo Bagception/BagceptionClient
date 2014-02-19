@@ -366,6 +366,7 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 				Log.d("TEST", newItem.toString());
 				Intent intent = new Intent(getActivity(), MainGUI.class);
 				startActivity(intent);
+				ImageCachingSystem.getInstance().clearCache(newItem);
 			}
 		});
 
