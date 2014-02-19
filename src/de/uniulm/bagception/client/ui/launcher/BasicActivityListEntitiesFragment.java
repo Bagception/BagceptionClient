@@ -18,6 +18,8 @@ import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMe
 import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
+import de.uniulm.bagception.bundlemessageprotocol.entities.Activity;
+import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
 import de.uniulm.bagception.client.R;
 
@@ -95,8 +97,15 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 				}
 
 				String[] test = { "1", "2" };
+				Activity activity = (Activity)listAdapter.getItem(arg2);
+				String[] data = new String[activity.getItemsForActivity().size()];
+				
+				int iter=0;
+				for (Item i:activity.getItemsForActivity()){
+					data[iter++] = i.getName();
+				}
 
-				startActivity.setItems(test,
+				startActivity.setItems(data,
 						new DialogInterface.OnClickListener() {
 
 							@Override
