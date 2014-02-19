@@ -24,8 +24,12 @@ import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMe
 import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
+import de.uniulm.bagception.bundlemessageprotocol.entities.Activity;
+import de.uniulm.bagception.bundlemessageprotocol.entities.ActivityPriorityList;
+import de.uniulm.bagception.bundlemessageprotocol.entities.Category;
 import de.uniulm.bagception.bundlemessageprotocol.entities.ContainerStateUpdate;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
+import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ActivityCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommandProcessor;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.CategoryCommand;
@@ -54,6 +58,9 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 	private Item unknownItem;
 	Button changeActivity;
+	Button endActivity;
+	
+	private Activity ac = null;
 
 	static Fragment newInstance(Context context) {
 		OverviewFragment f = new OverviewFragment();
@@ -72,6 +79,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 		currentActivityView = (TextView) root.findViewById(R.id.test);
 		changeActivity = (Button) root.findViewById(R.id.changeActivity);
+		endActivity = (Button) root.findViewById(R.id.endActivity);
 
 		ActionBar actionBar = getActivity().getActionBar();
 		actionBar.setBackgroundDrawable(new ColorDrawable(Color
@@ -112,8 +120,41 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 				new BundleMessageHelper(getActivity())
 						.sendMessageSendBundle(BundleMessage.getInstance()
 								.createBundle(
-										BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
+										BUNDLE_MESSAGE.ACTIVITY_PRIORITY_LIST,
 										CategoryCommand.list()));
+			}
+		});
+		
+		endActivity.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				AlertDialog.Builder categoryAlert = new AlertDialog.Builder(
+						getActivity());
+				categoryAlert.setTitle("Aktivität beenden?");
+
+				categoryAlert.setNegativeButton("Abbrechen", new OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						dialog.cancel();
+					}
+				});
+				
+				categoryAlert.setPositiveButton("Beenden", new OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						if(ac != null){
+							new BundleMessageHelper(getActivity()).sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,ActivityCommand.stop(ac)));
+							currentActivityView.setText("Aktuelle Aktivität: Keine");
+						}	
+					}
+				});
+				
+				categoryAlert.create().show();
 			}
 		});
 
@@ -139,6 +180,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			statusUpdate = ContainerStateUpdate.fromJSON(BundleMessage
 					.getInstance().extractObject(b));
 			String currentActivity = statusUpdate.getActivity().getName();
+			ac = statusUpdate.getActivity();
 			currentActivityView.setText("Aktuelle Aktivität: "
 					+ currentActivity);
 
@@ -194,6 +236,10 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 			dialog(unknownItem);
 			break;
+			
+		case ACTIVITY_PRIORITY_LIST:{
+			onActivityPriorityList(b);
+		}
 
 		case ADMINISTRATION_COMMAND: {
 			onAdminCommand(b);
@@ -323,6 +369,10 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		super.onStop();
 		bmActor.unregister(getActivity());
 
+	}
+	
+	private void onActivityPriorityList(Bundle b){
+		
 	}
 
 	// add tagid to item
