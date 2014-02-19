@@ -172,6 +172,8 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
+				Log.w("TEST", "ResultLocation: " + resultLocation);
+				
 				Location location = new Location(-1, editName.getText()
 						.toString(), resultLocation.getLat(), resultLocation
 						.getLng(), resultLocation.getRadius(), resultLocation.getMac());
