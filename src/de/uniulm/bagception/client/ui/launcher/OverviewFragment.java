@@ -432,7 +432,6 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 				itemAlert.create().show();
 			}
 		};
-		
 		JSONObject o = BundleMessage.getInstance().extractObject(b);
 		AdministrationCommand.fromJSONObject(o).accept(p);
 
