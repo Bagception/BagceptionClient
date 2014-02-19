@@ -2,6 +2,7 @@ package de.uniulm.bagception.client.ui.launcher;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ public class AllLocationsFragment extends BasicListEntitiesFragment<Location> {
 							android.R.layout.simple_list_item_1, null);
 				}
 				Location loc = getItem(position);
+				
 				if (loc != null) {
 					TextView itemView = (TextView) view
 							.findViewById(android.R.id.text1);
@@ -59,6 +61,9 @@ public class AllLocationsFragment extends BasicListEntitiesFragment<Location> {
 			public void onLocationList(AdministrationCommand<Location> l) {
 				// item list
 				Location[] theLocationsWeWantToDisplay = l.getPayloadObjects();
+				for(int loc = 0; loc < theLocationsWeWantToDisplay.length; loc++){
+					Log.w("TEST", "Location: " + theLocationsWeWantToDisplay[loc]);
+				}
 				listAdapter.clear();
 				listAdapter.addAll(theLocationsWeWantToDisplay);
 			}

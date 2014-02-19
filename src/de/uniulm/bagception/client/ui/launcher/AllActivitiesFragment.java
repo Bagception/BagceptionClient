@@ -1,7 +1,10 @@
 package de.uniulm.bagception.client.ui.launcher;
 
+import java.util.List;
+
 import android.app.Fragment;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,7 @@ import de.uniulm.bagception.bluetoothclientmessengercommunication.service.Bundle
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Activity;
+import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ActivityCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommandProcessor;
@@ -75,6 +79,11 @@ public class AllActivitiesFragment extends BasicActivityListEntitiesFragment<Act
 			public void onActivityList(AdministrationCommand<Activity> a) {
 				// item list
 				Activity[] theActivitiesWeWantToDisplay = a.getPayloadObjects();
+				
+				// Get items
+				List<Item> i = theActivitiesWeWantToDisplay[0].getItemsForActivity();
+				Log.w("TEST", "Item: " + i);
+				
 				listAdapter.clear();
 				listAdapter.addAll(theActivitiesWeWantToDisplay);
 			}

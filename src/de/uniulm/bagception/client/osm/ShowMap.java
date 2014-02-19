@@ -14,6 +14,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
@@ -141,6 +142,26 @@ public class ShowMap extends Activity implements LocationListener {
 		locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
 				4000, 0, locListener);
 
+		Handler h = new Handler();
+		h.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				Rect r = mapView.getProjection().getScreenRect();
+				IGeoPoint nullP = mapView.getProjection().fromPixels(0, 0);
+				IGeoPoint endP = mapView.getProjection().fromPixels(r.width(),
+						r.height());
+				float[] result = new float[3];
+				Location.distanceBetween(nullP.getLatitude(),
+						nullP.getLongitude(), endP.getLatitude(),
+						endP.getLongitude(), result);
+
+				if (result[0] != 0.0f)
+					meterSlider.setMax((int) (result[0] / 2));
+				
+			}
+		}, 1000);
+				
 	}
 
 	@Override

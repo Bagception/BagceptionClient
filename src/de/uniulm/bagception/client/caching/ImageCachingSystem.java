@@ -54,6 +54,11 @@ public class ImageCachingSystem implements BundleMessageReactor{
 		ImageCachingSystem.getInstance().mainService = mainService;
 	}
 	
+	public void clearCache(Item i){
+		if (i == null) return;
+		imageCache.delete((int)i.getImageHash());
+	}
+	
 	@SuppressWarnings("unchecked")
 	public Bitmap getImage(Item i){
 		if (instance == null) return null;
