@@ -172,17 +172,20 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-				Log.w("TEST", "ResultLocation: " + resultLocation);
+
+				float lat = Float.parseFloat(latView.getText().toString());
+				float lon = Float.parseFloat(lngView.getText().toString());
 				
 				Location location = new Location(-1, editName.getText()
-						.toString(), resultLocation.getLat(), resultLocation
-						.getLng(), resultLocation.getRadius(), resultLocation.getMac());
+						.toString(), lat, lon, resultLocation.getRadius(), resultLocation.getMac());
 				BundleMessageHelper helper = new BundleMessageHelper(
 						getActivity());
 				helper.sendMessageSendBundle(BundleMessage.getInstance()
 						.createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
 								LocationCommand.add(location)));
 
+				Log.w("TEST", "Location: " + location);
+				
 				Intent intent = new Intent(getActivity(), MainGUI.class);
 				startActivity(intent);
 			}
@@ -233,6 +236,7 @@ public class CreateNewPlaceFragment extends Fragment implements
 					.extractObject(b));
 			latView.setText(""+resultLocation.getLat());
 			lngView.setText(""+resultLocation.getLng());
+			Log.w("TEST", resultLocation.getLat() + " und " + resultLocation.getLng());
 			break;
 		}
 		case RESOLVE_COORDS_REPLY: {
