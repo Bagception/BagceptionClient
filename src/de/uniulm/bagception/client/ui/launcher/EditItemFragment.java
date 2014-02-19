@@ -106,7 +106,7 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 		 * Get item
 		 */
 		Item item = null;
-		String i = getArguments().getString("ITEMSTRING");
+		String i = getArguments().getString("ENTITYSTRING");
 		// String i = intent.getStringExtra("ITEMSTRING");
 		org.json.simple.JSONObject obj = new org.json.simple.JSONObject();
 		JSONParser p = new JSONParser();

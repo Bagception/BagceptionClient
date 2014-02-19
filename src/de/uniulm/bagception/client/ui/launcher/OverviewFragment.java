@@ -122,7 +122,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 						.sendMessageSendBundle(BundleMessage.getInstance()
 								.createBundle(
 										BUNDLE_MESSAGE.ACTIVITY_PRIORITY_LIST,
-										CategoryCommand.list()));
+										ActivityCommand.list()));
 			}
 		});
 		

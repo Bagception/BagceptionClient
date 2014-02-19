@@ -82,7 +82,7 @@ public abstract class BasicListEntitiesFragment<E> extends Fragment implements
 				long id = getId(listAdapter.getItem(arg2));
 				String serializedString = listAdapter.getItem(arg2).toString();
 				intent.putExtra("ID",id);
-				intent.putExtra("ITEMSTRING",serializedString);
+				intent.putExtra("ENTITYSTRING",serializedString);
 				
 				startActivity(intent);
 			}
