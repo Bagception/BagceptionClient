@@ -105,7 +105,7 @@ public class AllActivitiesFragment extends BasicActivityListEntitiesFragment<Act
 	@Override
 	protected void onItemClicked(Activity elem) {
 		new BundleMessageHelper(getActivity()).sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,ActivityCommand.start(elem)));
-		
+//		new BundleMessageHelper(getActivity()).sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND, ActivityCommand.stop(elem)));
 	}
 
 }

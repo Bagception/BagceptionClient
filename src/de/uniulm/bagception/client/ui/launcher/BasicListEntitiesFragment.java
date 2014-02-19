@@ -86,6 +86,8 @@ public abstract class BasicListEntitiesFragment<E> extends Fragment implements
 				
 				startActivity(intent);
 			}
+			
+			
 		});
 
 		listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -94,7 +96,7 @@ public abstract class BasicListEntitiesFragment<E> extends Fragment implements
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
 				dialog(arg2);
-				return false;
+				return true;
 			}
 		});
 
