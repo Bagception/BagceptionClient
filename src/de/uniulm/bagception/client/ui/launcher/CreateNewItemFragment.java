@@ -315,7 +315,7 @@ public class CreateNewItemFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-//				getFragmentManager().popBackStack();
+				// getFragmentManager().popBackStack();
 				editName.setText("");
 				iv.setImageResource(R.drawable.ic_launcher);
 
@@ -327,7 +327,6 @@ public class CreateNewItemFragment extends Fragment implements
 
 	@Override
 	public void onBundleMessageRecv(Bundle b) {
-		// TODO Auto-generated method stub
 		switch (BundleMessage.getInstance().getBundleMessageType(b)) {
 		case ADMINISTRATION_COMMAND: {
 			AdministrationCommandProcessor p = new AdministrationCommandProcessor() {
@@ -335,7 +334,6 @@ public class CreateNewItemFragment extends Fragment implements
 				@Override
 				public void onCategoryList(
 						de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand<de.uniulm.bagception.bundlemessageprotocol.entities.Category> i) {
-					// TODO Auto-generated method stub
 					final Category[] categories = i.getPayloadObjects();
 					final String[] categoryStrings = new String[categories.length];
 					final long[] categoryIDs = new long[categories.length];
@@ -390,7 +388,7 @@ public class CreateNewItemFragment extends Fragment implements
 	public void onPause() {
 		// TODO Auto-generated method stub
 		bmActor.unregister(getActivity());
-//		getFragmentManager().popBackStack();
+		// getFragmentManager().popBackStack();
 		super.onPause();
 	}
 
