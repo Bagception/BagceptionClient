@@ -172,11 +172,11 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 			}
 
 			if (item.getContextItem() == true) {
-				independet.setChecked(true);
+				always.setChecked(true);
 			}
 
 			if (item.getIndependentItem() == true) {
-				always.setChecked(true);
+				independet.setChecked(true);
 			}
 		}
 
