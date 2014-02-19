@@ -53,7 +53,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 	final String[] data = { "Übersicht", "Alle Items", "Alle Locations",
 			"Alle Kategorien", "Alle Aktivitäten", "Item erstellen",
 			"Ort erstellen", "Kategorie erstellen", "Aktivität erstellen",
-			"Neue Tasche" };
+			"Neue Tasche", "Kalender" };
 	final String[] menueFragments = {
 			"de.uniulm.bagception.client.ui.launcher.OverviewFragment",
 			"de.uniulm.bagception.client.ui.launcher.AllItemsFragment",
@@ -64,7 +64,8 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 			"de.uniulm.bagception.client.ui.launcher.CreateNewPlaceFragment",
 			"de.uniulm.bagception.client.ui.launcher.CreateNewCategoryFragment",
 			"de.uniulm.bagception.client.ui.launcher.CreateNewActivityFragment",
-			"de.uniulm.bagception.client.ui.launcher.NewBagFragment" };
+			"de.uniulm.bagception.client.ui.launcher.NewBagFragment",
+			"de.uniulm.bagception.client.ui.launcher.CalendarFragment"};
 
 
 	@Override

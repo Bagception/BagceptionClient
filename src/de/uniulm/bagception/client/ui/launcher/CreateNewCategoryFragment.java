@@ -35,8 +35,8 @@ public class CreateNewCategoryFragment extends Fragment {
 		final ViewGroup root = (ViewGroup) inflater.inflate(
 				R.layout.fragment_create_new_category, null);
 		editName = (EditText) root.findViewById(R.id.editCategory);
-		send = (Button) root.findViewById(R.id.sendCategory);
-		cancel = (Button) root.findViewById(R.id.cancelCategory);
+		send = (Button) root.findViewById(R.id.sendCalendarBtn);
+		cancel = (Button) root.findViewById(R.id.cancelCalendarBtn);
 
 		send.setOnClickListener(new OnClickListener() {
 
