@@ -34,6 +34,9 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 
 	private BundleMessageActor actor;
 	private BundleMessageHelper helper;
+	
+	protected abstract String getEditFragmentName();
+	protected abstract String getCreateNewFragmentName();
 
 	/**
 	 * 
@@ -168,6 +171,7 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 		return root;
 	}
 
+	
 	public void dialog(final int pos) {
 		AlertDialog.Builder dialogAlert = new AlertDialog.Builder(getActivity());
 		dialogAlert.setTitle("Eintrag löschen?");

@@ -6,7 +6,11 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -34,31 +38,35 @@ public abstract class BasicListEntitiesFragment<E> extends Fragment implements
 	 * @return the ArrayAdapter for the corresponding entity
 	 */
 	protected abstract ArrayAdapter<E> getEntityAdapter();
-	
-	private void sendDeleteCommand(AdministrationCommand<E> cmd){
-		helper.sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND, cmd));
+
+	private void sendDeleteCommand(AdministrationCommand<E> cmd) {
+		helper.sendMessageSendBundle(BundleMessage.getInstance().createBundle(
+				BUNDLE_MESSAGE.ADMINISTRATION_COMMAND, cmd));
 	}
-	
 
 	/**
 	 * Returns the AdministrationCommand to delete the entity from the list
-	 * @param pos the position of the entity in the list
+	 * 
+	 * @param pos
+	 *            the position of the entity in the list
 	 * @return the AdministrationCommand to delete
 	 */
 	protected abstract AdministrationCommand<E> getToDeleteEntity(int pos);
 
 	protected abstract AdministrationCommand<E> getAdminCommandRequest();
 
-	protected abstract String getFragmentName();
+	protected abstract String getEditFragmentName();
+
+	protected abstract String getCreateNewFragmentName();
 
 	protected abstract long getId(E e);
-	
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		actor = new BundleMessageActor(this);
 		helper = new BundleMessageHelper(getActivity());
+		setHasOptionsMenu(true);
 
 	}
 
@@ -71,23 +79,22 @@ public abstract class BasicListEntitiesFragment<E> extends Fragment implements
 		listAdapter = getEntityAdapter();
 		listView.setAdapter(listAdapter);
 		listAdapter.notifyDataSetChanged();
-		
+
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				Intent intent = new Intent(getActivity(), MainGUI.class);
-				intent.putExtra("FRAGMENT", getFragmentName());
+				intent.putExtra("FRAGMENT", getEditFragmentName());
 				long id = getId(listAdapter.getItem(arg2));
 				String serializedString = listAdapter.getItem(arg2).toString();
-				intent.putExtra("ID",id);
-				intent.putExtra("ENTITYSTRING",serializedString);
-				
+				intent.putExtra("ID", id);
+				intent.putExtra("ENTITYSTRING", serializedString);
+
 				startActivity(intent);
 			}
-			
-			
+
 		});
 
 		listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -115,17 +122,37 @@ public abstract class BasicListEntitiesFragment<E> extends Fragment implements
 
 			}
 		});
-		
+
 		dialogAlert.setPositiveButton("Löschen", new OnClickListener() {
-			
+
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				sendDeleteCommand(getToDeleteEntity(pos));
 				listAdapter.notifyDataSetChanged();
 			}
 		});
-		
+
 		dialogAlert.create().show();
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.actionbar_button, menu);
+
+		MenuItem item = menu.findItem(R.id.menu_item_add);
+		Log.d("TEST", "fhejfedj");
+		item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				Intent intent = new Intent(getActivity(), MainGUI.class);
+				intent.putExtra("FRAGMENT", getCreateNewFragmentName());
+
+				startActivity(intent);
+				return false;
+			}
+		});
+		super.onCreateOptionsMenu(menu, inflater);
 	}
 
 	@Override

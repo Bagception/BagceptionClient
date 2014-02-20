@@ -16,6 +16,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -50,9 +51,8 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 	private View drawRightLayout;
 	public Bitmap currentPicturetaken = null;
 
-	final String[] data = { "Übersicht", "Alle Items", "Alle Locations",
-			"Alle Kategorien", "Alle Aktivitäten", "Item erstellen",
-			"Ort erstellen", "Kategorie erstellen", "Aktivität erstellen",
+	final String[] data = { "Übersicht", "Items", "Orte",
+			"Kategorien", "Aktivitäten",
 			"Neue Tasche", "Kalender" };
 	final String[] menueFragments = {
 			"de.uniulm.bagception.client.ui.launcher.OverviewFragment",
@@ -60,12 +60,8 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 			"de.uniulm.bagception.client.ui.launcher.AllLocationsFragment",
 			"de.uniulm.bagception.client.ui.launcher.AllCategoriesFragment",
 			"de.uniulm.bagception.client.ui.launcher.AllActivitiesFragment",
-			"de.uniulm.bagception.client.ui.launcher.CreateNewItemFragment",
-			"de.uniulm.bagception.client.ui.launcher.CreateNewPlaceFragment",
-			"de.uniulm.bagception.client.ui.launcher.CreateNewCategoryFragment",
-			"de.uniulm.bagception.client.ui.launcher.CreateNewActivityFragment",
 			"de.uniulm.bagception.client.ui.launcher.NewBagFragment",
-			"de.uniulm.bagception.client.ui.launcher.CalendarFragment"};
+			"de.uniulm.bagception.client.ui.launcher.CalendarFragment" };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +124,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 				fragmentToLoad, getIntent().getExtras()));
 		tx.commit();
 	}
+
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
