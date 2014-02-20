@@ -131,7 +131,8 @@ public class CreateNewPlaceFragment extends Fragment implements
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								btView.setText("BT: " + btDevices.get(which).toString());
+								btView.setText("BT: "
+										+ btDevices.get(which).toString());
 							}
 						});
 				btAlert.create().show();
@@ -161,7 +162,8 @@ public class CreateNewPlaceFragment extends Fragment implements
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								wlanView.setText("WLAN: " + wifiDevices.get(which).toString());
+								wlanView.setText("WLAN: "
+										+ wifiDevices.get(which).toString());
 							}
 						});
 				wifiAlert.create().show();
@@ -175,19 +177,40 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 				float lat = Float.parseFloat(latView.getText().toString());
 				float lon = Float.parseFloat(lngView.getText().toString());
-				
+
 				Location location = new Location(-1, editName.getText()
-						.toString(), lat, lon, resultLocation.getRadius(), resultLocation.getMac());
+						.toString(), lat, lon, resultLocation.getRadius(),
+						resultLocation.getMac());
 				BundleMessageHelper helper = new BundleMessageHelper(
 						getActivity());
-				helper.sendMessageSendBundle(BundleMessage.getInstance()
-						.createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
-								LocationCommand.add(location)));
 
-				Log.w("TEST", "Location: " + location);
-				
-				Intent intent = new Intent(getActivity(), MainGUI.class);
-				startActivity(intent);
+				if (editName.length() == 0 || latView.getText() == null
+						|| lngView.getText() == null
+						|| resultLocation.getMac() == null) {
+					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
+							getActivity());
+					dialogAlert.setTitle("Bitte alle Felder ausfüllen");
+					dialogAlert.setNeutralButton("OK",
+							new DialogInterface.OnClickListener() {
+
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// TODO Auto-generated method stub
+									dialog.cancel();
+								}
+							});
+					dialogAlert.create().show();
+				} else {
+					helper.sendMessageSendBundle(BundleMessage.getInstance()
+							.createBundle(
+									BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
+									LocationCommand.add(location)));
+
+					Log.w("TEST", "Location: " + location);
+
+					Intent intent = new Intent(getActivity(), MainGUI.class);
+					startActivity(intent);
+				}
 			}
 		});
 
@@ -195,17 +218,17 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-//				getFragmentManager().popBackStack();
+				// getFragmentManager().popBackStack();
 				editName.setText("");
 			}
 		});
 
 		return root;
 	}
-	
+
 	@Override
 	public void onPause() {
-//		getFragmentManager().popBackStack();
+		// getFragmentManager().popBackStack();
 		super.onPause();
 	}
 
@@ -234,9 +257,10 @@ public class CreateNewPlaceFragment extends Fragment implements
 			Log.w("TEST", "Hole mir jetzt die Location");
 			resultLocation = Location.fromJSON(BundleMessage.getInstance()
 					.extractObject(b));
-			latView.setText(""+resultLocation.getLat());
-			lngView.setText(""+resultLocation.getLng());
-			Log.w("TEST", resultLocation.getLat() + " und " + resultLocation.getLng());
+			latView.setText("" + resultLocation.getLat());
+			lngView.setText("" + resultLocation.getLng());
+			Log.w("TEST",
+					resultLocation.getLat() + " und " + resultLocation.getLng());
 			break;
 		}
 		case RESOLVE_COORDS_REPLY: {
