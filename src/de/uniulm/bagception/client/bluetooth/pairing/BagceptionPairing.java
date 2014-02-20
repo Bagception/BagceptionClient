@@ -12,7 +12,7 @@ import android.os.Handler;
 import android.util.Log;
 
 public class BagceptionPairing{
-	private boolean DEBUG = true;
+	private boolean DEBUG = false;
 
 	private final BagceptionPairingCallbacks callbacks;
 	private final List<BluetoothDevice> foundBTDevices =  Collections.synchronizedList(new  ArrayList<BluetoothDevice>());
