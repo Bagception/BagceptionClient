@@ -7,8 +7,12 @@ import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMe
 import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
+import de.uniulm.bagception.bundlemessageprotocol.entities.Activity;
 import de.uniulm.bagception.bundlemessageprotocol.entities.CalendarEvent;
 import de.uniulm.bagception.bundlemessageprotocol.entities.WifiBTDevice;
+import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ActivityCommand;
+import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
+import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommandProcessor;
 import de.uniulm.bagception.client.R;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -37,6 +41,7 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 	private ArrayList<String> calendarNames;
 	private ArrayList<String> calendarEvents;
 	private ArrayList<String> activityNames;
+	private ArrayList<Activity> activityList;
 	private AlertDialog.Builder calendarNamesAlertDialog;
 	private AlertDialog.Builder activitieNamesAlertDialog;
 
@@ -72,6 +77,7 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 		calendarNames = new ArrayList<String>();
 		calendarEvents = new ArrayList<String>();
 		activityNames = new ArrayList<String>();
+		activityList = new ArrayList<Activity>();
 		
 		sendBtn = (Button) root.findViewById(R.id.sendCalendarBtn);
 		cancelBtn = (Button) root.findViewById(R.id.cancelCalendarBtn);
@@ -109,15 +115,16 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 			@Override
 			public void onClick(View v) {
 				activityNames.clear();
+				activityList.clear();
 				activitieNamesAlertDialog = new AlertDialog.Builder(getActivity());
 				activitieNamesAlertDialog.setTitle("Aktivitäten");
 				activityNamesAdapter = new ArrayAdapter<String>(getActivity(),
 						android.R.layout.simple_selectable_list_item, activityNames);
 				//TODO: erstelle bundlemessage type für get all activities
-//				new BundleMessageHelper(getActivity())
-//				.sendMessageSendBundle(BundleMessage.getInstance()
-//						.createBundle(
-//								BUNDLE_MESSAGE., null));
+				new BundleMessageHelper(getActivity())
+				.sendMessageSendBundle(BundleMessage.getInstance()
+						.createBundle(
+								BUNDLE_MESSAGE.ADMINISTRATION_COMMAND, ActivityCommand.list()));
 				calendarNamesAlertDialog.setAdapter(calendarNamesAdapter,
 						new DialogInterface.OnClickListener() {
 
@@ -170,6 +177,23 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 			calendarNames.add(calendarName.getCalendarName());
 			calendarNamesAdapter.notifyDataSetChanged();
 			break;
+		}
+		case ADMINISTRATION_COMMAND: {
+			AdministrationCommandProcessor p = new AdministrationCommandProcessor(){
+				public void onActivityList(de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand<de.uniulm.bagception.bundlemessageprotocol.entities.Activity> i) {
+					if (i.isSuccessful()){
+						Activity[] temp = i.getPayloadObjects();
+						for(int j=0; j<temp.length; j++){
+							activityNames.add(temp[j].getName());
+							activityList.add(temp[j]);
+						}
+					}else{
+						log("error");
+					}
+				};
+			};
+			AdministrationCommand.fromJSONObject(BundleMessage.getInstance().extractObject(b)).accept(p);
+			
 		}
 		default:
 			break;

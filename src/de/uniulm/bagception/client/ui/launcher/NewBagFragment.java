@@ -9,6 +9,7 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -23,12 +24,22 @@ public class NewBagFragment extends ListFragment {
 	private BluetoothDeviceArrayAdapter mAdapter;
 	private BagceptionPairing pairingHelper;
 	private ProgressDialog dialog;
-	private ProgressDialog pairingDialog;
 
 	public static Fragment newInstance(Context context) {
 		NewBagFragment f = new NewBagFragment();
-
 		return f;
+	}
+
+	private void abortScan() {
+		if (dialog != null)
+			dialog.dismiss();
+		pairingHelper.cancel();
+
+	}
+
+	private void startScan() {
+		dialog(DIALOG_SEARCH);
+		pairingHelper.startScan();
 	}
 
 	@Override
@@ -37,21 +48,34 @@ public class NewBagFragment extends ListFragment {
 		pairingHelper = new BagceptionPairing(callback);
 		super.onActivityCreated(savedInstanceState);
 		setListAdapter(mAdapter);
-		if (dialog != null)
-			dialog.dismiss();
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setMessage("Nach Geräten suchen?")
+				.setCancelable(false)
+				.setPositiveButton("suchen",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								startScan();
 
-		dialog = ProgressDialog
-				.show(getActivity(),
-						"suche..",
-						"Suche nach Geräten... bitte warten\n\nDer Bagception Server muss auf dem fremden Gerät eingeschaltet sein");
-		pairingHelper.startScan();
+							}
+						})
+				.setNegativeButton("abbrechen",
+						new DialogInterface.OnClickListener() {
 
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+ 
+							}
+						});
+
+		AlertDialog alert = builder.create();
+		alert.show();
 	}
 
 	public void pairingStatus(BluetoothDevice d, boolean success) {
-		pairingDialog.dismiss();
-		mAdapter.clear();
-		if (getActivity()==null)return;
+		dialog(DIALOG_NONE);
+		if (getActivity() == null)
+			return;
 		if (success) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			builder.setMessage("Pairing erfolgreich")
@@ -75,10 +99,7 @@ public class NewBagFragment extends ListFragment {
 								@Override
 								public void onClick(DialogInterface dialog,
 										int which) {
-									NewBagFragment.this.dialog = ProgressDialog
-											.show(getActivity(),
-													"suche..",
-													"Suche nach Geräten... bitte warten\n\nDer Bagception Server muss auf dem fremden Gerät eingeschaltet sein");
+									dialog(DIALOG_SEARCH);
 									pairingHelper.startScan();
 								}
 							})
@@ -97,10 +118,8 @@ public class NewBagFragment extends ListFragment {
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		if (pairingDialog != null)
-			pairingDialog.dismiss();
-		pairingDialog = ProgressDialog.show(getActivity(), "Pairing..",
-				"Pairing wird durchgeführt");
+
+		dialog(DIALOG_PAIR);
 		BluetoothDevice d = mAdapter.getItem(position);
 		ManageConnection mg = new ManageConnection(this);
 		mg.execute(d);
@@ -117,10 +136,7 @@ public class NewBagFragment extends ListFragment {
 	public void onStop() {
 
 		super.onStop();
-		if (dialog != null)
-			dialog.dismiss();
-		if (pairingDialog != null)
-			pairingDialog.dismiss();
+		dialog(DIALOG_NONE);
 		try {
 			if (pairingHelper != null)
 				pairingHelper.unregister(getActivity());
@@ -131,7 +147,6 @@ public class NewBagFragment extends ListFragment {
 
 	@Override
 	public void onPause() {
-		getFragmentManager().popBackStack();
 		super.onPause();
 	}
 
@@ -143,20 +158,51 @@ public class NewBagFragment extends ListFragment {
 
 		@Override
 		public void onScanFinished(List<BluetoothDevice> devices) {
-			mAdapter.addAll(devices);
-			dialog.dismiss();
+			dialog(DIALOG_NONE);
 			if (devices.size() == 0) {
-				if (getActivity()!=null){
+				if (getActivity() != null) {
 					Toast.makeText(getActivity(), "Keine Geräte gefunden",
-							Toast.LENGTH_SHORT).show();	
+							Toast.LENGTH_SHORT).show();
 				}
-				
+
 			}
 		}
 
 		@Override
 		public void onDeviceFound(BluetoothDevice device) {
-			// nop
+			mAdapter.add(device);
 		}
 	};
+
+	private final int DIALOG_SEARCH = 0;
+	private final int DIALOG_PAIR = 1;
+	private final int DIALOG_NONE = 2;
+
+	private void dialog(int dialog) {
+		if (this.dialog != null) {
+			this.dialog.dismiss();
+		}
+
+		switch (dialog) {
+		case DIALOG_SEARCH:
+			this.dialog = ProgressDialog
+					.show(getActivity(),
+							"suche..",
+							"Suche nach Geräten... bitte warten");//\n\nDer Bagception Server muss auf dem fremden Gerät eingeschaltet sein");
+			this.dialog.setCanceledOnTouchOutside(true);
+			this.dialog.setOnCancelListener(new OnCancelListener() {
+
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					abortScan();
+				}
+			});
+			break;
+		case DIALOG_PAIR:
+			this.dialog = ProgressDialog.show(getActivity(), "Pairing..",
+					"Pairing wird durchgeführt");
+			this.dialog.setCanceledOnTouchOutside(false);
+			break;
+		}
+	}
 }

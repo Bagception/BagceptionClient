@@ -305,8 +305,9 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 		}
 		case UNABLE_TO_SEND_DATA: {
 			Toast.makeText(this,
-					"unable to send data, not connected with remote endpoint",
-					Toast.LENGTH_SHORT).show();
+					"Daten konnten nicht gesendet werden. Das Gerät ist mit keiner Tasche verbunden.",
+					Toast.LENGTH_LONG).show();
+			//drawer.openDrawer(drawRightLayout);	
 			break;
 		}
 		default:
