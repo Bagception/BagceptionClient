@@ -15,7 +15,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +32,6 @@ import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ActivityCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommandProcessor;
-import de.uniulm.bagception.bundlemessageprotocol.entities.administration.CategoryCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ItemCommand;
 import de.uniulm.bagception.client.R;
 import de.uniulm.bagception.protocol.bundle.constants.Command;
@@ -41,6 +39,8 @@ import de.uniulm.bagception.protocol.bundle.constants.StatusCode;
 
 public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
+	private boolean acceptList=false; 
+	
 	public static Context appContext;
 	private BundleMessageActor bmActor;
 	private volatile ContainerStateUpdate statusUpdate;
@@ -117,7 +117,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				acceptList=true;
 				new BundleMessageHelper(getActivity())
 						.sendMessageSendBundle(BundleMessage.getInstance()
 								.createBundle(
@@ -271,6 +271,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
+				acceptList=true;
 				unknownItem = item;
 				new BundleMessageHelper(getActivity())
 						.sendMessageSendBundle(BundleMessage.getInstance()
@@ -382,6 +383,10 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		AdministrationCommandProcessor p = new AdministrationCommandProcessor() {
 			@Override
 			public void onItemList(AdministrationCommand<Item> i) {
+				if (!acceptList){
+					return;
+				}
+				acceptList=false;
 				final Item[] items = i.getPayloadObjects();
 				String[] itemStrings = new String[items.length];
 
@@ -432,6 +437,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 				itemAlert.create().show();
 			}
 		};
+		
 		JSONObject o = BundleMessage.getInstance().extractObject(b);
 
 		AdministrationCommand.fromJSONObject(o).accept(p);
