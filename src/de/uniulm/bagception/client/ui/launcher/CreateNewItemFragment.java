@@ -40,6 +40,7 @@ import de.uniulm.bagception.client.R;
 public class CreateNewItemFragment extends Fragment implements
 		BundleMessageReactor {
 
+	private boolean acceptList=false;
 	Category categoryForActivity;
 	EditText editName;
 	Button send;
@@ -103,7 +104,7 @@ public class CreateNewItemFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-
+				acceptList=true;
 				new BundleMessageHelper(getActivity())
 						.sendMessageSendBundle(BundleMessage.getInstance()
 								.createBundle(
@@ -353,6 +354,7 @@ public class CreateNewItemFragment extends Fragment implements
 				@Override
 				public void onCategoryList(
 						de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand<de.uniulm.bagception.bundlemessageprotocol.entities.Category> i) {
+					acceptList=false;
 					final Category[] categories = i.getPayloadObjects();
 					final String[] categoryStrings = new String[categories.length];
 					final long[] categoryIDs = new long[categories.length];
@@ -384,6 +386,9 @@ public class CreateNewItemFragment extends Fragment implements
 				}
 
 			};
+			if (!acceptList){
+				return;
+			}
 			AdministrationCommand.fromJSONObject(
 					BundleMessage.getInstance().extractObject(b)).accept(p);
 
