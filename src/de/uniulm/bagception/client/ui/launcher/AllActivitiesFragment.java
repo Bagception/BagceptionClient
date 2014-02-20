@@ -80,10 +80,6 @@ public class AllActivitiesFragment extends BasicActivityListEntitiesFragment<Act
 				// item list
 				Activity[] theActivitiesWeWantToDisplay = a.getPayloadObjects();
 				
-				// Get items
-				List<Item> i = theActivitiesWeWantToDisplay[0].getItemsForActivity();
-				Log.w("TEST", "Item: " + i);
-				
 				listAdapter.clear();
 				listAdapter.addAll(theActivitiesWeWantToDisplay);
 			}
