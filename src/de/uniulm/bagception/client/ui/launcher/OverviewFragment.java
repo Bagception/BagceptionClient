@@ -433,8 +433,8 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			}
 		};
 		JSONObject o = BundleMessage.getInstance().extractObject(b);
-		AdministrationCommand.fromJSONObject(o).accept(p);
 
+		AdministrationCommand.fromJSONObject(o).accept(p);
 	}
 
 }

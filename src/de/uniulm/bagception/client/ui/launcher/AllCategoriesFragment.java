@@ -72,15 +72,19 @@ public class AllCategoriesFragment extends BasicListEntitiesFragment<Category> {
 	}
 
 	@Override
-	protected String getFragmentName() {
-		// TODO Auto-generated method stub
-		return "de.uniulm.bagception.client.ui.launcher.CreateNewCategoryFragment";
-	}
-
-	@Override
 	protected long getId(Category e) {
 		// TODO Auto-generated method stub
 		return e.getId();
+	}
+
+	@Override
+	protected String getEditFragmentName() {
+		return "de.uniulm.bagception.client.ui.launcher.EditCategoryFragment";
+	}
+
+	@Override
+	protected String getCreateNewFragmentName() {
+		return "de.uniulm.bagception.client.ui.launcher.CreateNewCategoryFragment";
 	}
 
 }

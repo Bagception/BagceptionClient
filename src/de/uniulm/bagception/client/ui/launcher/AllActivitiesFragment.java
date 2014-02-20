@@ -6,6 +6,8 @@ import android.app.Fragment;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -19,20 +21,20 @@ import de.uniulm.bagception.bundlemessageprotocol.entities.administration.Activi
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommandProcessor;
 
-public class AllActivitiesFragment extends BasicActivityListEntitiesFragment<Activity>{
+public class AllActivitiesFragment extends
+		BasicActivityListEntitiesFragment<Activity> {
 
 	public long activity_id = -1;
-	
-	public long getActivityId(){
+
+	public long getActivityId() {
 		return this.activity_id;
 	}
-	
+
 	public static Fragment newInstance(Context context) {
 		AllActivitiesFragment f = new AllActivitiesFragment();
 
 		return f;
 	}
-
 
 	@Override
 	protected ArrayAdapter<Activity> getEntityAdapter() {
@@ -50,27 +52,26 @@ public class AllActivitiesFragment extends BasicActivityListEntitiesFragment<Act
 				Activity activity = getItem(position);
 
 				if (activity != null) {
-					TextView itemView = (TextView) view.findViewById(android.R.id.text1);
+					TextView itemView = (TextView) view
+							.findViewById(android.R.id.text1);
 
 					if (itemView != null) {
 						itemView.setText(activity.getName());
-						
+
 					}
-					
+
 					activity_id = activity.getId();
 				}
-				
+
 				return view;
 			}
 		};
 	}
 
-
 	@Override
 	protected AdministrationCommand<Activity> getAdminCommandRequest() {
 		return ActivityCommand.list();
 	}
-
 
 	@Override
 	public void onAdminCommand(AdministrationCommand<?> a_cmd) {
@@ -79,7 +80,12 @@ public class AllActivitiesFragment extends BasicActivityListEntitiesFragment<Act
 			public void onActivityList(AdministrationCommand<Activity> a) {
 				// item list
 				Activity[] theActivitiesWeWantToDisplay = a.getPayloadObjects();
-				
+
+				// Get items
+				List<Item> i = theActivitiesWeWantToDisplay[0]
+						.getItemsForActivity();
+				Log.w("TEST", "Item: " + i);
+
 				listAdapter.clear();
 				listAdapter.addAll(theActivitiesWeWantToDisplay);
 			}
@@ -87,19 +93,10 @@ public class AllActivitiesFragment extends BasicActivityListEntitiesFragment<Act
 		a_cmd.accept(adminCommandProcessor);
 	}
 
-
 	@Override
 	protected AdministrationCommand<Activity> getToDeleteEntity(int pos) {
 		return ActivityCommand.remove(listAdapter.getItem(pos));
 	}
-
-
-	@Override
-	protected String getFragmentName() {
-		// TODO Auto-generated method stub
-		return "de.uniulm.bagception.client.ui.launcher.EditActivityFragment";
-	}
-
 
 	@Override
 	protected long itemSelected(Activity e) {
@@ -109,8 +106,27 @@ public class AllActivitiesFragment extends BasicActivityListEntitiesFragment<Act
 
 	@Override
 	protected void onItemClicked(Activity elem) {
-//		new BundleMessageHelper(getActivity()).sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,ActivityCommand.start(elem)));
-//		new BundleMessageHelper(getActivity()).sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND, ActivityCommand.stop(elem)));
+		// new
+		// BundleMessageHelper(getActivity()).sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,ActivityCommand.start(elem)));
+		// new
+		// BundleMessageHelper(getActivity()).sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
+		// ActivityCommand.stop(elem)));
+	}
+
+	@Override
+	protected String getEditFragmentName() {
+		return "de.uniulm.bagception.client.ui.launcher.EditActivityFragment";
+	}
+
+	@Override
+	protected String getCreateNewFragmentName() {
+		return "de.uniulm.bagception.client.ui.launcher.CreateNewActivityFragment";
+	}
+
+	@Override
+	protected String getFragmentName() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
