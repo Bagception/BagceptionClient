@@ -121,8 +121,7 @@ public class CreateNewActivityFragment extends Fragment implements
 				BundleMessageHelper helper = new BundleMessageHelper(
 						getActivity());
 
-				if (editName.length() == 0 || itemsForActivity == null
-						|| locationForActivity == null) {
+				if (editName.length() == 0 || itemsForActivity == null) {
 
 					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
 							getActivity());
