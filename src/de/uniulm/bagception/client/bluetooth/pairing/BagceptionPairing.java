@@ -16,25 +16,21 @@ public class BagceptionPairing{
 
 	private final BagceptionPairingCallbacks callbacks;
 	private final List<BluetoothDevice> foundBTDevices =  Collections.synchronizedList(new  ArrayList<BluetoothDevice>());
-	private final List<BluetoothDevice> foundBagceptionDevices = Collections.synchronizedList(new  ArrayList<BluetoothDevice>());
 	public final BluetoothAdapter bluetoothAdapter;
 	private final ArrayList<BluetoothDevice> discoveredDevices = new ArrayList<BluetoothDevice>();
 	private final BluetoothServiceActor actor;
-	private volatile boolean sdpFinished = false;
 	private volatile boolean ddFinished = false;
 	public BagceptionPairing(BagceptionPairingCallbacks callbacks) {
 		this.callbacks = callbacks;
 		bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		
-		discoveredDevices.clear();
-		foundBTDevices.clear();
-		foundBagceptionDevices.clear();
-		sdpFinished = false;
-		ddFinished = false;
+		startOver();
 		
 		discoveredDevices.addAll(bluetoothAdapter.getBondedDevices());
 		actor = new BluetoothServiceActor(btServicereactor);
 	}
+	
+	
 	
 	public void register(Context c){
 		actor.register(c);
@@ -44,13 +40,7 @@ public class BagceptionPairing{
 	}
 	
 	public void startScan(){
-		discoveredDevices.clear();
-		foundBTDevices.clear();
-		actor.clear();
-		foundBagceptionDevices.clear();
-		discoveredDevices.addAll(bluetoothAdapter.getBondedDevices());
-		sdpFinished = false;
-		ddFinished = false;
+		startOver();
 		bluetoothAdapter.startDiscovery();
 		Handler h = new Handler();
 		h.postDelayed(new Runnable() {
@@ -60,33 +50,27 @@ public class BagceptionPairing{
 				//device discovery finished
 				deviceDiscoveryFinished();
 			}
-		}, 15000);
+		}, 10000);
 	}
-//	public void cancel(){
-//		
-//	}
-	//callbacks.onScanFinished(foundBagceptionDevices);
-	private synchronized void sdpFinished(){
-		if (sdpFinished)return;
-		sdpFinished=true;
-		//SDP finished
-		if (DEBUG)
-			Log.d("bt", "sdp finished");
-		for (BluetoothDevice d: foundBTDevices){
-			if (DEBUG)
-				Log.d("bt", "device found: "+d.getName());
-
-//			if (BagceptionBluetoothUtil.isBagceptionServer(d)){
-//				if (DEBUG)
-//					Log.d("bt", "device is bacgeption: "+d.getName());
-
-				foundBagceptionDevices.add(d);
-//			}
-		}
-		callbacks.onScanFinished(foundBagceptionDevices);
+	public void cancel(){
+		bluetoothAdapter.cancelDiscovery();
+		startOver();
+		callbacks.onScanFinished(foundBTDevices);
 	}
+	
+	private void startOver(){
+		discoveredDevices.clear();
+		foundBTDevices.clear();
+		if (actor!=null)
+			actor.clear();
+		discoveredDevices.addAll(bluetoothAdapter.getBondedDevices());
+		ddFinished = false;
+	}
+	
+
 	private synchronized void deviceDiscoveryFinished(){
 		if (ddFinished)return;
+		
 		ddFinished=true;
 		if (DEBUG)
 			Log.d("bt", "device discovery finished");
@@ -102,18 +86,9 @@ public class BagceptionPairing{
 					Log.d("bt", "sdp started for: "+d.getName());
 
 			}
-			
-		}
-		
-		Handler h2 = new Handler();
-		h2.postDelayed(new Runnable() {
-			
-			@Override
-			public void run() {
-				sdpFinished();
 				
-			}
-		}, 15000);
+		}
+		callbacks.onScanFinished(foundBTDevices);
 		
 	}
 	
@@ -121,10 +96,6 @@ public class BagceptionPairing{
 		
 		@Override
 		public void onServicesDiscovered(BluetoothDevice device) {
-//			sdpCount--;
-//			if (sdpCount<=0){
-//				sdpFinished();
-//			}
 		}
 		
 		@Override
@@ -139,6 +110,7 @@ public class BagceptionPairing{
 					if (DEBUG)
 						Log.d("bt", "is not bound: "+device.getName());
 					foundBTDevices.add(device);	
+					callbacks.onDeviceFound(device);
 				}
 			}else{
 				if (DEBUG)
