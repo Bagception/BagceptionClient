@@ -84,7 +84,7 @@ public class CreateNewItemFragment extends Fragment implements
 			Bundle savedInstanceState) {
 		final ViewGroup root = (ViewGroup) inflater.inflate(
 				R.layout.fragment_create_new_item, null);
-		editName = (EditText) root.findViewById(R.id.eventNameEditText);
+		editName = (EditText) root.findViewById(R.id.editName);
 		send = (Button) root.findViewById(R.id.sendItem);
 		cancel = (Button) root.findViewById(R.id.cancelItem);
 		addCategory = (Button) root.findViewById(R.id.addCategory);
@@ -304,7 +304,7 @@ public class CreateNewItemFragment extends Fragment implements
 				BundleMessageHelper helper = new BundleMessageHelper(
 						getActivity());
 
-				if (editName.length() == 0) {
+				if ("".equals(editName.getText().toString().trim())) {
 					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
 							getActivity());
 					dialogAlert.setTitle("Bitte alle Felder ausfüllen");
