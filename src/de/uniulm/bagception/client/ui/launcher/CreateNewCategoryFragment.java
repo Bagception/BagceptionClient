@@ -49,12 +49,9 @@ public class CreateNewCategoryFragment extends Fragment {
 				
 				Toast.makeText(getActivity(), "RLY FU", Toast.LENGTH_LONG).show();
 
-				Category category = new Category(editName.getText().toString());
-				String name = editName.getText().toString();
-				BundleMessageHelper helper = new BundleMessageHelper(
-						getActivity());
 
-				if (editName.length() == 0) {
+
+				if (editName.getText().toString().trim().equals("")) {
 					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
 							getActivity());
 					dialogAlert.setTitle("Bitte alle Felder ausfüllen");
@@ -69,6 +66,9 @@ public class CreateNewCategoryFragment extends Fragment {
 							});
 					dialogAlert.create().show();
 				} else {
+					Category category = new Category(editName.getText().toString());
+					BundleMessageHelper helper = new BundleMessageHelper(
+							getActivity());
 					helper.sendMessageSendBundle(BundleMessage.getInstance()
 							.createBundle(
 									BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
