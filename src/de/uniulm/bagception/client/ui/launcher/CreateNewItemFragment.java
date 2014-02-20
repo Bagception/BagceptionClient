@@ -210,7 +210,7 @@ public class CreateNewItemFragment extends Fragment implements
 					boolean isChecked) {
 				// TODO Auto-generated method stub
 				if (isChecked) {
-					darkOn = "cold";
+					darkOn = "dark";
 				} else {
 					darkOn = null;
 				}
@@ -302,12 +302,31 @@ public class CreateNewItemFragment extends Fragment implements
 				Log.d("TEST", item.toString());
 				BundleMessageHelper helper = new BundleMessageHelper(
 						getActivity());
-				helper.sendMessageSendBundle(BundleMessage.getInstance()
-						.createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
-								ItemCommand.add(item)));
-				Log.d("TEST", item.toString());
-				Intent intent = new Intent(getActivity(), MainGUI.class);
-				startActivity(intent);
+
+				if (editName.length() == 0 || categoryForActivity == null) {
+					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
+							getActivity());
+					dialogAlert.setTitle("Bitte alle Felder ausfüllen");
+					dialogAlert.setNeutralButton("OK",
+							new DialogInterface.OnClickListener() {
+
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// TODO Auto-generated method stub
+									dialog.cancel();
+								}
+							});
+					dialogAlert.create().show();
+				} else {
+
+					helper.sendMessageSendBundle(BundleMessage.getInstance()
+							.createBundle(
+									BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
+									ItemCommand.add(item)));
+					Log.d("TEST", item.toString());
+					Intent intent = new Intent(getActivity(), MainGUI.class);
+					startActivity(intent);
+				}
 			}
 		});
 
