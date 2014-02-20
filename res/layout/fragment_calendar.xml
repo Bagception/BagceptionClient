@@ -1,5 +1,5 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-   xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
@@ -46,7 +46,7 @@
                 android:id="@+id/viewActivitiesBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Aktivitäten" />
+                android:text="Aktivität" />
 
             <TextView
                 android:id="@+id/selectedActivityTextView"
@@ -88,6 +88,19 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dip"
             android:layout_marginTop="10dip" >
+            
+            <Button
+                android:id="@+id/showTimePickerBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pick time" />
+
+            <TextView
+                android:id="@+id/timeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" />
+
         </TableRow>
 
         <TableRow
@@ -96,6 +109,19 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dip"
             android:layout_marginTop="10dip" >
+
+            <Button
+                android:id="@+id/showDatePickerBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pick date" />
+
+            <TextView
+                android:id="@+id/dateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" />
+
         </TableRow>
 
         <View

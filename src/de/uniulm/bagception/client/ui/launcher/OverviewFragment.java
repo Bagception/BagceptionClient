@@ -29,6 +29,7 @@ import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Activity;
 import de.uniulm.bagception.bundlemessageprotocol.entities.ContainerStateUpdate;
+import de.uniulm.bagception.bundlemessageprotocol.entities.ContextSuggestion;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ActivityCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
@@ -40,12 +41,14 @@ import de.uniulm.bagception.protocol.bundle.constants.StatusCode;
 
 public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
-	private boolean acceptList=false; 
-	
+	private boolean acceptList = false;
+
 	public static Context appContext;
 	private BundleMessageActor bmActor;
 	private volatile ContainerStateUpdate statusUpdate;
-
+	
+	volatile List<ContextSuggestion> contextSuggestions;
+	
 	private ItemsInFragment itemsInFragment;
 	private ItemsMissFragment itemsMissFragment;
 	private ItemsSuggFragment itemsSuggFragment;
@@ -61,7 +64,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 	private Item unknownItem;
 	Button changeActivity;
 	Button endActivity;
-	
+
 	private Activity ac = null;
 
 	static Fragment newInstance(Context context) {
@@ -118,7 +121,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 			@Override
 			public void onClick(View v) {
-				acceptList=true;
+				acceptList = true;
 				new BundleMessageHelper(getActivity())
 						.sendMessageSendBundle(BundleMessage.getInstance()
 								.createBundle(
@@ -126,9 +129,9 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 										ActivityCommand.list()));
 			}
 		});
-		
+
 		endActivity.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -136,25 +139,35 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 						getActivity());
 				categoryAlert.setTitle("Aktivität beenden?");
 
-				categoryAlert.setNegativeButton("Abbrechen", new OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
-						dialog.cancel();
-					}
-				});
-				
-				categoryAlert.setPositiveButton("Beenden", new OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						if(ac != null){
-							new BundleMessageHelper(getActivity()).sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,ActivityCommand.stop(ac)));
-						}	
-					}
-				});
-				
+				categoryAlert.setNegativeButton("Abbrechen",
+						new OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// TODO Auto-generated method stub
+								dialog.cancel();
+							}
+						});
+
+				categoryAlert.setPositiveButton("Beenden",
+						new OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								if (ac != null) {
+									new BundleMessageHelper(getActivity())
+											.sendMessageSendBundle(BundleMessage
+													.getInstance()
+													.createBundle(
+															BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
+															ActivityCommand
+																	.stop(ac)));
+								}
+							}
+						});
+
 				categoryAlert.create().show();
 			}
 		});
@@ -167,6 +180,10 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 	List<Item> needlessItems;
 	List<Item> missingItems;
 	List<Item> copiedMustItems;
+	
+
+	
+	
 
 	public void onBundleMessageRecv(Bundle b) {
 		BUNDLE_MESSAGE msg = BundleMessage.getInstance()
@@ -177,7 +194,8 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			itemsInFragment.setParentFragment(this);
 			itemsMissFragment.setParentFragment(this);
 			// itemsNeedlessFragment.setParentFragment(this);
-
+			
+			
 			statusUpdate = ContainerStateUpdate.fromJSON(BundleMessage
 					.getInstance().extractObject(b));
 			String currentActivity = statusUpdate.getActivity().getName();
@@ -200,6 +218,16 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			} else {
 				copiedMustItems = new ArrayList<Item>(itemsMust);
 			}
+			
+			
+			
+			//SUGGESTIONS
+			contextSuggestions = statusUpdate.getContextSuggestions();
+			
+			//TODO
+			itemsSuggFragment.updateView(statusUpdate);
+			
+			
 			itemsInTab.setText(String.format("Enthalten" + " (%d)",
 					itemsIn.size()));
 			// itemsNeedlessTab.setText(String.format("Überflüssig (%d)",needlessItems.size()));
@@ -240,8 +268,8 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 			dialog(unknownItem);
 			break;
-			
-		case ACTIVITY_PRIORITY_LIST:{
+
+		case ACTIVITY_PRIORITY_LIST: {
 			onActivityPriorityList(b);
 		}
 
@@ -274,7 +302,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				acceptList=true;
+				acceptList = true;
 				unknownItem = item;
 				new BundleMessageHelper(getActivity())
 						.sendMessageSendBundle(BundleMessage.getInstance()
@@ -366,8 +394,6 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		bmHelper.sendCommandBundle(Command.RESEND_STATUS.toBundle());
 
 	}
-	
-	
 
 	@Override
 	public void onStop() {
@@ -375,9 +401,9 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		bmActor.unregister(getActivity());
 
 	}
-	
-	private void onActivityPriorityList(Bundle b){
-		
+
+	private void onActivityPriorityList(Bundle b) {
+
 	}
 
 	// add tagid to item
@@ -386,10 +412,10 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		AdministrationCommandProcessor p = new AdministrationCommandProcessor() {
 			@Override
 			public void onItemList(AdministrationCommand<Item> i) {
-				if (!acceptList){
+				if (!acceptList) {
 					return;
 				}
-				acceptList=false;
+				acceptList = false;
 				final Item[] items = i.getPayloadObjects();
 				String[] itemStrings = new String[items.length];
 
@@ -440,16 +466,16 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 				itemAlert.create().show();
 			}
 		};
-		
-		
+
 		JSONObject o = BundleMessage.getInstance().extractObject(b);
-		AdministrationCommand<?> adminCmd = AdministrationCommand.fromJSONObject(o);
-		if (adminCmd!=null){
+		AdministrationCommand<?> adminCmd = AdministrationCommand
+				.fromJSONObject(o);
+		if (adminCmd != null) {
 			adminCmd.accept(p);
-		}else{
-			Log.d("FIXME", "admin command is null (int Overview fragment)"); //XXX
+		} else {
+			Log.d("FIXME", "admin command is null (int Overview fragment)"); // XXX
 		}
-		
+
 	}
 
 }
