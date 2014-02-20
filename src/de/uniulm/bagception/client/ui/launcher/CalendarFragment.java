@@ -1,6 +1,9 @@
 package de.uniulm.bagception.client.ui.launcher;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
@@ -15,10 +18,17 @@ import de.uniulm.bagception.bundlemessageprotocol.entities.administration.Admini
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommandProcessor;
 import de.uniulm.bagception.client.R;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
+import android.app.TimePickerDialog;
+import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,7 +37,11 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 public class CalendarFragment extends Fragment implements BundleMessageReactor{
 
@@ -35,8 +49,13 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 	private Button cancelBtn;
 	private Button viewCalendarBtn;
 	private Button viewActivitiesBtn;
+	private Button showTimePickerBtn;
+	private Button showDatePickerBtn;
 	private TextView selectedActivityTextView;
 	private TextView selectedCalendarTextView;
+	private EditText eventNameEditText;
+	private TextView timeTextView;
+	private TextView dateTextView;
 	private ArrayAdapter<String> calendarNamesAdapter;
 	private ArrayAdapter<String> calendarEventsAdapter;
 	private ArrayAdapter<String> activityNamesAdapter;
@@ -46,6 +65,8 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 	private ArrayList<Activity> activityList;
 	private AlertDialog.Builder calendarNamesAlertDialog;
 	private AlertDialog.Builder activitieNamesAlertDialog;
+	
+	private Calendar chosenCalendarTime;
 
 	private BundleMessageActor actor;
 	
@@ -73,19 +94,24 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 			Bundle savedInstanceState) {
 		final ViewGroup root = (ViewGroup) inflater.inflate(
 				R.layout.fragment_calendar, null);
+		chosenCalendarTime = Calendar.getInstance();
 		actor = new BundleMessageActor(this);
 		
 		calendarNames = new ArrayList<String>();
 		calendarEvents = new ArrayList<String>();
 		activityNames = new ArrayList<String>();
 		activityList = new ArrayList<Activity>();
-		
+		this.eventNameEditText = (EditText) root.findViewById(R.id.eventNameEditText);
 		this.selectedActivityTextView = (TextView) root.findViewById(R.id.selectedActivityTextView);
 		this.selectedCalendarTextView = (TextView) root.findViewById(R.id.selectedCalendarTextView);
+		this.timeTextView = (TextView) root.findViewById(R.id.timeTextView);
+		this.dateTextView = (TextView) root.findViewById(R.id.dateTextView);
 		sendBtn = (Button) root.findViewById(R.id.sendCalendarBtn);
 		cancelBtn = (Button) root.findViewById(R.id.cancelCalendarBtn);
 		viewCalendarBtn = (Button) root.findViewById(R.id.viewCalendarBtn);
 		viewActivitiesBtn = (Button) root.findViewById(R.id.viewActivitiesBtn);
+		showTimePickerBtn = (Button) root.findViewById(R.id.showTimePickerBtn);
+		this.showDatePickerBtn = (Button) root.findViewById(R.id.showDatePickerBtn);
 
 		viewCalendarBtn.setOnClickListener(new OnClickListener() {
 			@Override
@@ -139,11 +165,69 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 			}
 		});
 		
+		showTimePickerBtn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Calendar rightNow = Calendar.getInstance();
+				TimePickerDialog dialog = new TimePickerDialog(getActivity(), new OnTimeSetListener() {
+					@Override
+					public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+						timeTextView.setText(hourOfDay + ":" + minute + "Uhr");
+						chosenCalendarTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+						chosenCalendarTime.set(Calendar.MINUTE, minute);
+					}
+				}, rightNow.get(Calendar.HOUR_OF_DAY), rightNow.get(Calendar.MINUTE), true);
+				dialog.show();
+			}
+		});
+		
+		showDatePickerBtn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Calendar rightNow = Calendar.getInstance();
+				DatePickerDialog dialog = new DatePickerDialog(getActivity(),
+						new OnDateSetListener() {
+					
+							@Override
+							public void onDateSet(DatePicker view, int year, int monthOfYear,
+									int dayOfMonth) {
+								chosenCalendarTime.set(Calendar.YEAR, year);
+								chosenCalendarTime.set(Calendar.MONTH, monthOfYear);
+								dateTextView.setText(dayOfMonth + "/" + chosenCalendarTime.get(Calendar.MONTH) + "/" + year);
+							}
+						}
+						, rightNow.get(Calendar.YEAR), rightNow.get(Calendar.MONTH), rightNow.get(Calendar.DAY_OF_MONTH));
+				dialog.show();
+				}
+		
+		});
+		
 		sendBtn.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
+				log("YEAR:" + chosenCalendarTime.get(Calendar.YEAR));
+				log("MONTH:" + chosenCalendarTime.get(Calendar.MONTH));
+				log("DAY:" + chosenCalendarTime.get(Calendar.DAY_OF_MONTH));
+				log("HOUR:" + chosenCalendarTime.get(Calendar.HOUR_OF_DAY));
+				log("MIN:" + chosenCalendarTime.get(Calendar.MINUTE));
+				log("2HLATER: " + (chosenCalendarTime.get(Calendar.HOUR_OF_DAY)+2));
+				Calendar twoHoursLaterEvent = chosenCalendarTime;
+				int hours = chosenCalendarTime.get(Calendar.HOUR_OF_DAY);
+				hours += 2;
+				twoHoursLaterEvent.set(Calendar.HOUR_OF_DAY, hours);
+				CalendarEvent event = new CalendarEvent(eventNameEditText.getText().toString(),
+														selectedCalendarTextView.getText().toString(), 
+														selectedActivityTextView.getText().toString(),
+														"-1",
+														chosenCalendarTime.getTimeInMillis(),
+														twoHoursLaterEvent.getTimeInMillis());
 				
+				new BundleMessageHelper(getActivity())
+				.sendMessageSendBundle(BundleMessage.getInstance()
+						.createBundle(
+								BUNDLE_MESSAGE.CALENDAR_ADD_EVENT_REQUEST,
+								event));
 			}
 		});
 
@@ -157,7 +241,8 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 
 		return root;
 	}
-
+	
+	
 	@Override
 	public void onPause() {
 //		getFragmentManager().popBackStack();
@@ -207,34 +292,72 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 	}
 
 	@Override
-	public void onBundleMessageSend(Bundle b) {
-		
-	}
-
+	public void onBundleMessageSend(Bundle b) {	}
 	@Override
-	public void onResponseMessage(Bundle b) {
-		
-	}
-
+	public void onResponseMessage(Bundle b) {	}
 	@Override
-	public void onResponseAnswerMessage(Bundle b) {
-		
-	}
-
+	public void onResponseAnswerMessage(Bundle b) {	}
 	@Override
-	public void onStatusMessage(Bundle b) {
-		
-	}
-
+	public void onStatusMessage(Bundle b) {	}
 	@Override
-	public void onCommandMessage(Bundle b) {
-		
-	}
-
+	public void onCommandMessage(Bundle b) {	}
 	@Override
-	public void onError(Exception e) {
-		
-	}
+	public void onError(Exception e) {	}
+	
+//	
+//	
+//	public static class TimePickerFragment extends DialogFragment implements
+//			TimePickerDialog.OnTimeSetListener {
+//
+//		@Override
+//		public Dialog onCreateDialog(Bundle savedInstanceState) {
+//			// Use the current time as the default values for the picker
+//			final Calendar c = Calendar.getInstance();
+//			int hour = c.get(Calendar.HOUR_OF_DAY);
+//			int minute = c.get(Calendar.MINUTE);
+//
+//			// Create a new instance of TimePickerDialog and return it
+//			return new TimePickerDialog(getActivity(), this, hour, minute,
+//					DateFormat.is24HourFormat(getActivity()));
+//		}
+//
+//		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+//			log("hourOfDay: " + hourOfDay);
+//			log("minute: " + minute);
+//		}
+//		
+//		private void log(String s){
+//			Log.d("TimePickerFragment", s);
+//		}
+//	}
+//	
+//	public static class DatePickerFragment extends DialogFragment implements
+//			DatePickerDialog.OnDateSetListener {
+//		
+//		
+//		@Override
+//		public Dialog onCreateDialog(Bundle savedInstanceState) {
+//			// Use the current date as the default date in the picker
+//			final Calendar c = Calendar.getInstance();
+//			int year = c.get(Calendar.YEAR);
+//			int month = c.get(Calendar.MONTH);
+//			int day = c.get(Calendar.DAY_OF_MONTH);
+//
+//			// Create a new instance of DatePickerDialog and return it
+//			return new DatePickerDialog(getActivity(), this, year, month, day);
+//		}
+//
+//		public void onDateSet(DatePicker view, int year, int month, int day) {
+//			log("year: " + year);
+//			log("month: " + month);
+//			log("day: " + day);
+//		}
+//		
+//		private void log(String s){
+//			Log.d("DatePickerFragment", s);
+//		}
+//	}
+
 }
 
 
