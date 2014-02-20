@@ -66,16 +66,17 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 			"de.uniulm.bagception.client.ui.launcher.CreateNewActivityFragment",
 			"de.uniulm.bagception.client.ui.launcher.NewBagFragment" };
 
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		bmActor = new BundleMessageActor(this);
 		bmHelper = new BundleMessageHelper(this);
 		setContentView(R.layout.activity_main_gui);
-		currentPicturetaken = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+		currentPicturetaken = BitmapFactory.decodeResource(getResources(),
+				R.drawable.ic_launcher);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActionBar()
-				.getThemedContext(), R.layout.drawer_layout, R.id.drawerText, data);
+				.getThemedContext(), R.layout.drawer_layout, R.id.drawerText,
+				data);
 		drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 		drawRightLayout = findViewById(R.id.drawerRight);
 		final ListView navListLeft = (ListView) findViewById(R.id.drawer);
@@ -119,7 +120,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 		if (s != null) {
 			fragmentToLoad = s;
 		}
-		
+
 		FragmentTransaction tx = getFragmentManager().beginTransaction();
 
 		tx.replace(R.id.main, Fragment.instantiate(MainGUI.this,
@@ -147,12 +148,10 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 		return super.onOptionsItemSelected(item);
 	}
 
-
-
 	public void startMap(View view) {
 		Intent intent = new Intent(this, ShowMap.class);
 		startActivityForResult(intent, REQUEST_LOCATION);
-		
+
 	}
 
 	private final int REQUEST_IMAGE_CAPTURE = 1;
@@ -178,13 +177,12 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 			// send as string (this would work over bluetooth)
 			Toast.makeText(this, "picture taken", Toast.LENGTH_SHORT).show();
 			ImageView img = (ImageView) findViewById(R.id.itemIcon);
-			if (img != null){
+			if (img != null) {
 				img.setImageBitmap(imageBitmap);
 			}
 			currentPicturetaken = imageBitmap;
-		} 
-			else if (requestCode == REQUEST_LOCATION) {
-			if(resultCode != Activity.RESULT_OK){
+		} else if (requestCode == REQUEST_LOCATION) {
+			if (resultCode != Activity.RESULT_OK) {
 				Log.d("TEST", "WHY U NOT WORKING?");
 			}
 			Bundle extras = data.getExtras();
@@ -195,16 +193,16 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 			int rad = extras.getInt("RAD");
 			TextView latView = (TextView) findViewById(R.id.latitudeView);
 			TextView lngView = (TextView) findViewById(R.id.longitudeView);
-			latView.setText(""+lat);
-			lngView.setText(""+longt);
+			latView.setText("" + lat);
+			lngView.setText("" + longt);
 
 			Log.w("TEST", "Lat: " + lat);
 			Log.w("TEST", "Lon: " + longt);
-			
+
 			Location locCoords = new Location("", lat, longt, rad);
-			new BundleMessageHelper(this)
-			.sendMessageSendBundle(BundleMessage.getInstance()
-					.createBundle(BUNDLE_MESSAGE.RESOLVE_COORDS_REQUEST, locCoords));
+			new BundleMessageHelper(this).sendMessageSendBundle(BundleMessage
+					.getInstance().createBundle(
+							BUNDLE_MESSAGE.RESOLVE_COORDS_REQUEST, locCoords));
 		}
 	}
 
@@ -236,18 +234,18 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 
 					}
 				}
-				
+
 				@Override
 				public void onItemEdit(Item toEdit, Item editValues,
 						AdministrationCommand<Item> i) {
-					String e="";
-					if (!i.isSuccessful()){
-						e=" nicht";
+					String e = "";
+					if (!i.isSuccessful()) {
+						e = " nicht";
 					}
 					Toast.makeText(
 							MainGUI.this,
-							"item : " + toEdit.getName()
-									+ e + " erfolgreich geändert",
+							"item : " + toEdit.getName() + e
+									+ " erfolgreich geändert",
 							Toast.LENGTH_SHORT).show();
 
 				}

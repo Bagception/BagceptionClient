@@ -96,7 +96,6 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 					Log.d("TEST", listAdapter.getItem(arg2).toString());
 				}
 
-				String[] test = { "1", "2" };
 				Activity activity = (Activity)listAdapter.getItem(arg2);
 				String[] data = new String[activity.getItemsForActivity().size()];
 				

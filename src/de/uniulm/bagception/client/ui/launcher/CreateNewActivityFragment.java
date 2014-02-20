@@ -68,7 +68,8 @@ public class CreateNewActivityFragment extends Fragment implements
 
 		listView = (ListView) root.findViewById(R.id.itemView);
 		placeView = (TextView) root.findViewById(R.id.viewPlace);
-		listadapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1);
+		listadapter = new ArrayAdapter<String>(getActivity(),
+				android.R.layout.simple_list_item_1);
 		listView.setAdapter(listadapter);
 
 		bmActor = new BundleMessageActor(this);
@@ -113,18 +114,37 @@ public class CreateNewActivityFragment extends Fragment implements
 								+ itemsForActivity);
 				String name = editName.getText().toString();
 
-				Activity activity = new Activity(name, itemsForActivity, locationForActivity);
+				Activity activity = new Activity(name, itemsForActivity,
+						locationForActivity);
 				Log.w("TEST", "Die erstellte Activity: " + activity);
 
 				BundleMessageHelper helper = new BundleMessageHelper(
 						getActivity());
-				helper.sendMessageSendBundle(BundleMessage.getInstance()
-						.createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
-								ActivityCommand.add(activity)));
 
-				Intent intent = new Intent(getActivity(), MainGUI.class);
-				startActivity(intent);
+				if (editName.length() == 0 || itemsForActivity == null
+						|| locationForActivity == null) {
 
+					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
+							getActivity());
+					dialogAlert.setTitle("Bitte alle Felder ausfüllen");
+					dialogAlert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO Auto-generated method stub
+							dialog.cancel();
+						}
+					});
+					dialogAlert.create().show();
+
+				} else {
+					helper.sendMessageSendBundle(BundleMessage.getInstance()
+							.createBundle(
+									BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
+									ActivityCommand.add(activity)));
+
+					Intent intent = new Intent(getActivity(), MainGUI.class);
+					startActivity(intent);
+				}
 			}
 		});
 
@@ -132,7 +152,7 @@ public class CreateNewActivityFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-//				getFragmentManager().popBackStack();
+				// getFragmentManager().popBackStack();
 				editName.setText("");
 
 			}
@@ -157,7 +177,7 @@ public class CreateNewActivityFragment extends Fragment implements
 					final float[] locationLon = new float[locations.length];
 					final int[] locationRadius = new int[locations.length];
 					final String[] locationMAC = new String[locations.length];
-					
+
 					for (int iter = 0; iter < locationNames.length; iter++) {
 						locationIDs[iter] = locations[iter].getId();
 						locationNames[iter] = locations[iter].getName();
@@ -180,9 +200,14 @@ public class CreateNewActivityFragment extends Fragment implements
 									// TODO Auto-generated method stub
 									locationForActivity = new Location(
 											locationNames[which], null);
-									locationForActivity = new Location(locationIDs[which], 
-											locationNames[which], locationLat[which], locationLon[which], locationRadius[which], locationMAC[which]);
-									
+									locationForActivity = new Location(
+											locationIDs[which],
+											locationNames[which],
+											locationLat[which],
+											locationLon[which],
+											locationRadius[which],
+											locationMAC[which]);
+
 									placeView.setText(locationNames[which]);
 								}
 							});
@@ -229,15 +254,17 @@ public class CreateNewActivityFragment extends Fragment implements
 										selectedItems.add(items[checked]
 												.getName());
 										itemsSelected.add(items[checked]);
-									
+
 										Log.d("TEST", selectedItems.toString());
-//											Toast.makeText(getActivity(),
-//													selectedItems.toString(),
-//													Toast.LENGTH_LONG).show();
-											
+										// Toast.makeText(getActivity(),
+										// selectedItems.toString(),
+										// Toast.LENGTH_LONG).show();
+
 										// listadapter.add("klkl");
 									}
-									Toast.makeText(getActivity(), selectedItems.toString(), Toast.LENGTH_LONG).show();
+									Toast.makeText(getActivity(),
+											selectedItems.toString(),
+											Toast.LENGTH_LONG).show();
 									listadapter.addAll(selectedItems);
 									listView.invalidate();
 									itemsForActivity = itemsSelected;
@@ -317,7 +344,7 @@ public class CreateNewActivityFragment extends Fragment implements
 	@Override
 	public void onPause() {
 		bmActor.unregister(getActivity());
-//		getFragmentManager().popBackStack();
+		// getFragmentManager().popBackStack();
 		super.onPause();
 	}
 
