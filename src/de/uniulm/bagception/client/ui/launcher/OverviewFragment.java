@@ -151,7 +151,6 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 					public void onClick(DialogInterface dialog, int which) {
 						if(ac != null){
 							new BundleMessageHelper(getActivity()).sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,ActivityCommand.stop(ac)));
-							currentActivityView.setText("Aktuelle Aktivität: Keine");
 						}	
 					}
 				});
