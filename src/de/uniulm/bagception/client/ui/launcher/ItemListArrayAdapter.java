@@ -1,6 +1,7 @@
 package de.uniulm.bagception.client.ui.launcher;
 
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.List;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,25 +10,40 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import de.uniulm.bagception.bundlemessageprotocol.entities.ContextSuggestion.CONTEXT;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.client.R;
 import de.uniulm.bagception.client.items.AutoUpdateableItemView;
 
 public class ItemListArrayAdapter extends ArrayAdapter<Item> {
 
-	private HashSet<Integer> specialItem = new HashSet<Integer>();
+	
+	private HashMap<Item,Integer> colorCodes = new HashMap<Item,Integer>(); 
+	private HashMap<Item,List<CONTEXT>> context = new HashMap<Item, List<CONTEXT>>();
+	
+	public void clearColorCodeItems(){
+		colorCodes.clear();
+	}
+	public void putColorCodeItems(int c,Item... items){
+		for (Item i:items){
+			colorCodes.put(i, c);
+		}
+	}
+	
+	public void clearContextInfo(){
+		context.clear();
+	}
+	
+	public void putContextItem(List<CONTEXT> c,Item... items){
+		for (Item i:items){
+			context.put(i, c);
+		}
+	}
 	
 	public ItemListArrayAdapter(Context newBagFragment) {
 		super(newBagFragment, android.R.layout.simple_list_item_1);
 	}
 	
-	public void setSpecialItem(int num){
-		specialItem.add(num);
-	}
-	
-	public void clearSpecialItems(){
-		specialItem.clear();
-	}
 	
 	@Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -46,11 +62,26 @@ public class ItemListArrayAdapter extends ArrayAdapter<Item> {
             if (itemView != null) {
                 itemView.setText(item.getName());
             }
+            Integer col = colorCodes.get(item);
             
-            if (specialItem.contains(position)){
-            	view.setBackgroundColor(Color.CYAN);
+            if (col!=null){
+            	view.setBackgroundColor(col);
             }else{
             	view.setBackgroundColor(Color.WHITE);
+            }
+            //TODO render context image
+            List<CONTEXT> ctx = context.get(item);
+            if (ctx!=null){
+            	for(CONTEXT c:ctx){
+            		switch (c) {
+					case BRIGHT:
+						//TODO show bright image
+						break;
+
+					default:
+						break;
+					}
+            	}
             }
          }
 

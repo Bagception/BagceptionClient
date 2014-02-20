@@ -1,7 +1,8 @@
 package de.uniulm.bagception.client.ui.launcher;
 
+import java.util.List;
+
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +10,11 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
+import de.uniulm.bagception.bundlemessageprotocol.entities.ContainerStateUpdate;
+import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.client.R;
 
-public class ItemsSuggFragment extends Fragment implements BundleMessageReactor{
+public class ItemsSuggFragment extends OverviewTabFragment implements BundleMessageReactor{
 
 	private OverviewFragment fragment;
 	private ListView itemsRedundantView;
@@ -29,9 +32,10 @@ public class ItemsSuggFragment extends Fragment implements BundleMessageReactor{
 				R.layout.fragment_items_sugg, null);
 
 		itemsRedundantView = (ListView) root.findViewById(R.id.itemsSugg);
-		arrayAdapter = new ItemListArrayAdapter(getActivity());
+		arrayAdapter = new ItemListArrayAdapter(getActivity());//TODO kein listadapter
+		//arrayAdapter.addAll(suggestionToReplace);
 		itemsRedundantView.setAdapter(arrayAdapter);
-
+		
 		return root;
 	}
 
@@ -90,5 +94,13 @@ public class ItemsSuggFragment extends Fragment implements BundleMessageReactor{
 		
 	}
 
+	@Override
+	protected List<Item> getCorrespondingItemList(ContainerStateUpdate update) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	
 	
 }
