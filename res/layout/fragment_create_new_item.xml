@@ -24,7 +24,7 @@
                 android:textSize="20dp" />
 
             <EditText
-                android:id="@+id/eventNameEditText"
+                android:id="@+id/editName"
                 android:layout_width="wrap_content"
                 android:ems="10"
                 android:gravity="left"

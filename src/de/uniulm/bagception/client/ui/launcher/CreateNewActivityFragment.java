@@ -109,33 +109,32 @@ public class CreateNewActivityFragment extends Fragment implements
 			@Override
 			public void onClick(View arg0) {
 
-				Log.w("TEST",
-						"ItemsForActivity wird jetzt in Activity gepackt: "
-								+ itemsForActivity);
-				String name = editName.getText().toString();
-
-				Activity activity = new Activity(name, itemsForActivity,
-						locationForActivity);
-				Log.w("TEST", "Die erstellte Activity: " + activity);
-
-				BundleMessageHelper helper = new BundleMessageHelper(
-						getActivity());
-
-				if (editName.length() == 0 || itemsForActivity == null) {
+				Log.w("TEST", "EditName: " + editName.getText());
+				if ("".equals(editName.getText().toString().trim())) {
 
 					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
 							getActivity());
 					dialogAlert.setTitle("Bitte alle Felder ausfüllen");
-					dialogAlert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+					dialogAlert.setNeutralButton("OK",
+							new DialogInterface.OnClickListener() {
 
-						public void onClick(DialogInterface dialog, int which) {
-							// TODO Auto-generated method stub
-							dialog.cancel();
-						}
-					});
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// TODO Auto-generated method stub
+									dialog.cancel();
+								}
+							});
 					dialogAlert.create().show();
 
 				} else {
+					String name = editName.getText().toString();
+
+					Activity activity = new Activity(name, itemsForActivity,
+							locationForActivity);
+					Log.w("TEST", "Die erstellte Activity: " + activity);
+
+					BundleMessageHelper helper = new BundleMessageHelper(
+							getActivity());
 					helper.sendMessageSendBundle(BundleMessage.getInstance()
 							.createBundle(
 									BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
