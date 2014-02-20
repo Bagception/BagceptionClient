@@ -33,7 +33,6 @@ import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ActivityCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommandProcessor;
-import de.uniulm.bagception.bundlemessageprotocol.entities.administration.CategoryCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ItemCommand;
 import de.uniulm.bagception.client.R;
 import de.uniulm.bagception.protocol.bundle.constants.Command;
@@ -41,6 +40,8 @@ import de.uniulm.bagception.protocol.bundle.constants.StatusCode;
 
 public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
+	private boolean acceptList=false; 
+	
 	public static Context appContext;
 	private BundleMessageActor bmActor;
 	private volatile ContainerStateUpdate statusUpdate;
@@ -117,7 +118,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				acceptList=true;
 				new BundleMessageHelper(getActivity())
 						.sendMessageSendBundle(BundleMessage.getInstance()
 								.createBundle(
@@ -150,7 +151,6 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 					public void onClick(DialogInterface dialog, int which) {
 						if(ac != null){
 							new BundleMessageHelper(getActivity()).sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,ActivityCommand.stop(ac)));
-							currentActivityView.setText("Aktuelle Aktivität: Keine");
 						}	
 					}
 				});
@@ -222,11 +222,14 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			sb.append(statusUpdate.getActivity().getName());
 			sb.append("\n");
 			sb.append("Items for activity:");
+			for(Item i:statusUpdate.getActivity().getItemsForActivity()){
+				sb.append(i.getName() + ", ");
+			}
 			sb.append("\n");
 
 			sb.append("\n");
-			// Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG)
-			// .show();
+			 Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG)
+			 .show();
 			break;
 
 		case ITEM_NOT_FOUND:
@@ -271,6 +274,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
+				acceptList=true;
 				unknownItem = item;
 				new BundleMessageHelper(getActivity())
 						.sendMessageSendBundle(BundleMessage.getInstance()
@@ -382,6 +386,10 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		AdministrationCommandProcessor p = new AdministrationCommandProcessor() {
 			@Override
 			public void onItemList(AdministrationCommand<Item> i) {
+				if (!acceptList){
+					return;
+				}
+				acceptList=false;
 				final Item[] items = i.getPayloadObjects();
 				String[] itemStrings = new String[items.length];
 
@@ -432,9 +440,16 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 				itemAlert.create().show();
 			}
 		};
+		
+		
 		JSONObject o = BundleMessage.getInstance().extractObject(b);
-
-		AdministrationCommand.fromJSONObject(o).accept(p);
+		AdministrationCommand<?> adminCmd = AdministrationCommand.fromJSONObject(o);
+		if (adminCmd!=null){
+			adminCmd.accept(p);
+		}else{
+			Log.d("FIXME", "admin command is null (int Overview fragment)"); //XXX
+		}
+		
 	}
 
 }

@@ -78,8 +78,8 @@ public class CreateNewPlaceFragment extends Fragment implements
 			Bundle savedInstanceState) {
 		final ViewGroup root = (ViewGroup) inflater.inflate(
 				R.layout.fragment_create_new_place, null);
-		editName = (EditText) root.findViewById(R.id.eventNameEditText);
-		editAddress = (EditText) root.findViewById(R.id.editName);
+		editName = (EditText) root.findViewById(R.id.editName);
+		editAddress = (EditText) root.findViewById(R.id.editAddress);
 		btView = (TextView) root.findViewById(R.id.btView);
 		latView = (TextView) root.findViewById(R.id.latitudeView);
 		lngView = (TextView) root.findViewById(R.id.longitudeView);
@@ -178,14 +178,10 @@ public class CreateNewPlaceFragment extends Fragment implements
 				float lat = Float.parseFloat(latView.getText().toString());
 				float lon = Float.parseFloat(lngView.getText().toString());
 
-				Location location = new Location(-1, editName.getText()
-						.toString(), lat, lon, resultLocation.getRadius(),
-						resultLocation.getMac());
-				BundleMessageHelper helper = new BundleMessageHelper(
-						getActivity());
 
-				if (editName.length() == 0 || latView.getText() == null
-						|| lngView.getText() == null
+
+				if ("".equals(editName.getText().toString().trim()) || latView.length() == 0
+						|| lngView.length() == 0
 						|| resultLocation.getMac() == null) {
 					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
 							getActivity());
@@ -201,6 +197,11 @@ public class CreateNewPlaceFragment extends Fragment implements
 							});
 					dialogAlert.create().show();
 				} else {
+					Location location = new Location(-1, editName.getText()
+							.toString(), lat, lon, resultLocation.getRadius(),
+							resultLocation.getMac());
+					BundleMessageHelper helper = new BundleMessageHelper(
+							getActivity());
 					helper.sendMessageSendBundle(BundleMessage.getInstance()
 							.createBundle(
 									BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
@@ -264,9 +265,10 @@ public class CreateNewPlaceFragment extends Fragment implements
 			break;
 		}
 		case RESOLVE_COORDS_REPLY: {
+			Log.d("TEST", "received");
 			resultLocation = Location.fromJSON(BundleMessage.getInstance()
 					.extractObject(b));
-			Log.d("TEST", resultLocation.getName());
+			Log.d("TEST", "result" + resultLocation.getName());
 			editAddress.setText(resultLocation.getName());
 			break;
 

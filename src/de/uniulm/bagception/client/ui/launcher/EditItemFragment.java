@@ -44,6 +44,7 @@ import de.uniulm.bagception.client.caching.ImageCachingSystem;
 
 public class EditItemFragment extends Fragment implements BundleMessageReactor {
 
+	private boolean acceptList=false;
 	Category categoryForActivity;
 	EditText editName;
 	Button send;
@@ -123,7 +124,7 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 
 			@Override
 			public void onClick(View v) {
-
+				acceptList=true;
 				new BundleMessageHelper(getActivity())
 						.sendMessageSendBundle(BundleMessage.getInstance()
 								.createBundle(
@@ -392,6 +393,7 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 				@Override
 				public void onCategoryList(
 						de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand<de.uniulm.bagception.bundlemessageprotocol.entities.Category> i) {
+					acceptList=false;
 					final Category[] categories = i.getPayloadObjects();
 					final String[] categoryStrings = new String[categories.length];
 					for (int iter = 0; iter < categoryStrings.length; iter++) {
@@ -415,10 +417,13 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 								}
 							});
 					categoryAlert.create().show();
-
+					
 				}
 
 			};
+			if (!acceptList){
+				return;
+			}
 			AdministrationCommand.fromJSONObject(
 					BundleMessage.getInstance().extractObject(b)).accept(p);
 

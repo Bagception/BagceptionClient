@@ -38,7 +38,7 @@ public class CreateNewCategoryFragment extends Fragment {
 			Bundle savedInstanceState) {
 		final ViewGroup root = (ViewGroup) inflater.inflate(
 				R.layout.fragment_create_new_category, null);
-		editName = (EditText) root.findViewById(R.id.editName);
+		editName = (EditText) root.findViewById(R.id.editCategory);
 		send = (Button) root.findViewById(R.id.sendCategory);
 		cancel = (Button) root.findViewById(R.id.cancelCategory);
 
@@ -49,12 +49,7 @@ public class CreateNewCategoryFragment extends Fragment {
 				
 				Toast.makeText(getActivity(), "RLY FU", Toast.LENGTH_LONG).show();
 
-				Category category = new Category(editName.getText().toString());
-				String name = editName.getText().toString();
-				BundleMessageHelper helper = new BundleMessageHelper(
-						getActivity());
-
-				if (editName.length() == 0) {
+				if ("".equals(editName.getText().toString().trim())) {
 					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
 							getActivity());
 					dialogAlert.setTitle("Bitte alle Felder ausfüllen");
@@ -69,6 +64,9 @@ public class CreateNewCategoryFragment extends Fragment {
 							});
 					dialogAlert.create().show();
 				} else {
+					Category category = new Category(editName.getText().toString());
+					BundleMessageHelper helper = new BundleMessageHelper(
+							getActivity());
 					helper.sendMessageSendBundle(BundleMessage.getInstance()
 							.createBundle(
 									BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
