@@ -3,24 +3,14 @@ package de.uniulm.bagception.client.ui.launcher;
 import java.util.List;
 
 import android.app.Activity;
-<<<<<<< HEAD
-import android.app.Fragment;
-import android.database.DataSetObserver;
-=======
->>>>>>> 0cf3dbd30d69cba8ed9b025b6d4698651c684ff5
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ExpandableListAdapter;
-import android.widget.ExpandableListView;
 import android.widget.ListView;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
-<<<<<<< HEAD
-=======
 import de.uniulm.bagception.bundlemessageprotocol.entities.ContainerStateUpdate;
->>>>>>> 0cf3dbd30d69cba8ed9b025b6d4698651c684ff5
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.client.R;
 
