@@ -147,7 +147,6 @@ public class NewBagFragment extends ListFragment {
 
 	@Override
 	public void onPause() {
-		getFragmentManager().popBackStack();
 		super.onPause();
 	}
 
