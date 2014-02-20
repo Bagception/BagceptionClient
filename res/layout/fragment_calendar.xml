@@ -131,7 +131,7 @@
             android:showDividers="middle" >
 
             <Button
-                android:id="@+id/cancelPlace"
+                android:id="@+id/cancelCalendarBtn"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -141,7 +141,7 @@
                 android:text="@string/cancel" />
 
             <Button
-                android:id="@+id/send"
+                android:id="@+id/sendCalendarBtn"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
