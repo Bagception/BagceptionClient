@@ -8,6 +8,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -71,7 +74,7 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 		super.onCreate(savedInstanceState);
 		actor = new BundleMessageActor(this);
 		helper = new BundleMessageHelper(getActivity());
-
+		setHasOptionsMenu(true);
 	}
 
 	@Override
@@ -113,7 +116,6 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								// TODO Auto-generated method stub
 
 							}
 						});
@@ -124,7 +126,6 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								// TODO Auto-generated method stub
 
 							}
 						});
@@ -170,7 +171,6 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 
 		return root;
 	}
-
 	
 	public void dialog(final int pos) {
 		AlertDialog.Builder dialogAlert = new AlertDialog.Builder(getActivity());
@@ -179,7 +179,6 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
 				dialog.cancel();
 
 			}
@@ -197,6 +196,27 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 		dialogAlert.create().show();
 	}
 
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.actionbar_button, menu);
+
+		MenuItem item = menu.findItem(R.id.menu_item_add);
+		Log.w("TEST", "TEST");
+		item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				Intent intent = new Intent(getActivity(), MainGUI.class);
+				intent.putExtra("FRAGMENT", getCreateNewFragmentName());
+
+				startActivity(intent);
+				return false;
+			}
+		});
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+	
 	@Override
 	public void onResume() {
 		super.onResume();
