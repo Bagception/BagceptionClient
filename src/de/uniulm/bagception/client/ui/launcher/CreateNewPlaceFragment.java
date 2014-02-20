@@ -178,14 +178,10 @@ public class CreateNewPlaceFragment extends Fragment implements
 				float lat = Float.parseFloat(latView.getText().toString());
 				float lon = Float.parseFloat(lngView.getText().toString());
 
-				Location location = new Location(-1, editName.getText()
-						.toString(), lat, lon, resultLocation.getRadius(),
-						resultLocation.getMac());
-				BundleMessageHelper helper = new BundleMessageHelper(
-						getActivity());
 
-				if (editName.length() == 0 || latView.getText() == null
-						|| lngView.getText() == null
+
+				if (editName.length() == 0 || latView.length() == 0
+						|| lngView.length() == 0
 						|| resultLocation.getMac() == null) {
 					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
 							getActivity());
@@ -201,6 +197,11 @@ public class CreateNewPlaceFragment extends Fragment implements
 							});
 					dialogAlert.create().show();
 				} else {
+					Location location = new Location(-1, editName.getText()
+							.toString(), lat, lon, resultLocation.getRadius(),
+							resultLocation.getMac());
+					BundleMessageHelper helper = new BundleMessageHelper(
+							getActivity());
 					helper.sendMessageSendBundle(BundleMessage.getInstance()
 							.createBundle(
 									BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
@@ -266,7 +267,7 @@ public class CreateNewPlaceFragment extends Fragment implements
 		case RESOLVE_COORDS_REPLY: {
 			resultLocation = Location.fromJSON(BundleMessage.getInstance()
 					.extractObject(b));
-			Log.d("TEST", resultLocation.getName());
+			Log.d("TEST", "result" + resultLocation.getName());
 			editAddress.setText(resultLocation.getName());
 			break;
 
