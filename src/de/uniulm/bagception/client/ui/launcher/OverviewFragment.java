@@ -250,11 +250,14 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			sb.append(statusUpdate.getActivity().getName());
 			sb.append("\n");
 			sb.append("Items for activity:");
+			for(Item i:statusUpdate.getActivity().getItemsForActivity()){
+				sb.append(i.getName() + ", ");
+			}
 			sb.append("\n");
 
 			sb.append("\n");
-			// Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG)
-			// .show();
+			 Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG)
+			 .show();
 			break;
 
 		case ITEM_NOT_FOUND:
