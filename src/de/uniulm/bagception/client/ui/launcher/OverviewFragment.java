@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -438,9 +439,15 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			}
 		};
 		
+		
 		JSONObject o = BundleMessage.getInstance().extractObject(b);
-
-		AdministrationCommand.fromJSONObject(o).accept(p);
+		AdministrationCommand<?> adminCmd = AdministrationCommand.fromJSONObject(o);
+		if (adminCmd!=null){
+			adminCmd.accept(p);
+		}else{
+			Log.d("FIXME", "admin command is null (int Overview fragment)"); //XXX
+		}
+		
 	}
 
 }
