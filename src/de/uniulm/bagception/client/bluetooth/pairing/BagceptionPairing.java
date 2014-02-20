@@ -54,8 +54,8 @@ public class BagceptionPairing{
 	}
 	public void cancel(){
 		bluetoothAdapter.cancelDiscovery();
-		startOver();
 		callbacks.onScanFinished(foundBTDevices);
+		startOver();
 	}
 	
 	private void startOver(){
