@@ -35,7 +35,7 @@ public class AllLocationsFragment extends BasicListEntitiesFragment<Location> {
 							android.R.layout.simple_list_item_1, null);
 				}
 				Location loc = getItem(position);
-				
+
 				if (loc != null) {
 					TextView itemView = (TextView) view
 							.findViewById(android.R.id.text1);
@@ -61,8 +61,9 @@ public class AllLocationsFragment extends BasicListEntitiesFragment<Location> {
 			public void onLocationList(AdministrationCommand<Location> l) {
 				// item list
 				Location[] theLocationsWeWantToDisplay = l.getPayloadObjects();
-				for(int loc = 0; loc < theLocationsWeWantToDisplay.length; loc++){
-					Log.w("TEST", "Location: " + theLocationsWeWantToDisplay[loc]);
+				for (int loc = 0; loc < theLocationsWeWantToDisplay.length; loc++) {
+					Log.w("TEST", "Location: "
+							+ theLocationsWeWantToDisplay[loc]);
 				}
 				listAdapter.clear();
 				listAdapter.addAll(theLocationsWeWantToDisplay);
@@ -77,15 +78,19 @@ public class AllLocationsFragment extends BasicListEntitiesFragment<Location> {
 	}
 
 	@Override
-	protected String getFragmentName() {
+	protected long getId(Location e) {
 		// TODO Auto-generated method stub
+		return e.getId();
+	}
+
+	@Override
+	protected String getEditFragmentName() {
 		return "de.uniulm.bagception.client.ui.launcher.EditLocationFragment";
 	}
 
 	@Override
-	protected long getId(Location e) {
-		// TODO Auto-generated method stub
-		return e.getId();
+	protected String getCreateNewFragmentName() {
+		return "de.uniulm.bagception.client.ui.launcher.CreateNewPlaceFragment";
 	}
 
 }
