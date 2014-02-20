@@ -303,7 +303,7 @@ public class CreateNewItemFragment extends Fragment implements
 				BundleMessageHelper helper = new BundleMessageHelper(
 						getActivity());
 
-				if (editName.length() == 0 || categoryForActivity == null) {
+				if (editName.length() == 0) {
 					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
 							getActivity());
 					dialogAlert.setTitle("Bitte alle Felder ausfüllen");
