@@ -84,8 +84,8 @@ public class CreateNewPlaceFragment extends Fragment implements
 		latView = (TextView) root.findViewById(R.id.latitudeView);
 		lngView = (TextView) root.findViewById(R.id.longitudeView);
 		wlanView = (TextView) root.findViewById(R.id.wlanView);
-		send = (Button) root.findViewById(R.id.send);
-		cancel = (Button) root.findViewById(R.id.cancelPlace);
+		send = (Button) root.findViewById(R.id.sendPlaceBtn);
+		cancel = (Button) root.findViewById(R.id.cancelPlaceBtn);
 		bt = (Button) root.findViewById(R.id.btButton);
 		wlan = (Button) root.findViewById(R.id.wlanButton);
 		resolveAddress = (Button) root.findViewById(R.id.resolveAddress);
