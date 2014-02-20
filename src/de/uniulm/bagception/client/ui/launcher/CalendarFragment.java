@@ -35,6 +35,8 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 	private Button cancelBtn;
 	private Button viewCalendarBtn;
 	private Button viewActivitiesBtn;
+	private TextView selectedActivityTextView;
+	private TextView selectedCalendarTextView;
 	private ArrayAdapter<String> calendarNamesAdapter;
 	private ArrayAdapter<String> calendarEventsAdapter;
 	private ArrayAdapter<String> activityNamesAdapter;
@@ -48,9 +50,8 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 	private BundleMessageActor actor;
 	
 	public static Fragment newInstance(Context context) {
-		CreateNewItemFragment f = new CreateNewItemFragment();
-
-		return f;
+		CalendarFragment c = new CalendarFragment();
+		return c;
 	}
 	
 	@Override
@@ -71,7 +72,7 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		final ViewGroup root = (ViewGroup) inflater.inflate(
-				R.layout.fragment_create_new_category, null);
+				R.layout.fragment_calendar, null);
 		actor = new BundleMessageActor(this);
 		
 		calendarNames = new ArrayList<String>();
@@ -79,10 +80,12 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 		activityNames = new ArrayList<String>();
 		activityList = new ArrayList<Activity>();
 		
+		this.selectedActivityTextView = (TextView) root.findViewById(R.id.selectedActivityTextView);
+		this.selectedCalendarTextView = (TextView) root.findViewById(R.id.selectedCalendarTextView);
 		sendBtn = (Button) root.findViewById(R.id.sendCalendarBtn);
 		cancelBtn = (Button) root.findViewById(R.id.cancelCalendarBtn);
-		viewCalendarBtn = (Button) root.findViewById(R.id.viewAllCalendarsBtn);
-		viewActivitiesBtn = (Button) root.findViewById(R.id.viewAllActivitiesBtn);
+		viewCalendarBtn = (Button) root.findViewById(R.id.viewCalendarBtn);
+		viewActivitiesBtn = (Button) root.findViewById(R.id.viewActivitiesBtn);
 
 		viewCalendarBtn.setOnClickListener(new OnClickListener() {
 			@Override
@@ -104,7 +107,7 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 
 							@Override
 							public void onClick(DialogInterface dialog,	int which) {
-								log("clicked calendar: " + calendarNames.get(which));
+								selectedCalendarTextView.setText(calendarNames.get(which));
 							}
 						});
 				calendarNamesAlertDialog.create().show();
@@ -120,20 +123,19 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 				activitieNamesAlertDialog.setTitle("Aktivitäten");
 				activityNamesAdapter = new ArrayAdapter<String>(getActivity(),
 						android.R.layout.simple_selectable_list_item, activityNames);
-				//TODO: erstelle bundlemessage type für get all activities
 				new BundleMessageHelper(getActivity())
 				.sendMessageSendBundle(BundleMessage.getInstance()
 						.createBundle(
 								BUNDLE_MESSAGE.ADMINISTRATION_COMMAND, ActivityCommand.list()));
-				calendarNamesAlertDialog.setAdapter(calendarNamesAdapter,
+				activitieNamesAlertDialog.setAdapter(activityNamesAdapter,
 						new DialogInterface.OnClickListener() {
 
 							@Override
 							public void onClick(DialogInterface dialog,	int which) {
-								log("clicked calendar: " + calendarNames.get(which));
+								selectedActivityTextView.setText(activityNames.get(which));
 							}
 						});
-				calendarNamesAlertDialog.create().show();
+				activitieNamesAlertDialog.create().show();
 			}
 		});
 		
@@ -179,6 +181,7 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 			break;
 		}
 		case ADMINISTRATION_COMMAND: {
+			log("admin command received...");
 			AdministrationCommandProcessor p = new AdministrationCommandProcessor(){
 				public void onActivityList(de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand<de.uniulm.bagception.bundlemessageprotocol.entities.Activity> i) {
 					if (i.isSuccessful()){
@@ -186,6 +189,9 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 						for(int j=0; j<temp.length; j++){
 							activityNames.add(temp[j].getName());
 							activityList.add(temp[j]);
+							log(j + " " + temp[j]);
+							activityNamesAdapter.notifyDataSetChanged();
+							break;
 						}
 					}else{
 						log("error");

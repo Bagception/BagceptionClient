@@ -1,5 +1,5 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+   xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
@@ -16,19 +16,18 @@
             android:layout_marginTop="10dip" >
 
             <TextView
-                android:id="@+id/CalendarName"
+                android:id="@+id/eventNameTextView"
                 android:layout_width="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="3"
-                android:text="Name"
+                android:text="@string/itemName"
                 android:textColor="@color/text"
                 android:textSize="20dp" />
 
             <EditText
-                android:id="@+id/editCategory"
+                android:id="@+id/eventNameEditText"
                 android:layout_width="wrap_content"
                 android:ems="10"
-                android:gravity="left"
                 android:inputType="text"
                 android:textColor="@color/text" >
 
@@ -36,11 +35,95 @@
             </EditText>
         </TableRow>
 
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:layout_marginTop="10dip" >
+
+            <Button
+                android:id="@+id/viewActivitiesBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Aktivitäten" />
+
+            <TextView
+                android:id="@+id/selectedActivityTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" />
+
+        </TableRow>
+        
+        <TableRow
+            android:id="@+id/tableRow4"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:layout_marginTop="10dip" >
+
+            <Button
+                android:id="@+id/viewCalendarBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kalender" />
+
+            <TextView
+                android:id="@+id/selectedCalendarTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" />
+
+        </TableRow>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:layout_marginTop="10dip" >
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:layout_marginTop="10dip" >
+        </TableRow>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <TableRow
+            android:id="@+id/tableRow10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dip"
+            android:layout_marginTop="10dip" >
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow28"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:layout_marginTop="10dip" >
+        </TableRow>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginTop="350dp"
+            android:layout_marginTop="180dp"
             android:background="@color/background"
             android:divider="?android:attr/listDivider"
             android:dividerPadding="12dp"
@@ -48,7 +131,7 @@
             android:showDividers="middle" >
 
             <Button
-                android:id="@+id/cancelCalendarBtn"
+                android:id="@+id/cancelPlace"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -58,16 +141,16 @@
                 android:text="@string/cancel" />
 
             <Button
-                android:id="@+id/sendCalendarBtn"
+                android:id="@+id/send"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@android:drawable/list_selector_background"
-                android:onClick="sendNewCategory"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
                 android:text="@string/save" />
         </LinearLayout>
     </TableLayout>
+
 
 </ScrollView>

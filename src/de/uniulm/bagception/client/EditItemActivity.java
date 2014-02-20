@@ -18,7 +18,7 @@ public class EditItemActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_item);
 
-		editName = (EditText) findViewById(R.id.editName);
+		editName = (EditText) findViewById(R.id.eventNameEditText);
 		send = (Button) findViewById(R.id.save);
 
 		send.setOnClickListener(new OnClickListener() {

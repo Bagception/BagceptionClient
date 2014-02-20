@@ -39,7 +39,7 @@ public class ItemListArrayAdapter extends ArrayAdapter<Item> {
 
         Item item = getItem(position);
         if (item!= null) {
-            TextView itemView = (TextView) view.findViewById(R.id.itemName);
+            TextView itemView = (TextView) view.findViewById(R.id.eventNameTextView);
             AutoUpdateableItemView autoItemView = (AutoUpdateableItemView) view.findViewById(R.id.itemIcon);
             autoItemView.setItem(item);
             

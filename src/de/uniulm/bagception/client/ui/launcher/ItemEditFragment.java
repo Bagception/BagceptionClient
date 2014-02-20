@@ -51,7 +51,7 @@ public class ItemEditFragment extends Fragment {
 		
 		View rootView = inflater.inflate(R.layout.item_edit, container, false);
 		
-		editName = (EditText) rootView.findViewById(R.id.editName);
+		editName = (EditText) rootView.findViewById(R.id.eventNameEditText);
 		editName.setText("TEST");
 		
 		textTagId = (TextView) rootView.findViewById(R.id.textTagId);

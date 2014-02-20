@@ -87,7 +87,7 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 			Bundle savedInstanceState) {
 		final ViewGroup root = (ViewGroup) inflater.inflate(
 				R.layout.fragment_create_new_item, null);
-		editName = (EditText) root.findViewById(R.id.editName);
+		editName = (EditText) root.findViewById(R.id.eventNameEditText);
 		send = (Button) root.findViewById(R.id.sendItem);
 		cancel = (Button) root.findViewById(R.id.cancelItem);
 		addCategory = (Button) root.findViewById(R.id.addCategory);

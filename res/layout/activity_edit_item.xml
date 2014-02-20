@@ -43,7 +43,7 @@
             android:layout_marginTop="10dip" >
 
             <TextView
-                android:id="@+id/itemName"
+                android:id="@+id/eventNameTextView"
                 android:layout_gravity="center"
                 android:layout_marginLeft="15dp"
                 android:text="@string/itemName"
@@ -51,7 +51,7 @@
                 android:textColor="@color/text" />
 
             <EditText
-                android:id="@+id/editName"
+                android:id="@+id/eventNameEditText"
                 android:layout_width="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginRight="15dp"

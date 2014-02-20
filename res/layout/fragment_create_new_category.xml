@@ -16,26 +16,25 @@
             android:layout_marginTop="10dip" >
 
             <TextView
-                android:id="@+id/CalendarName"
+                android:id="@+id/CategoryName"
                 android:layout_width="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="3"
                 android:text="Name"
                 android:textColor="@color/text"
                 android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/editCategory"
+                android:layout_width="wrap_content"
+                android:ems="10"
+                android:gravity="left"
+                android:inputType="text"
+                android:textColor="@color/text" >
+
+                <requestFocus />
+            </EditText>
         </TableRow>
-
-        <Button
-            android:id="@+id/viewAllCalendarsBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="get all Calendars" />
-
-        <Button
-            android:id="@+id/viewAllActivitiesBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="get all Activities" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,7 +48,7 @@
             android:showDividers="middle" >
 
             <Button
-                android:id="@+id/cancelCalendarBtn"
+                android:id="@+id/cancelCategory"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -59,7 +58,7 @@
                 android:text="@string/cancel" />
 
             <Button
-                android:id="@+id/sendCalendarBtn"
+                android:id="@+id/sendCategory"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
