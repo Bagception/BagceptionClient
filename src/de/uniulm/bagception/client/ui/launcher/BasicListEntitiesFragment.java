@@ -117,7 +117,6 @@ public abstract class BasicListEntitiesFragment<E> extends Fragment implements
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
 				dialog.cancel();
 
 			}

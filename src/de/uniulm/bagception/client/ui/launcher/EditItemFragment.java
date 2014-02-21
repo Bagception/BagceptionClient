@@ -287,9 +287,9 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
 				if (isChecked) {
-					alwaysChecked = true;
+					independetChecked = true;
 				} else {
-					alwaysChecked = false;
+					independetChecked = false;
 				}
 			}
 		});
@@ -300,9 +300,9 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
 				if (isChecked) {
-					independetChecked = true;
+					alwaysChecked = true;
 				} else {
-					independetChecked = false;
+					alwaysChecked = false;
 				}
 			}
 		});

@@ -120,7 +120,6 @@ public class CreateNewActivityFragment extends Fragment implements
 
 								public void onClick(DialogInterface dialog,
 										int which) {
-									// TODO Auto-generated method stub
 									dialog.cancel();
 								}
 							});
@@ -150,7 +149,6 @@ public class CreateNewActivityFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-				// getFragmentManager().popBackStack();
 				editName.setText("");
 
 			}
@@ -195,7 +193,6 @@ public class CreateNewActivityFragment extends Fragment implements
 								@Override
 								public void onClick(DialogInterface dialog,
 										int which) {
-									// TODO Auto-generated method stub
 									locationForActivity = new Location(
 											locationNames[which], null);
 									locationForActivity = new Location(
@@ -254,11 +251,6 @@ public class CreateNewActivityFragment extends Fragment implements
 										itemsSelected.add(items[checked]);
 
 										Log.d("TEST", selectedItems.toString());
-										// Toast.makeText(getActivity(),
-										// selectedItems.toString(),
-										// Toast.LENGTH_LONG).show();
-
-										// listadapter.add("klkl");
 									}
 									Toast.makeText(getActivity(),
 											selectedItems.toString(),
@@ -269,11 +261,6 @@ public class CreateNewActivityFragment extends Fragment implements
 									Log.w("TEST",
 											"ItemsForActivity wird gefüllt mit: "
 													+ itemsForActivity);
-
-									// listadapter = new ArrayAdapter<String>(
-									// getActivity(), R.id.itemView,
-									// selectedItems);
-									// listadapter.add("fd");
 								}
 
 							});
@@ -284,10 +271,6 @@ public class CreateNewActivityFragment extends Fragment implements
 			};
 			AdministrationCommand.fromJSONObject(
 					BundleMessage.getInstance().extractObject(b)).accept(p);
-
-			// listadapter = new ArrayAdapter<Item>(getActivity(),
-			// R.layout.fragment_create_new_activity, R.id.itemTextView,
-			// itemsForActivity);
 
 		}
 
@@ -342,7 +325,6 @@ public class CreateNewActivityFragment extends Fragment implements
 	@Override
 	public void onPause() {
 		bmActor.unregister(getActivity());
-		// getFragmentManager().popBackStack();
 		super.onPause();
 	}
 

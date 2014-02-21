@@ -34,6 +34,7 @@ import de.uniulm.bagception.bundlemessageprotocol.entities.Location;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ActivityCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommandProcessor;
+import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ItemCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.LocationCommand;
 import de.uniulm.bagception.client.R;
 
@@ -67,6 +68,7 @@ public class EditActivityFragment extends Fragment implements
 		send = (Button) root.findViewById(R.id.sendActivity);
 		cancel = (Button) root.findViewById(R.id.cancelActivity);
 		addPlace = (Button) root.findViewById(R.id.addLocation);
+		addActivityItems = (Button) root.findViewById(R.id.addActivityItem);
 
 		listView = (ListView) root.findViewById(R.id.itemView);
 		placeView = (TextView) root.findViewById(R.id.viewPlace);
@@ -78,10 +80,11 @@ public class EditActivityFragment extends Fragment implements
 
 		Activity activity = null;
 		String i = getArguments().getString("ENTITYSTRING");
-		// String i = intent.getStringExtra("ITEMSTRING");
 		org.json.simple.JSONObject obj = new org.json.simple.JSONObject();
 		JSONParser p = new JSONParser();
 		try {
+			Log.w("TEST", "Parser: " + p);
+			Log.w("TEST", "String: " + i);
 			obj = (org.json.simple.JSONObject) p.parse(i);
 			activity = Activity.fromJSON(obj);
 		} catch (ParseException e) {
@@ -105,6 +108,20 @@ public class EditActivityFragment extends Fragment implements
 			}
 		});
 
+		addActivityItems.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				new BundleMessageHelper(getActivity())
+						.sendMessageSendBundle(BundleMessage.getInstance()
+								.createBundle(
+										BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
+										ItemCommand.list()));
+
+			}
+		});
+		
 		editName.setText(activity.getName());
 
 		if (activity.getLocation() != null) {
@@ -113,6 +130,14 @@ public class EditActivityFragment extends Fragment implements
 
 		if (activity.getItemsForActivity() != null) {
 			// TODO
+			
+			for (int j = 0; j < activity.getItemsForActivity().size(); j++) {
+				Log.d("TEST", activity.getItemsForActivity().get(j).toString());
+				
+				Item it = activity.getItemsForActivity().get(j);
+				String itemName = it.getName().toString();
+				listadapter.add(itemName);
+			}
 		}
 
 		send.setOnClickListener(new OnClickListener() {
@@ -145,7 +170,6 @@ public class EditActivityFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-				// getFragmentManager().popBackStack();
 				editName.setText("");
 
 			}
@@ -216,7 +240,7 @@ public class EditActivityFragment extends Fragment implements
 					for (int iter = 0; iter < itemStrings.length; iter++) {
 						itemStrings[iter] = items[iter].getName();
 					}
-
+					listadapter.clear();
 					AlertDialog.Builder itemAlert = new AlertDialog.Builder(
 							getActivity());
 					itemAlert.setTitle("Items zur Activity hinzufügen");
@@ -249,11 +273,6 @@ public class EditActivityFragment extends Fragment implements
 										itemsSelected.add(items[checked]);
 
 										Log.d("TEST", selectedItems.toString());
-										// Toast.makeText(getActivity(),
-										// selectedItems.toString(),
-										// Toast.LENGTH_LONG).show();
-
-										// listadapter.add("klkl");
 									}
 									Toast.makeText(getActivity(),
 											selectedItems.toString(),
@@ -265,10 +284,6 @@ public class EditActivityFragment extends Fragment implements
 											"ItemsForActivity wird gefüllt mit: "
 													+ itemsForActivity);
 
-									// listadapter = new ArrayAdapter<String>(
-									// getActivity(), R.id.itemView,
-									// selectedItems);
-									// listadapter.add("fd");
 								}
 
 							});
@@ -337,7 +352,6 @@ public class EditActivityFragment extends Fragment implements
 	@Override
 	public void onPause() {
 		bmActor.unregister(getActivity());
-		// getFragmentManager().popBackStack();
 		super.onPause();
 	}
 
