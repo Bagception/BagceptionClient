@@ -301,7 +301,8 @@ public class CreateNewItemFragment extends Fragment implements
 			public void onClick(View v) {
 				editName.setText("");
 				iv.setImageResource(R.drawable.ic_launcher);
-
+				Intent intent = new Intent(getActivity(), MainGUI.class);
+				startActivity(intent);
 			}
 		});
 

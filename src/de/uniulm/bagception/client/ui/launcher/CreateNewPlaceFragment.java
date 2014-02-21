@@ -181,8 +181,7 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 
 				if ("".equals(editName.getText().toString().trim()) || latView.length() == 0
-						|| lngView.length() == 0
-						|| resultLocation.getMac() == null) {
+						|| lngView.length() == 0) {
 					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
 							getActivity());
 					dialogAlert.setTitle("Bitte alle Felder ausfüllen");
@@ -219,6 +218,8 @@ public class CreateNewPlaceFragment extends Fragment implements
 			@Override
 			public void onClick(View v) {
 				editName.setText("");
+				Intent intent = new Intent(getActivity(), MainGUI.class);
+				startActivity(intent);
 			}
 		});
 

@@ -150,6 +150,8 @@ public class CreateNewActivityFragment extends Fragment implements
 			@Override
 			public void onClick(View v) {
 				editName.setText("");
+				Intent intent = new Intent(getActivity(), MainGUI.class);
+				startActivity(intent);
 
 			}
 		});

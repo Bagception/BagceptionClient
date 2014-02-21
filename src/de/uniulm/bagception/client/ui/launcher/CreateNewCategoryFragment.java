@@ -81,7 +81,8 @@ public class CreateNewCategoryFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				editName.setText("");
-
+				Intent intent = new Intent(getActivity(), MainGUI.class);
+				startActivity(intent);
 			}
 		});
 
