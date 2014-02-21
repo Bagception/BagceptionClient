@@ -42,6 +42,7 @@ public class ItemsInFragment extends OverviewTabFragment{
 			adapter.putColorCodeItems(Color.GRAY,sug.getItemToReplace());
 			ArrayList<CONTEXT> ctx = new ArrayList<ContextSuggestion.CONTEXT>();
 			ctx.add(sug.getReason());
+			Log.d("CONTEXT","Context icon (in) for "+sug.getItemToReplace().getName()+": "+sug.getReason().name());
 			adapter.putContextItem(ctx, sug.getItemToReplace());
 		}
 	}
