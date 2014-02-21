@@ -31,11 +31,9 @@ public class ItemsSuggFragment extends OverviewTabFragment implements BundleMess
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		ViewGroup root = (ViewGroup) inflater.inflate(
-				R.layout.fragment_items_sugg, null);
-
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		
+		ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_items_sugg, null);
 		
 		ExpandableListView expandbleLis = (ExpandableListView) root.findViewById(R.id.itemSugg);
 		expandbleLis.setDividerHeight(2);
