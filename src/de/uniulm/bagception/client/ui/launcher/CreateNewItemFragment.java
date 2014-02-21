@@ -40,7 +40,7 @@ import de.uniulm.bagception.client.R;
 public class CreateNewItemFragment extends Fragment implements
 		BundleMessageReactor {
 
-	private boolean acceptList=false;
+	private boolean acceptList = false;
 	Category categoryForActivity;
 	EditText editName;
 	Button send;
@@ -104,7 +104,7 @@ public class CreateNewItemFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-				acceptList=true;
+				acceptList = true;
 				new BundleMessageHelper(getActivity())
 						.sendMessageSendBundle(BundleMessage.getInstance()
 								.createBundle(
@@ -354,7 +354,7 @@ public class CreateNewItemFragment extends Fragment implements
 				@Override
 				public void onCategoryList(
 						de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand<de.uniulm.bagception.bundlemessageprotocol.entities.Category> i) {
-					acceptList=false;
+					acceptList = false;
 					final Category[] categories = i.getPayloadObjects();
 					final String[] categoryStrings = new String[categories.length];
 					final long[] categoryIDs = new long[categories.length];
@@ -363,30 +363,46 @@ public class CreateNewItemFragment extends Fragment implements
 						categoryStrings[iter] = categories[iter].getName();
 					}
 
-					AlertDialog.Builder categoryAlert = new AlertDialog.Builder(
-							getActivity());
-					categoryAlert.setTitle("Items zur Activity hinzufügen");
+					if (categoryStrings.length == 0) {
+						AlertDialog.Builder noCategoriesAvailableAlert = new AlertDialog.Builder(getActivity());
+						noCategoriesAvailableAlert.setTitle("Es existiert keine Kategorie");
+						
+						noCategoriesAvailableAlert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO Auto-generated method stub
+								
+							}
+						});
+						noCategoriesAvailableAlert.create().show();
+					} else {
 
-					categoryAlert.setItems(categoryStrings,
-							new DialogInterface.OnClickListener() {
+						AlertDialog.Builder categoryAlert = new AlertDialog.Builder(
+								getActivity());
+						categoryAlert
+								.setTitle("Item einer Kategorie hinzufügen");
 
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									// TODO Auto-generated method stub
-									categoryForActivity = new Category(
-											categoryIDs[which],
-											categoryStrings[which]);
-									viewCategory
-											.setText(categoryStrings[which]);
-								}
-							});
-					categoryAlert.create().show();
+						categoryAlert.setItems(categoryStrings,
+								new DialogInterface.OnClickListener() {
 
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										// TODO Auto-generated method stub
+										categoryForActivity = new Category(
+												categoryIDs[which],
+												categoryStrings[which]);
+										viewCategory
+												.setText(categoryStrings[which]);
+									}
+								});
+						categoryAlert.create().show();
+					}
 				}
 
 			};
-			if (!acceptList){
+			if (!acceptList) {
 				return;
 			}
 			AdministrationCommand.fromJSONObject(
