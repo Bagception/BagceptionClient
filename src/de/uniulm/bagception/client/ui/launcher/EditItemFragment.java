@@ -70,8 +70,6 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 	String temperature;
 	String weather;
 	String lightness;
-	boolean alwaysChecked;
-	boolean independetChecked;
 	BundleMessageActor bmActor;
 
 	private String tagId;
@@ -172,11 +170,11 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 				dark.setChecked(true);
 			}
 
-			if (item.getContextItem() == true) {
+			if (item.getIndependentItem() == true) {
 				always.setChecked(true);
 			}
 
-			if (item.getIndependentItem() == true) {
+			if (item.getContextItem()  == true) {
 				independet.setChecked(true);
 			}
 		}
@@ -280,32 +278,6 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 			}
 		});
 
-		always.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				if (isChecked) {
-					independetChecked = true;
-				} else {
-					independetChecked = false;
-				}
-			}
-		});
-
-		independet.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				if (isChecked) {
-					alwaysChecked = true;
-				} else {
-					alwaysChecked = false;
-				}
-			}
-		});
-
 		send.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -351,7 +323,7 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 				ItemAttribute attributes = new ItemAttribute(temperature,
 						weather, lightness);
 				newItem = new Item(-1, editName.getText().toString(),
-						categoryForActivity, alwaysChecked, independetChecked,
+						categoryForActivity, always.isChecked(), independet.isChecked(),
 						attributes, tagIDs);
 
 				if (((MainGUI) getActivity()).currentPicturetaken != null) {
