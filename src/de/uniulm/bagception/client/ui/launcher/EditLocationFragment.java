@@ -98,7 +98,6 @@ public class EditLocationFragment extends Fragment implements
 
 		Location location = null;
 		String i = getArguments().getString("ENTITYSTRING");
-		// String i = intent.getStringExtra("ITEMSTRING");
 		org.json.simple.JSONObject obj = new org.json.simple.JSONObject();
 		JSONParser p = new JSONParser();
 		try {
@@ -110,21 +109,16 @@ public class EditLocationFragment extends Fragment implements
 			e.printStackTrace();
 		}
 		final Location oldLocation = location;
-		
+
 		editName.setText(location.getName());
-		
+
 		new BundleMessageHelper(getActivity())
-		.sendMessageSendBundle(BundleMessage.getInstance()
-				.createBundle(
-						BUNDLE_MESSAGE.RESOLVE_COORDS_REQUEST,
-						oldLocation));
-		
+				.sendMessageSendBundle(BundleMessage.getInstance()
+						.createBundle(BUNDLE_MESSAGE.RESOLVE_COORDS_REQUEST,
+								oldLocation));
+
 		latView.setText(location.getLat().toString());
 		lngView.setText(location.getLng().toString());
-		int radius = location.getRadius();
-		
-		
-//		editAddress.setText(location.)
 
 		resolveAddress.setOnClickListener(new OnClickListener() {
 
@@ -225,7 +219,6 @@ public class EditLocationFragment extends Fragment implements
 
 								public void onClick(DialogInterface dialog,
 										int which) {
-									// TODO Auto-generated method stub
 									dialog.cancel();
 								}
 							});
@@ -252,7 +245,6 @@ public class EditLocationFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-				// getFragmentManager().popBackStack();
 				editName.setText("");
 			}
 		});
@@ -262,7 +254,6 @@ public class EditLocationFragment extends Fragment implements
 
 	@Override
 	public void onPause() {
-		// getFragmentManager().popBackStack();
 		super.onPause();
 	}
 
@@ -313,37 +304,31 @@ public class EditLocationFragment extends Fragment implements
 
 	@Override
 	public void onBundleMessageSend(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onResponseMessage(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onResponseAnswerMessage(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onStatusMessage(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onCommandMessage(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onError(Exception e) {
-		// TODO Auto-generated method stub
 
 	}
 
