@@ -243,6 +243,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			
 			//SUGGESTIONS
 			contextSuggestions = statusUpdate.getContextSuggestions();
+			Log.w("TEST", "getContextSuggestions (Client/OverviewFragment:246): " + contextSuggestions);
 			
 			//TODO
 			itemsSuggFragment.updateView(statusUpdate);

@@ -57,6 +57,9 @@ public abstract class OverviewTabFragment extends Fragment {
 	}
 	
 	private synchronized void calcCorrespondingContextItems(){
+		
+		Log.w("TEST", "calcCorrespondingContextItems, suggestionToReplace: " + suggestionToReplace);
+		Log.w("TEST", "ContextSuggestions: " + fragment.contextSuggestions);
 		suggestionToReplace.clear();
 		suggestionToRemove.clear();
 		suggestionToReplace.clear();
