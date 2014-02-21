@@ -127,6 +127,10 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 							public void onClick(DialogInterface dialog,
 									int which) {
 
+								Intent intent = new Intent(getActivity(), MainGUI.class);
+								intent.putExtra("FRAGMENT", getEditFragmentName());
+
+								startActivity(intent);
 							}
 						});
 

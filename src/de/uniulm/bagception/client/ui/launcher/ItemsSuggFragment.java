@@ -2,7 +2,6 @@ package de.uniulm.bagception.client.ui.launcher;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.Toast;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
@@ -21,10 +19,11 @@ import de.uniulm.bagception.client.R;
 
 public class ItemsSuggFragment extends OverviewTabFragment implements BundleMessageReactor, OnChildClickListener{
 
+	@SuppressWarnings("unused")
 	private OverviewFragment fragment;
-	private ListView itemsRedundantView;
-	private ItemListArrayAdapter arrayAdapter;
 	private BundleMessageActor bmActor;
+	private SuggestionListAdapter suggAdapter;
+	private ExpandableListView expandbleLis;
 
 	public void setParentFragment(OverviewFragment fragment) {
 		this.fragment = fragment;
@@ -41,21 +40,27 @@ public class ItemsSuggFragment extends OverviewTabFragment implements BundleMess
 		
 		ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_items_sugg, null);
 		
-		ExpandableListView expandbleLis = (ExpandableListView) root.findViewById(R.id.itemSugg);
+		expandbleLis = (ExpandableListView) root.findViewById(R.id.itemSugg);
 		expandbleLis.setDividerHeight(2);
 		expandbleLis.setGroupIndicator(null);
 		expandbleLis.setClickable(true);
 		
-		setGroupData();
-		setChildGroupData();	
+		if(suggAdapter == null){
+			setGroupData();
+			setChildGroupData();	
 		
-		SuggestionListAdapter suggAdapter = new SuggestionListAdapter(groupItem, childItem);
-		suggAdapter.setInflater((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE), getActivity());
-		expandbleLis.setAdapter(suggAdapter);
+			suggAdapter = new SuggestionListAdapter(groupItem, childItem);
+			suggAdapter.setInflater((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE), getActivity());
+		}
+	
+		if(expandbleLis.getExpandableListAdapter() == null){
+			expandbleLis.setAdapter(suggAdapter);
+		}	
 		
 		return root;
 
 	}
+	
 	
 	ArrayList<String> groupItem = new ArrayList<String>();
 	ArrayList<Object> childItem = new ArrayList<Object>();
@@ -151,8 +156,4 @@ public class ItemsSuggFragment extends OverviewTabFragment implements BundleMess
 		Toast.makeText(getActivity().getApplicationContext(), "Clicked On Child", Toast.LENGTH_SHORT).show();
 		return true;
 	}
-
-
-	
-	
 }
