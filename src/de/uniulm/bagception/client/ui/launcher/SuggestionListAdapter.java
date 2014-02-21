@@ -45,6 +45,7 @@ public class SuggestionListAdapter extends BaseExpandableListAdapter {
 		return 0;
 	}
 
+	
 	/**
 	 * Create the view of the child entries (the items that shall be put in the bag)
 	 */

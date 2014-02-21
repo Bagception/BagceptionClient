@@ -2,35 +2,24 @@ package de.uniulm.bagception.client.ui.launcher;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckedTextView;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.TextView;
 import android.widget.Toast;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
 import de.uniulm.bagception.bundlemessageprotocol.entities.ContainerStateUpdate;
-import de.uniulm.bagception.bundlemessageprotocol.entities.ContextSuggestion;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
-import de.uniulm.bagception.bundlemessageprotocol.entities.ContextSuggestion.CONTEXT;
 import de.uniulm.bagception.client.R;
 
 public class ItemsSuggFragment extends OverviewTabFragment implements BundleMessageReactor, OnChildClickListener{
 
 	private OverviewFragment fragment;
-	private ListView itemsRedundantView;
-	private ItemListArrayAdapter arrayAdapter;
 	private BundleMessageActor bmActor;
 	private SuggestionListAdapter suggAdapter;
 	private ExpandableListView expandbleLis;
