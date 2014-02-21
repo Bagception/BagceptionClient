@@ -1,6 +1,5 @@
 package de.uniulm.bagception.client.ui.launcher;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -13,7 +12,6 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.Toast;
 import de.uniulm.bagception.bundlemessageprotocol.entities.ContainerStateUpdate;
-import de.uniulm.bagception.bundlemessageprotocol.entities.ContextSuggestion;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.client.R;
 
@@ -41,13 +39,13 @@ public class ItemsSuggFragment extends OverviewTabFragment implements OnChildCli
 		
 		if(suggAdapter == null){
 			
-			Log.w("TEST", "ContextSuggestion (Client/ItemSuggFragment): " + suggestionToReplace);
-			suggAdapter = new SuggestionListAdapter(getActivity(),suggestionToReplace);
+			Log.w("TEST", "ContextSuggestion (Client/ItemSuggFragment): " + fragment.suggestionToReplace);
+			suggAdapter = new SuggestionListAdapter(getActivity(),fragment.suggestionToReplace);
 			suggAdapter.setInflater((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE));
 		}
 	
 		if(expandbleLis.getExpandableListAdapter() == null){
-			Log.w("TEST", "suggAdapter (Client/ItemSuggFragment): " + suggestionToReplace);
+			Log.w("TEST", "suggAdapter (Client/ItemSuggFragment): " + fragment.suggestionToReplace);
 			expandbleLis.setAdapter(suggAdapter);
 		}	
 		
