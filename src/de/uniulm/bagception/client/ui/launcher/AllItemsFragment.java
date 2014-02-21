@@ -2,16 +2,11 @@ package de.uniulm.bagception.client.ui.launcher;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommandProcessor;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ItemCommand;
-import de.uniulm.bagception.client.R;
 
 public class AllItemsFragment extends BasicListEntitiesFragment<Item> {
 

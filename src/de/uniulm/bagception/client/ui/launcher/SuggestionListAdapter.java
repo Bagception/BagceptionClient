@@ -2,7 +2,6 @@ package de.uniulm.bagception.client.ui.launcher;
 
 import java.util.ArrayList;
 
-import de.uniulm.bagception.client.R;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -14,6 +13,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckedTextView;
 import android.widget.TextView;
 import android.widget.Toast;
+import de.uniulm.bagception.client.R;
 
 @SuppressWarnings("unchecked")
 public class SuggestionListAdapter extends BaseExpandableListAdapter {

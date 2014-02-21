@@ -1,22 +1,13 @@
 package de.uniulm.bagception.client.ui.launcher;
 
-import java.util.List;
-
 import android.app.Fragment;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
-import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
-import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Activity;
-import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ActivityCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommandProcessor;
@@ -95,7 +86,6 @@ public class AllActivitiesFragment extends
 
 	@Override
 	protected long itemSelected(Activity e) {
-		// TODO Auto-generated method stub
 		return e.getId();
 	}
 
@@ -120,8 +110,12 @@ public class AllActivitiesFragment extends
 
 	@Override
 	protected String getFragmentName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "de.uniulm.bagception.client.ui.launcher.AllActivitiesFragment";
+	}
+
+	@Override
+	protected long getId(Activity e) {
+		return e.getId();
 	}
 
 }
