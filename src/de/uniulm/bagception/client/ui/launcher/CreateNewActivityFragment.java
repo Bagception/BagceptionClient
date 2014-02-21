@@ -150,7 +150,6 @@ public class CreateNewActivityFragment extends Fragment implements
 			@Override
 			public void onClick(View v) {
 				editName.setText("");
-
 			}
 		});
 

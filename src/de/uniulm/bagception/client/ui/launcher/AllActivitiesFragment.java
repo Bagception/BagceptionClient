@@ -3,6 +3,8 @@ package de.uniulm.bagception.client.ui.launcher;
 import android.app.Fragment;
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -26,6 +28,8 @@ public class AllActivitiesFragment extends
 
 		return f;
 	}
+	
+	
 
 	@Override
 	protected ArrayAdapter<Activity> getEntityAdapter() {

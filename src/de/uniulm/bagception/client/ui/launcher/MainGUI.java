@@ -61,7 +61,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 			"de.uniulm.bagception.client.ui.launcher.AllCategoriesFragment",
 			"de.uniulm.bagception.client.ui.launcher.AllActivitiesFragment",
 			"de.uniulm.bagception.client.ui.launcher.NewBagFragment",
-			"de.uniulm.bagception.client.ui.launcher.CalendarFragment" };
+			"de.uniulm.bagception.client.ui.launcher.CalendarOverviewFragment" };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
