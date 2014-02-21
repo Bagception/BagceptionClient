@@ -19,6 +19,7 @@ import de.uniulm.bagception.client.R;
 
 public class ItemsSuggFragment extends OverviewTabFragment implements BundleMessageReactor, OnChildClickListener{
 
+	@SuppressWarnings("unused")
 	private OverviewFragment fragment;
 	private BundleMessageActor bmActor;
 	private SuggestionListAdapter suggAdapter;
