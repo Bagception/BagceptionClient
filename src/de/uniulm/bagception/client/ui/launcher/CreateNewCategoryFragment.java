@@ -28,7 +28,7 @@ public class CreateNewCategoryFragment extends Fragment {
 	Button cancel;
 
 	public static Fragment newInstance(Context context) {
-		CreateNewItemFragment f = new CreateNewItemFragment();
+		CreateNewCategoryFragment f = new CreateNewCategoryFragment();
 
 		return f;
 	}

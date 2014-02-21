@@ -88,7 +88,7 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 			Bundle savedInstanceState) {
 		final ViewGroup root = (ViewGroup) inflater.inflate(
 				R.layout.fragment_create_new_item, null);
-		editName = (EditText) root.findViewById(R.id.eventNameEditText);
+		editName = (EditText) root.findViewById(R.id.editName);
 		send = (Button) root.findViewById(R.id.sendItem);
 		cancel = (Button) root.findViewById(R.id.cancelItem);
 		addCategory = (Button) root.findViewById(R.id.addCategory);
@@ -114,6 +114,8 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 		try {
 			obj = (org.json.simple.JSONObject) p.parse(i);
 			item = Item.fromJSON(obj);
+			Log.d("TEST", item.getName().toString());
+			
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -136,7 +138,6 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 		/**
 		 * Fill GUI with the given values
 		 */
-
 		editName.setText(item.getName());
 
 		if (item.getCategory() != null) {
@@ -351,7 +352,7 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 				ItemAttribute attributes = new ItemAttribute(temperature,
 						weather, lightness);
 				newItem = new Item(-1, editName.getText().toString(),
-						categoryForActivity, independetChecked, alwaysChecked,
+						categoryForActivity, alwaysChecked, independetChecked, 
 						attributes, tagIDs);
 
 				if (((MainGUI) getActivity()).currentPicturetaken != null) {
