@@ -34,6 +34,8 @@
                 <requestFocus />
             </EditText>
         </TableRow>
+        
+        
 
         <TableRow
             android:id="@+id/tableRow3"
@@ -62,12 +64,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dip"
             android:layout_marginTop="10dip" >
-
-            <Button
-                android:id="@+id/viewCalendarBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Kalender" />
 
             <TextView
                 android:id="@+id/selectedCalendarTextView"
@@ -118,6 +114,48 @@
 
             <TextView
                 android:id="@+id/dateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" />
+
+        </TableRow>
+        
+         <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:layout_marginTop="10dip" >
+            
+            <Button
+                android:id="@+id/showEndTimePickerBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pick end time" />
+
+            <TextView
+                android:id="@+id/EndTimeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" />
+
+        </TableRow>
+        
+        <TableRow
+            android:id="@+id/tableRow4"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:layout_marginTop="10dip" >
+
+            <Button
+                android:id="@+id/showEndDatePickerBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pick end date" />
+
+            <TextView
+                android:id="@+id/endDateTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="" />
