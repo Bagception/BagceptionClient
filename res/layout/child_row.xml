@@ -22,7 +22,7 @@
             android:contentDescription="@string/hello_world" />
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/suggestionItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
