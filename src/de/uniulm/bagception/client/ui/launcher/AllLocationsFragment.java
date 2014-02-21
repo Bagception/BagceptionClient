@@ -79,7 +79,6 @@ public class AllLocationsFragment extends BasicListEntitiesFragment<Location> {
 
 	@Override
 	protected long getId(Location e) {
-		// TODO Auto-generated method stub
 		return e.getId();
 	}
 

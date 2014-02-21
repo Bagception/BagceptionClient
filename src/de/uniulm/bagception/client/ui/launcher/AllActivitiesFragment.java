@@ -95,7 +95,6 @@ public class AllActivitiesFragment extends
 
 	@Override
 	protected long itemSelected(Activity e) {
-		// TODO Auto-generated method stub
 		return e.getId();
 	}
 
@@ -120,8 +119,12 @@ public class AllActivitiesFragment extends
 
 	@Override
 	protected String getFragmentName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "de.uniulm.bagception.client.ui.launcher.AllActivitiesFragment";
+	}
+
+	@Override
+	protected long getId(Activity e) {
+		return e.getId();
 	}
 
 }

@@ -40,6 +40,7 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 	
 	protected abstract String getEditFragmentName();
 	protected abstract String getCreateNewFragmentName();
+	protected abstract long getId(E e);
 
 	/**
 	 * 
@@ -129,6 +130,11 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 
 								Intent intent = new Intent(getActivity(), MainGUI.class);
 								intent.putExtra("FRAGMENT", getEditFragmentName());
+								
+								long itemID = getId(listAdapter.getItem(id));
+								String serializedString = listAdapter.getItem(id).toString();
+								intent.putExtra("ID", itemID);
+								intent.putExtra("ENTITYSTRING", serializedString);
 
 								startActivity(intent);
 							}
@@ -161,17 +167,6 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 				startActivity.create().show();
 			}
 		});
-
-		// listView.setOnItemLongClickListener(new
-		// AdapterView.OnItemLongClickListener() {
-		//
-		// @Override
-		// public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-		// int arg2, long arg3) {
-		// dialog(arg2);
-		// return false;
-		// }
-		// });
 
 		return root;
 	}
@@ -213,7 +208,7 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 			public boolean onMenuItemClick(MenuItem item) {
 				Intent intent = new Intent(getActivity(), MainGUI.class);
 				intent.putExtra("FRAGMENT", getCreateNewFragmentName());
-
+				
 				startActivity(intent);
 				return false;
 			}
