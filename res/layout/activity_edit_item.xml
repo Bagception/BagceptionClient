@@ -51,7 +51,7 @@
                 android:textColor="@color/text" />
 
             <EditText
-                android:id="@+id/eventNameEditText"
+                android:id="@+id/editItem"
                 android:layout_width="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginRight="15dp"
