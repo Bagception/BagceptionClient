@@ -73,7 +73,6 @@ public class AllCategoriesFragment extends BasicListEntitiesFragment<Category> {
 
 	@Override
 	protected long getId(Category e) {
-		// TODO Auto-generated method stub
 		return e.getId();
 	}
 

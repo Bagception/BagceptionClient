@@ -2,8 +2,8 @@ package de.uniulm.bagception.client.ui.launcher;
 
 import java.util.ArrayList;
 
-import de.uniulm.bagception.client.R;
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +13,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckedTextView;
 import android.widget.TextView;
 import android.widget.Toast;
+import de.uniulm.bagception.client.R;
 
 @SuppressWarnings("unchecked")
 public class SuggestionListAdapter extends BaseExpandableListAdapter {
@@ -44,6 +45,10 @@ public class SuggestionListAdapter extends BaseExpandableListAdapter {
 		return 0;
 	}
 
+	
+	/**
+	 * Create the view of the child entries (the items that shall be put in the bag)
+	 */
 	@Override
 	public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 		tempChild = (ArrayList<String>) Childtem.get(groupPosition);
@@ -52,7 +57,7 @@ public class SuggestionListAdapter extends BaseExpandableListAdapter {
 			convertView = minflater.inflate(R.layout.child_row, null);
 		}
 		
-		text = (TextView) convertView.findViewById(R.id.textView1);
+		text = (TextView) convertView.findViewById(R.id.suggestionItem);
 		text.setText(tempChild.get(childPosition));
 		
 		convertView.setOnClickListener(new OnClickListener() {
@@ -100,6 +105,9 @@ public class SuggestionListAdapter extends BaseExpandableListAdapter {
 		return 0;
 	}
 
+	/**
+	 * Create the parent view (the items that shall be replaced)
+	 */
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 
@@ -109,6 +117,16 @@ public class SuggestionListAdapter extends BaseExpandableListAdapter {
 		
 		((CheckedTextView) convertView).setText(groupItem.get(groupPosition));
 		((CheckedTextView) convertView).setChecked(isExpanded);
+		
+		
+		/**
+		 * Set the images of the parent entries (the items that shall be replaced)
+		 */
+		CheckedTextView cv = (CheckedTextView) convertView.findViewById(R.id.replaceItem);
+		Drawable icon = (Drawable) convertView.getResources().getDrawable(R.drawable.ic_launcher);
+		Drawable icon2 = (Drawable) convertView.getResources().getDrawable(R.drawable.service_icon);
+		
+		cv.setCompoundDrawablesWithIntrinsicBounds(icon2, null, icon, null);
 		
 		return convertView;
 	}

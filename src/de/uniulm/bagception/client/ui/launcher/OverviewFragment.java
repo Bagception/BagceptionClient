@@ -134,7 +134,6 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				AlertDialog.Builder categoryAlert = new AlertDialog.Builder(
 						getActivity());
 				categoryAlert.setTitle("Aktivität beenden?");
@@ -145,7 +144,6 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								// TODO Auto-generated method stub
 								dialog.cancel();
 							}
 						});
@@ -164,7 +162,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 															BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
 															ActivityCommand
 																	.stop(ac)));
-								}
+								} 
 							}
 						});
 
@@ -200,6 +198,13 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 					.getInstance().extractObject(b));
 			String currentActivity = statusUpdate.getActivity().getName();
 			ac = statusUpdate.getActivity();
+			
+			if(ac.getName().equals("keine Aktivität")){
+				endActivity.setEnabled(false);
+			} else{
+				endActivity.setEnabled(true);
+			}
+			
 			currentActivityView.setText("Aktuelle Aktivität: "
 					+ currentActivity);
 
@@ -258,6 +263,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			sb.append("\n");
 			 Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG)
 			 .show();
+			 
 			break;
 
 		case ITEM_NOT_FOUND:
@@ -335,6 +341,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 	// }
 
 	public synchronized ContainerStateUpdate getItemUpdate() {
+		
 		return statusUpdate;
 	}
 

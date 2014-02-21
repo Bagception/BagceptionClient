@@ -1,9 +1,10 @@
 package de.uniulm.bagception.client.ui.launcher;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.graphics.Color;
-
+import android.util.Log;
 import de.uniulm.bagception.bundlemessageprotocol.entities.ContainerStateUpdate;
 import de.uniulm.bagception.bundlemessageprotocol.entities.ContextSuggestion;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
@@ -11,12 +12,11 @@ import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 public class ItemsInFragment extends OverviewTabFragment{
 
 	private List<Item>  needless;
-	
-	
+
 	@Override
 	protected List<Item> getCorrespondingItemList(ContainerStateUpdate update) {
 		needless = update.getNeedlessItems();
-		List<Item> ret = update.getItemList();
+		List<Item> ret = new ArrayList<Item>(update.getItemList());
 		for(ContextSuggestion sug:suggestionToRemove){
 			if (!ret.contains(sug.getItemToReplace())){
 				ret.add(sug.getItemToReplace());
@@ -33,7 +33,8 @@ public class ItemsInFragment extends OverviewTabFragment{
 			Item item = adapter.getItem(i);
 			
 			if (needless.contains(item)){
-				adapter.putColorCodeItems(Color.BLUE, item);
+				adapter.putColorCodeItems(Color.CYAN, item);
+				Log.d("COLOR","needless: "+item.getName());
 			}
 		}
 		

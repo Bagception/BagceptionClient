@@ -40,7 +40,7 @@ import de.uniulm.bagception.client.R;
 public class CreateNewItemFragment extends Fragment implements
 		BundleMessageReactor {
 
-	private boolean acceptList=false;
+	private boolean acceptList = false;
 	Category categoryForActivity;
 	EditText editName;
 	Button send;
@@ -56,7 +56,7 @@ public class CreateNewItemFragment extends Fragment implements
 	Spinner spinner;
 	ImageView iv;
 	CheckBox always;
-	CheckBox independet;
+	CheckBox independent;
 	String warmOn;
 	String coldOn;
 	String rainyOn;
@@ -66,8 +66,6 @@ public class CreateNewItemFragment extends Fragment implements
 	String temperature;
 	String weather;
 	String lightness;
-	boolean alwaysChecked;
-	boolean independetChecked;
 	BundleMessageActor bmActor;
 
 	private String tagId;
@@ -96,7 +94,7 @@ public class CreateNewItemFragment extends Fragment implements
 		light = (ToggleButton) root.findViewById(R.id.lightButton);
 		dark = (ToggleButton) root.findViewById(R.id.darkButton);
 		always = (CheckBox) root.findViewById(R.id.always);
-		independet = (CheckBox) root.findViewById(R.id.independent);
+		independent = (CheckBox) root.findViewById(R.id.independent);
 		viewCategory = (TextView) root.findViewById(R.id.viewCategory);
 
 		bmActor = new BundleMessageActor(this);
@@ -104,7 +102,7 @@ public class CreateNewItemFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-				acceptList=true;
+				acceptList = true;
 				new BundleMessageHelper(getActivity())
 						.sendMessageSendBundle(BundleMessage.getInstance()
 								.createBundle(
@@ -218,34 +216,6 @@ public class CreateNewItemFragment extends Fragment implements
 			}
 		});
 
-		always.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				// TODO Auto-generated method stub
-				if (isChecked) {
-					alwaysChecked = true;
-				} else {
-					alwaysChecked = false;
-				}
-			}
-		});
-
-		independet.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				// TODO Auto-generated method stub
-				if (isChecked) {
-					independetChecked = true;
-				} else {
-					independetChecked = false;
-				}
-			}
-		});
-
 		send.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -291,10 +261,10 @@ public class CreateNewItemFragment extends Fragment implements
 
 				ItemAttribute attributes = new ItemAttribute(temperature,
 						weather, lightness);
-
+				
 				item = new Item(-1, editName.getText().toString(),
-						categoryForActivity, alwaysChecked, independetChecked,
-						attributes, tagIDs);
+						categoryForActivity,always.isChecked() , independent.isChecked(), 
+ 						attributes, tagIDs);
 
 				if (((MainGUI) getActivity()).currentPicturetaken != null) {
 					item.setImage(((MainGUI) getActivity()).currentPicturetaken);
@@ -354,7 +324,7 @@ public class CreateNewItemFragment extends Fragment implements
 				@Override
 				public void onCategoryList(
 						de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand<de.uniulm.bagception.bundlemessageprotocol.entities.Category> i) {
-					acceptList=false;
+					acceptList = false;
 					final Category[] categories = i.getPayloadObjects();
 					final String[] categoryStrings = new String[categories.length];
 					final long[] categoryIDs = new long[categories.length];
@@ -363,30 +333,46 @@ public class CreateNewItemFragment extends Fragment implements
 						categoryStrings[iter] = categories[iter].getName();
 					}
 
-					AlertDialog.Builder categoryAlert = new AlertDialog.Builder(
-							getActivity());
-					categoryAlert.setTitle("Items zur Activity hinzufügen");
+					if (categoryStrings.length == 0) {
+						AlertDialog.Builder noCategoriesAvailableAlert = new AlertDialog.Builder(getActivity());
+						noCategoriesAvailableAlert.setTitle("Es existiert keine Kategorie");
+						
+						noCategoriesAvailableAlert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO Auto-generated method stub
+								
+							}
+						});
+						noCategoriesAvailableAlert.create().show();
+					} else {
 
-					categoryAlert.setItems(categoryStrings,
-							new DialogInterface.OnClickListener() {
+						AlertDialog.Builder categoryAlert = new AlertDialog.Builder(
+								getActivity());
+						categoryAlert
+								.setTitle("Item einer Kategorie hinzufügen");
 
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									// TODO Auto-generated method stub
-									categoryForActivity = new Category(
-											categoryIDs[which],
-											categoryStrings[which]);
-									viewCategory
-											.setText(categoryStrings[which]);
-								}
-							});
-					categoryAlert.create().show();
+						categoryAlert.setItems(categoryStrings,
+								new DialogInterface.OnClickListener() {
 
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										// TODO Auto-generated method stub
+										categoryForActivity = new Category(
+												categoryIDs[which],
+												categoryStrings[which]);
+										viewCategory
+												.setText(categoryStrings[which]);
+									}
+								});
+						categoryAlert.create().show();
+					}
 				}
 
 			};
-			if (!acceptList){
+			if (!acceptList) {
 				return;
 			}
 			AdministrationCommand.fromJSONObject(
