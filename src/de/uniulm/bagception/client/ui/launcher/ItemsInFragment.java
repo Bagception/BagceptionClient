@@ -33,7 +33,7 @@ public class ItemsInFragment extends OverviewTabFragment{
 			Item item = adapter.getItem(i);
 			
 			if (needless.contains(item)){
-				adapter.putColorCodeItems(Color.BLUE, item);
+				adapter.putColorCodeItems(Color.CYAN, item);
 			}
 		}
 		

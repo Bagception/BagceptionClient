@@ -4,11 +4,14 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import de.uniulm.bagception.bundlemessageprotocol.entities.ContextSuggestion.CONTEXT;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
@@ -20,6 +23,7 @@ public class ItemListArrayAdapter extends ArrayAdapter<Item> {
 	
 	private HashMap<Item,Integer> colorCodes = new HashMap<Item,Integer>(); 
 	private HashMap<Item,List<CONTEXT>> context = new HashMap<Item, List<CONTEXT>>();
+	private final HashMap<CONTEXT,Bitmap> contextImageMap = new HashMap<CONTEXT, Bitmap>();
 	
 	public void clearColorCodeItems(){
 		colorCodes.clear();
@@ -40,8 +44,16 @@ public class ItemListArrayAdapter extends ArrayAdapter<Item> {
 		}
 	}
 	
-	public ItemListArrayAdapter(Context newBagFragment) {
-		super(newBagFragment, android.R.layout.simple_list_item_1);
+	public ItemListArrayAdapter(Context context) {
+		super(context, android.R.layout.simple_list_item_1);
+		
+		contextImageMap.put(CONTEXT.BRIGHT, BitmapFactory.decodeResource(context.getResources(), R.drawable.daywarm));
+		contextImageMap.put(CONTEXT.COLD, BitmapFactory.decodeResource(context.getResources(), R.drawable.cold));
+		contextImageMap.put(CONTEXT.DARK, BitmapFactory.decodeResource(context.getResources(), R.drawable.night));
+		contextImageMap.put(CONTEXT.RAIN, BitmapFactory.decodeResource(context.getResources(), R.drawable.rain));
+		contextImageMap.put(CONTEXT.SUNNY, BitmapFactory.decodeResource(context.getResources(), R.drawable.daywarm));
+		contextImageMap.put(CONTEXT.WARM, BitmapFactory.decodeResource(context.getResources(), R.drawable.hot));
+		
 	}
 	
 	
@@ -69,23 +81,20 @@ public class ItemListArrayAdapter extends ArrayAdapter<Item> {
             }else{
             	view.setBackgroundColor(Color.WHITE);
             }
-            //TODO render context image
             List<CONTEXT> ctx = context.get(item);
+            ImageView contextImg = (ImageView)view.findViewById(R.id.contextIcon);
             if (ctx!=null){
+	            Bitmap bmp=null;
             	for(CONTEXT c:ctx){
-            		switch (c) {
-					case BRIGHT:
-						//TODO show bright image
-						break;
-
-					default:
-						break;
-					}
+            		bmp=contextImageMap.get(c);
             	}
+            	contextImg.setImageBitmap(bmp);
             }
          }
 
         return view;
     }
+	
+
 
 }
