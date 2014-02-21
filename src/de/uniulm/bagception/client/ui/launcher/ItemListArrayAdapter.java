@@ -5,9 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +44,6 @@ public class ItemListArrayAdapter extends ArrayAdapter<Item> {
 	
 	public ItemListArrayAdapter(Context context) {
 		super(context, android.R.layout.simple_list_item_1);
-		Log.d("COLOR","init arrayadapter");
 		bitmaps=Bitmaps.getInstance(context);
 
 		
@@ -71,7 +68,6 @@ public class ItemListArrayAdapter extends ArrayAdapter<Item> {
                 itemView.setText(item.getName());
             }
             Integer col = colorCodes.get(item.getId());
-            Log.d("COLOR","color code for "+item.getName()+":"  + col+ "\t pos: "+position);
             if (col!=null){
             	view.setBackgroundColor(col);
             }else{
