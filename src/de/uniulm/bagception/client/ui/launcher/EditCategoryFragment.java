@@ -48,30 +48,28 @@ public class EditCategoryFragment extends Fragment implements
 		editName = (EditText) root.findViewById(R.id.editCategory);
 		send = (Button) root.findViewById(R.id.sendCategory);
 		cancel = (Button) root.findViewById(R.id.cancelCategory);
-		
+
 		Category category = null;
 		String i = getArguments().getString("ENTITYSTRING");
-		// String i = intent.getStringExtra("ITEMSTRING");
 		org.json.simple.JSONObject obj = new org.json.simple.JSONObject();
 		JSONParser p = new JSONParser();
 		try {
 			obj = (org.json.simple.JSONObject) p.parse(i);
 			category = Category.fromJSON(obj);
 			Log.d("TEST", category.getName().toString());
-			
+
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		final Category oldCategory = category;
-		
+
 		editName.setText(oldCategory.getName());
-		
+
 		send.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
 				Category newCategory;
-				
 
 				if ("".equals(editName.getText().toString().trim())) {
 					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
@@ -82,7 +80,6 @@ public class EditCategoryFragment extends Fragment implements
 
 								public void onClick(DialogInterface dialog,
 										int which) {
-									// TODO Auto-generated method stub
 									dialog.cancel();
 								}
 							});
@@ -94,7 +91,8 @@ public class EditCategoryFragment extends Fragment implements
 					helper.sendMessageSendBundle(BundleMessage.getInstance()
 							.createBundle(
 									BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
-									CategoryCommand.edit(oldCategory, newCategory)));
+									CategoryCommand.edit(oldCategory,
+											newCategory)));
 
 					Intent intent = new Intent(getActivity(), MainGUI.class);
 					startActivity(intent);
@@ -106,55 +104,46 @@ public class EditCategoryFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-				// getFragmentManager().popBackStack();
 				editName.setText("");
 
 			}
 		});
 
-		
 		return root;
 	}
 
 	@Override
 	public void onBundleMessageRecv(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onBundleMessageSend(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onResponseMessage(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onResponseAnswerMessage(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onStatusMessage(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onCommandMessage(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onError(Exception e) {
-		// TODO Auto-generated method stub
 
 	}
 

@@ -121,7 +121,7 @@ public class EditActivityFragment extends Fragment implements
 
 			}
 		});
-		
+
 		editName.setText(activity.getName());
 
 		if (activity.getLocation() != null) {
@@ -130,10 +130,10 @@ public class EditActivityFragment extends Fragment implements
 
 		if (activity.getItemsForActivity() != null) {
 			// TODO
-			
+
 			for (int j = 0; j < activity.getItemsForActivity().size(); j++) {
 				Log.d("TEST", activity.getItemsForActivity().get(j).toString());
-				
+
 				Item it = activity.getItemsForActivity().get(j);
 				String itemName = it.getName().toString();
 				listadapter.add(itemName);
@@ -214,7 +214,6 @@ public class EditActivityFragment extends Fragment implements
 								@Override
 								public void onClick(DialogInterface dialog,
 										int which) {
-									// TODO Auto-generated method stub
 									locationForActivity = new Location(
 											locationNames[which], null);
 									locationForActivity = new Location(
@@ -295,10 +294,6 @@ public class EditActivityFragment extends Fragment implements
 			AdministrationCommand.fromJSONObject(
 					BundleMessage.getInstance().extractObject(b)).accept(p);
 
-			// listadapter = new ArrayAdapter<Item>(getActivity(),
-			// R.layout.fragment_create_new_activity, R.id.itemTextView,
-			// itemsForActivity);
-
 		}
 
 		default:
@@ -309,37 +304,31 @@ public class EditActivityFragment extends Fragment implements
 
 	@Override
 	public void onBundleMessageSend(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onResponseMessage(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onResponseAnswerMessage(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onStatusMessage(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onCommandMessage(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onError(Exception e) {
-		// TODO Auto-generated method stub
 
 	}
 

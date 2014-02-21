@@ -44,7 +44,7 @@ import de.uniulm.bagception.client.caching.ImageCachingSystem;
 
 public class EditItemFragment extends Fragment implements BundleMessageReactor {
 
-	private boolean acceptList=false;
+	private boolean acceptList = false;
 	Category categoryForActivity;
 	EditText editName;
 	Button send;
@@ -108,14 +108,13 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 		 */
 		Item item = null;
 		String i = getArguments().getString("ENTITYSTRING");
-		// String i = intent.getStringExtra("ITEMSTRING");
 		org.json.simple.JSONObject obj = new org.json.simple.JSONObject();
 		JSONParser p = new JSONParser();
 		try {
 			obj = (org.json.simple.JSONObject) p.parse(i);
 			item = Item.fromJSON(obj);
 			Log.d("TEST", item.getName().toString());
-			
+
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -126,7 +125,7 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 
 			@Override
 			public void onClick(View v) {
-				acceptList=true;
+				acceptList = true;
 				new BundleMessageHelper(getActivity())
 						.sendMessageSendBundle(BundleMessage.getInstance()
 								.createBundle(
@@ -146,7 +145,7 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 
 		// TODO
 		// get image
-		Bitmap bmp=ImageCachingSystem.getInstance().getImage(item);
+		Bitmap bmp = ImageCachingSystem.getInstance().getImage(item);
 		iv.setImageBitmap(bmp);
 		if (item.getAttribute() != null) {
 			ItemAttribute iA = item.getAttribute();
@@ -352,7 +351,7 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 				ItemAttribute attributes = new ItemAttribute(temperature,
 						weather, lightness);
 				newItem = new Item(-1, editName.getText().toString(),
-						categoryForActivity, alwaysChecked, independetChecked, 
+						categoryForActivity, alwaysChecked, independetChecked,
 						attributes, tagIDs);
 
 				if (((MainGUI) getActivity()).currentPicturetaken != null) {
@@ -394,7 +393,7 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 				@Override
 				public void onCategoryList(
 						de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand<de.uniulm.bagception.bundlemessageprotocol.entities.Category> i) {
-					acceptList=false;
+					acceptList = false;
 					final Category[] categories = i.getPayloadObjects();
 					final String[] categoryStrings = new String[categories.length];
 					for (int iter = 0; iter < categoryStrings.length; iter++) {
@@ -418,11 +417,11 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 								}
 							});
 					categoryAlert.create().show();
-					
+
 				}
 
 			};
-			if (!acceptList){
+			if (!acceptList) {
 				return;
 			}
 			AdministrationCommand.fromJSONObject(

@@ -139,7 +139,6 @@ public class CreateNewItemFragment extends Fragment implements
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
-				// TODO Auto-generated method stub
 				if (isChecked) {
 					warmOn = "warm";
 				} else {
@@ -153,7 +152,6 @@ public class CreateNewItemFragment extends Fragment implements
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
-				// TODO Auto-generated method stub
 				if (isChecked) {
 					coldOn = "cold";
 				} else {
@@ -167,7 +165,6 @@ public class CreateNewItemFragment extends Fragment implements
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
-				// TODO Auto-generated method stub
 				if (isChecked) {
 					rainyOn = "rainy";
 				} else {
@@ -181,7 +178,6 @@ public class CreateNewItemFragment extends Fragment implements
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
-				// TODO Auto-generated method stub
 				if (isChecked) {
 					sunnyOn = "sunny";
 				} else {
@@ -195,7 +191,6 @@ public class CreateNewItemFragment extends Fragment implements
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
-				// TODO Auto-generated method stub
 				if (isChecked) {
 					lightOn = "light";
 				} else {
@@ -209,7 +204,6 @@ public class CreateNewItemFragment extends Fragment implements
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
-				// TODO Auto-generated method stub
 				if (isChecked) {
 					darkOn = "dark";
 				} else {
@@ -223,7 +217,6 @@ public class CreateNewItemFragment extends Fragment implements
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
-				// TODO Auto-generated method stub
 				if (isChecked) {
 					independetChecked = true;
 				} else {
@@ -237,7 +230,6 @@ public class CreateNewItemFragment extends Fragment implements
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
-				// TODO Auto-generated method stub
 				if (isChecked) {
 					alwaysChecked = true;
 				} else {
@@ -313,7 +305,6 @@ public class CreateNewItemFragment extends Fragment implements
 
 								public void onClick(DialogInterface dialog,
 										int which) {
-									// TODO Auto-generated method stub
 									dialog.cancel();
 								}
 							});
@@ -335,7 +326,6 @@ public class CreateNewItemFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-				// getFragmentManager().popBackStack();
 				editName.setText("");
 				iv.setImageResource(R.drawable.ic_launcher);
 
@@ -371,7 +361,6 @@ public class CreateNewItemFragment extends Fragment implements
 							
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
-								// TODO Auto-generated method stub
 								
 							}
 						});
@@ -389,7 +378,6 @@ public class CreateNewItemFragment extends Fragment implements
 									@Override
 									public void onClick(DialogInterface dialog,
 											int which) {
-										// TODO Auto-generated method stub
 										categoryForActivity = new Category(
 												categoryIDs[which],
 												categoryStrings[which]);
@@ -419,52 +407,43 @@ public class CreateNewItemFragment extends Fragment implements
 
 	@Override
 	public void onResume() {
-		// TODO Auto-generated method stub
 		bmActor.register(getActivity());
 		super.onResume();
 	}
 
 	@Override
 	public void onPause() {
-		// TODO Auto-generated method stub
 		bmActor.unregister(getActivity());
-		// getFragmentManager().popBackStack();
 		super.onPause();
 	}
 
 	@Override
 	public void onBundleMessageSend(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onResponseMessage(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onResponseAnswerMessage(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onStatusMessage(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onCommandMessage(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onError(Exception e) {
-		// TODO Auto-generated method stub
 
 	}
 

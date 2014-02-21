@@ -108,5 +108,4 @@ public class ConnectivityFragment extends Fragment implements BundleMessageReact
 	public void onError(Exception e) {		
 	}
 	
-	// BundleMessageReactor \\
 }

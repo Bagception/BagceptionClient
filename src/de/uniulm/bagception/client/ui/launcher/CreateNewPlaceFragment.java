@@ -191,7 +191,6 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 								public void onClick(DialogInterface dialog,
 										int which) {
-									// TODO Auto-generated method stub
 									dialog.cancel();
 								}
 							});
@@ -219,7 +218,6 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-				// getFragmentManager().popBackStack();
 				editName.setText("");
 			}
 		});
@@ -229,7 +227,6 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 	@Override
 	public void onPause() {
-		// getFragmentManager().popBackStack();
 		super.onPause();
 	}
 
