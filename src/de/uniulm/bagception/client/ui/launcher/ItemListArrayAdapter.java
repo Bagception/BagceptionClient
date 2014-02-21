@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,16 +22,15 @@ import de.uniulm.bagception.client.items.AutoUpdateableItemView;
 public class ItemListArrayAdapter extends ArrayAdapter<Item> {
 
 	
-	private HashMap<Item,Integer> colorCodes = new HashMap<Item,Integer>(); 
-	private HashMap<Item,List<CONTEXT>> context = new HashMap<Item, List<CONTEXT>>();
-	private final HashMap<CONTEXT,Bitmap> contextImageMap = new HashMap<CONTEXT, Bitmap>();
-	
+	private HashMap<Long,Integer> colorCodes = new HashMap<Long,Integer>(); 
+	private HashMap<Long,List<CONTEXT>> context = new HashMap<Long, List<CONTEXT>>();
+	private final Bitmaps bitmaps;
 	public void clearColorCodeItems(){
 		colorCodes.clear();
 	}
 	public void putColorCodeItems(int c,Item... items){
 		for (Item i:items){
-			colorCodes.put(i, c);
+			colorCodes.put(i.getId(), c);
 		}
 	}
 	
@@ -40,19 +40,15 @@ public class ItemListArrayAdapter extends ArrayAdapter<Item> {
 	
 	public void putContextItem(List<CONTEXT> c,Item... items){
 		for (Item i:items){
-			context.put(i, c);
+			context.put(i.getId(), c);
 		}
 	}
 	
 	public ItemListArrayAdapter(Context context) {
 		super(context, android.R.layout.simple_list_item_1);
-		
-		contextImageMap.put(CONTEXT.BRIGHT, BitmapFactory.decodeResource(context.getResources(), R.drawable.daywarm));
-		contextImageMap.put(CONTEXT.COLD, BitmapFactory.decodeResource(context.getResources(), R.drawable.cold));
-		contextImageMap.put(CONTEXT.DARK, BitmapFactory.decodeResource(context.getResources(), R.drawable.night));
-		contextImageMap.put(CONTEXT.RAIN, BitmapFactory.decodeResource(context.getResources(), R.drawable.rain));
-		contextImageMap.put(CONTEXT.SUNNY, BitmapFactory.decodeResource(context.getResources(), R.drawable.daywarm));
-		contextImageMap.put(CONTEXT.WARM, BitmapFactory.decodeResource(context.getResources(), R.drawable.hot));
+		Log.d("COLOR","init arrayadapter");
+		bitmaps=Bitmaps.getInstance(context);
+
 		
 	}
 	
@@ -74,8 +70,8 @@ public class ItemListArrayAdapter extends ArrayAdapter<Item> {
             if (itemView != null) {
                 itemView.setText(item.getName());
             }
-            Integer col = colorCodes.get(item);
-            
+            Integer col = colorCodes.get(item.getId());
+            Log.d("COLOR","color code for "+item.getName()+":"  + col+ "\t pos: "+position);
             if (col!=null){
             	view.setBackgroundColor(col);
             }else{
@@ -86,7 +82,7 @@ public class ItemListArrayAdapter extends ArrayAdapter<Item> {
             if (ctx!=null){
 	            Bitmap bmp=null;
             	for(CONTEXT c:ctx){
-            		bmp=contextImageMap.get(c);
+            		bmp=bitmaps.getContextIcon(c);
             	}
             	contextImg.setImageBitmap(bmp);
             }

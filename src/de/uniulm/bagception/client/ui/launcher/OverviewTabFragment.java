@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,10 @@ public abstract class OverviewTabFragment extends Fragment {
 	protected ListView itemsStatusView;
 	private OverviewFragment fragment;
 
+	public OverviewTabFragment() {
+		Log.d("COLOR","overviewFragment created");
+	}
+	
 	protected List<ContextSuggestion> suggestionToReplace = new ArrayList<ContextSuggestion>();
 	protected List<ContextSuggestion> suggestionToRemove = new ArrayList<ContextSuggestion>();
 	protected List<ContextSuggestion> suggestionToAdd = new ArrayList<ContextSuggestion>();
@@ -73,6 +78,11 @@ public abstract class OverviewTabFragment extends Fragment {
 			}
 		}
 	}
+	/**
+	 * 
+	 * @param update
+	 * @return all items to display in  the list
+	 */
 	protected abstract List<Item> getCorrespondingItemList(ContainerStateUpdate update);
 	
 	@Override
@@ -94,7 +104,7 @@ public abstract class OverviewTabFragment extends Fragment {
 			Bundle savedInstanceState) {
 		ViewGroup root = (ViewGroup) inflater.inflate(
 				R.layout.fragment_items_in, null);
-
+		Log.d("COLOR","onCreateView called");
 		itemsStatusView = (ListView) root.findViewById(R.id.itemsIn);
 		
 		itemsStatusView.setAdapter(new ItemListArrayAdapter(getActivity()));
