@@ -52,7 +52,7 @@ public abstract class OverviewTabFragment extends Fragment {
 		
 	}
 	
-	
+
 	/**
 	 * 
 	 * @param update
