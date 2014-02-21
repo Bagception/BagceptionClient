@@ -3,35 +3,29 @@ package de.uniulm.bagception.client.ui.launcher;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.Toast;
-import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
-import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
 import de.uniulm.bagception.bundlemessageprotocol.entities.ContainerStateUpdate;
+import de.uniulm.bagception.bundlemessageprotocol.entities.ContextSuggestion;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.client.R;
 
-public class ItemsSuggFragment extends OverviewTabFragment implements BundleMessageReactor, OnChildClickListener{
+public class ItemsSuggFragment extends OverviewTabFragment implements OnChildClickListener{
 
-	@SuppressWarnings("unused")
-	private OverviewFragment fragment;
-	private BundleMessageActor bmActor;
 	private SuggestionListAdapter suggAdapter;
 	private ExpandableListView expandbleLis;
 
-	public void setParentFragment(OverviewFragment fragment) {
-		this.fragment = fragment;
-	}
 	
 	@Override
 	public synchronized void updateView(ContainerStateUpdate update) {
+		
 		super.updateView(update);
 	}
 
@@ -46,14 +40,14 @@ public class ItemsSuggFragment extends OverviewTabFragment implements BundleMess
 		expandbleLis.setClickable(true);
 		
 		if(suggAdapter == null){
-			setGroupData();
-			setChildGroupData();	
-		
-			suggAdapter = new SuggestionListAdapter(groupItem, childItem);
-			suggAdapter.setInflater((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE), getActivity());
+			
+			Log.w("TEST", "ContextSuggestion (Client/ItemSuggFragment): " + suggestionToReplace);
+			suggAdapter = new SuggestionListAdapter(getActivity(),suggestionToReplace);
+			suggAdapter.setInflater((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE));
 		}
 	
 		if(expandbleLis.getExpandableListAdapter() == null){
+			Log.w("TEST", "suggAdapter (Client/ItemSuggFragment): " + suggestionToReplace);
 			expandbleLis.setAdapter(suggAdapter);
 		}	
 		
@@ -61,83 +55,9 @@ public class ItemsSuggFragment extends OverviewTabFragment implements BundleMess
 
 	}
 	
-	
-	ArrayList<String> groupItem = new ArrayList<String>();
-	ArrayList<Object> childItem = new ArrayList<Object>();
-	
-	
-	public void setGroupData(){
-		groupItem.add("Kurze Hose");
-		groupItem.add("T-Shirt");
-	}
-	
-	public void setChildGroupData(){
-		
-		// Data for "Kurze Hose"
-		ArrayList<String> child = new ArrayList<String>();
-		child.add("Lange Jogginghose");
-		child.add("Lange Jeans");
-		childItem.add(child);
-		
-		
-		// Data for "T-Shirt"
-		child = new ArrayList<String>();
-		child.add("Strickpulli");
-		child.add("Pullover");
-		childItem.add(child);
-		
-	}
-
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		bmActor = new BundleMessageActor(this);
-		bmActor.register(getActivity());
-	}
-
-	@Override
-	public void onDetach() {
-		bmActor.unregister(getActivity());
-		super.onDetach();
-	}
-
-	@Override
-	public void onBundleMessageRecv(Bundle b) {
-		
-	}
-
-	@Override
-	public void onBundleMessageSend(Bundle b) {
-		
-	}
-
-	@Override
-	public void onResponseMessage(Bundle b) {
-		
-	}
-
-	@Override
-	public void onResponseAnswerMessage(Bundle b) {
-		
-	}
-
-	@Override
-	public void onStatusMessage(Bundle b) {
-		
-	}
-
-	@Override
-	public void onCommandMessage(Bundle b) {
-		
-	}
-
-	@Override
-	public void onError(Exception e) {
-		
-	}
-
 	@Override
 	protected List<Item> getCorrespondingItemList(ContainerStateUpdate update) {
+		//we do not need this, because the listview is different
 		return null;
 	}
 
