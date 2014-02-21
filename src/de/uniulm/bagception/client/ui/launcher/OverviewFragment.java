@@ -7,6 +7,7 @@ import org.json.simple.JSONObject;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,6 +29,7 @@ import de.uniulm.bagception.bluetoothclientmessengercommunication.service.Bundle
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Activity;
+import de.uniulm.bagception.bundlemessageprotocol.entities.ActivityPriorityList;
 import de.uniulm.bagception.bundlemessageprotocol.entities.ContainerStateUpdate;
 import de.uniulm.bagception.bundlemessageprotocol.entities.ContextSuggestion;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
@@ -65,6 +67,8 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 	Button changeActivity;
 	Button endActivity;
 
+	ActivityPriorityList list;
+	String[] prioActivities;
 	private Activity ac = null;
 
 	static Fragment newInstance(Context context) {
@@ -100,20 +104,15 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		itemsInFragment.setParentFragment(this);
 		itemsMissFragment = new ItemsMissFragment();
 		itemsMissFragment.setParentFragment(this);
-		// itemsNeedlessFragment = new ItemsNeedlessFragment();
-		// itemsNeedlessFragment.setParentFragment(this);
 		itemsSuggFragment = new ItemsSuggFragment();
 		itemsSuggFragment.setParentFragment(this);
 
 		itemsInTab.setTabListener(new ItemTabListener(itemsInFragment));
 		itemsMissTab.setTabListener(new ItemTabListener(itemsMissFragment));
-		// itemsNeedlessTab.setTabListener(new
-		// ItemTabListener(itemsNeedlessFragment));
 		itemsSuggTab.setTabListener(new ItemTabListener(itemsSuggFragment));
 
 		actionBar.addTab(itemsInTab);
 		actionBar.addTab(itemsMissTab);
-		// actionBar.addTab(itemsNeedlessTab);
 		actionBar.addTab(itemsSuggTab);
 		actionBar.getTabAt(0).select();
 
@@ -121,12 +120,19 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 			@Override
 			public void onClick(View v) {
-				acceptList = true;
-				new BundleMessageHelper(getActivity())
-						.sendMessageSendBundle(BundleMessage.getInstance()
-								.createBundle(
-										BUNDLE_MESSAGE.ACTIVITY_PRIORITY_LIST,
-										ActivityCommand.list()));
+				Log.d("TEST", "ja ich sende");
+				//TODO prioritylist anzeigen
+				AlertDialog.Builder priorityActivitiesAlert = new AlertDialog.Builder(getActivity());
+				priorityActivitiesAlert.setTitle("Aktivität ändern");
+				priorityActivitiesAlert.setSingleChoiceItems(prioActivities, -1, new OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+				priorityActivitiesAlert.create().show();
 			}
 		});
 
@@ -186,6 +192,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 	public void onBundleMessageRecv(Bundle b) {
 		BUNDLE_MESSAGE msg = BundleMessage.getInstance()
 				.getBundleMessageType(b);
+		Log.d("TEST", "msg" + msg.toString());
 		switch (msg) {
 
 		case CONTAINER_STATUS_UPDATE:
@@ -269,14 +276,17 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		case ITEM_NOT_FOUND:
 			Item unknownItem = Item.fromJSON(BundleMessage.getInstance()
 					.extractObject(b));
-			// Toast.makeText(getActivity(), "Found Item ID: " +
-			// unknownItem.getIds().get(0), Toast.LENGTH_LONG).show();
-
 			dialog(unknownItem);
 			break;
 
 		case ACTIVITY_PRIORITY_LIST: {
-			onActivityPriorityList(b);
+			Log.d("TEST", "Also das geht");
+			list = ActivityPriorityList.fromJSON(BundleMessage.getInstance().extractObject(b));
+			prioActivities = new String[list.getActivities().size()];
+			for(int i=0; i<list.getActivities().size(); i++){
+				prioActivities[i] = list.getActivities().get(i).getName();
+			}
+
 		}
 
 		case ADMINISTRATION_COMMAND: {
@@ -406,10 +416,6 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 	public void onStop() {
 		super.onStop();
 		bmActor.unregister(getActivity());
-
-	}
-
-	private void onActivityPriorityList(Bundle b) {
 
 	}
 
