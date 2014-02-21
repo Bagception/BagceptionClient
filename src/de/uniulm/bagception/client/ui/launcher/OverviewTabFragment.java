@@ -47,6 +47,10 @@ public abstract class OverviewTabFragment extends Fragment {
 		
 	}
 	
+	protected synchronized void onUpdateView(SuggestionListAdapter adapter){
+		
+	}
+	
 	private synchronized void calcCorrespondingContextItems(){
 		suggestionToReplace.clear();
 		suggestionToRemove.clear();
