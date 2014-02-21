@@ -112,8 +112,18 @@ public class EditLocationFragment extends Fragment implements
 		final Location oldLocation = location;
 		
 		editName.setText(location.getName());
+		
+		new BundleMessageHelper(getActivity())
+		.sendMessageSendBundle(BundleMessage.getInstance()
+				.createBundle(
+						BUNDLE_MESSAGE.RESOLVE_COORDS_REQUEST,
+						oldLocation));
+		
 		latView.setText(location.getLat().toString());
 		lngView.setText(location.getLng().toString());
+		int radius = location.getRadius();
+		
+		
 //		editAddress.setText(location.)
 
 		resolveAddress.setOnClickListener(new OnClickListener() {
