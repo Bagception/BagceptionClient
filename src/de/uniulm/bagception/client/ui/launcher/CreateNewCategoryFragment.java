@@ -57,7 +57,6 @@ public class CreateNewCategoryFragment extends Fragment {
 
 								public void onClick(DialogInterface dialog,
 										int which) {
-									// TODO Auto-generated method stub
 									dialog.cancel();
 								}
 							});
@@ -81,9 +80,9 @@ public class CreateNewCategoryFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				// getFragmentManager().popBackStack();
 				editName.setText("");
-
+				Intent intent = new Intent(getActivity(), MainGUI.class);
+				startActivity(intent);
 			}
 		});
 
@@ -92,7 +91,6 @@ public class CreateNewCategoryFragment extends Fragment {
 
 	@Override
 	public void onPause() {
-		// getFragmentManager().popBackStack();
 		super.onPause();
 	}
 }

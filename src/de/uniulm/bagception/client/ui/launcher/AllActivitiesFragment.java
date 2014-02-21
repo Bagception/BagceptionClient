@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
+import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
+import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Activity;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.ActivityCommand;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
@@ -95,11 +98,15 @@ public class AllActivitiesFragment extends
 
 	@Override
 	protected void onItemClicked(Activity elem) {
-		// new
-		// BundleMessageHelper(getActivity()).sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,ActivityCommand.start(elem)));
-		// new
-		// BundleMessageHelper(getActivity()).sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
-		// ActivityCommand.stop(elem)));
+		new BundleMessageHelper(getActivity())
+				.sendMessageSendBundle(BundleMessage.getInstance()
+						.createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
+								ActivityCommand.stop(elem)));
+		new BundleMessageHelper(getActivity())
+				.sendMessageSendBundle(BundleMessage.getInstance()
+						.createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
+								ActivityCommand.start(elem)));
+
 	}
 
 	@Override

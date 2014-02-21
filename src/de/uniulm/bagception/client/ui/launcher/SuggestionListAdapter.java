@@ -1,38 +1,35 @@
 package de.uniulm.bagception.client.ui.launcher;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckedTextView;
-import android.widget.TextView;
-import android.widget.Toast;
+import de.uniulm.bagception.bundlemessageprotocol.entities.ContextSuggestion;
+import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.client.R;
 
-@SuppressWarnings("unchecked")
 public class SuggestionListAdapter extends BaseExpandableListAdapter {
 
+	private LayoutInflater inflater;
+	private final Context context;
 	
-	public ArrayList<String> groupItem, tempChild;
-	public ArrayList<Object> Childtem = new ArrayList<Object>();
-	public LayoutInflater minflater;
-	public Activity activity;
+	private final List<ContextSuggestion> data;
 	
-	
-	public SuggestionListAdapter(ArrayList<String> grList, ArrayList<Object> childItem) {
-		groupItem = grList;
-		this.Childtem = childItem;
+	public SuggestionListAdapter(Context context,List<ContextSuggestion> contextSuggestions) {
+		this.data = contextSuggestions;
+		this.context = context;
+		
 	}
 
-	public void setInflater(LayoutInflater mInflater, Activity act) {
-		this.minflater = mInflater;
-		activity = act;
+	public void setInflater(LayoutInflater mInflater) {
+		this.inflater = mInflater;
 	}
 	 
 	@Override
@@ -51,23 +48,28 @@ public class SuggestionListAdapter extends BaseExpandableListAdapter {
 	 */
 	@Override
 	public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-		tempChild = (ArrayList<String>) Childtem.get(groupPosition);
-		TextView text = null;
-		if (convertView == null) {
-			convertView = minflater.inflate(R.layout.child_row, null);
-		}
+		ContextSuggestion sug = data.get(groupPosition);
+		Log.w("TEST", "ContextSuggestion (Client/SuggestionListAdapter): " + sug);
 		
-		text = (TextView) convertView.findViewById(R.id.suggestionItem);
-		text.setText(tempChild.get(childPosition));
+		List<Item> replaceSuggestions = sug.getReplaceSuggestions();
+		//TODO render replaceSuggestions
 		
-		convertView.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-
-				Toast.makeText(activity, tempChild.get(childPosition), Toast.LENGTH_SHORT).show();
-			}
-		});
+//		TextView text = null;
+//		if (convertView == null) {
+//			convertView = minflater.inflate(R.layout.child_row, null);
+//		}
+//		
+//		text = (TextView) convertView.findViewById(R.id.suggestionItem);
+//		text.setText(tempChild.get(childPosition));
+//		
+//		convertView.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//
+//				Toast.makeText(activity, tempChild.get(childPosition), Toast.LENGTH_SHORT).show();
+//			}
+//		});
 		
 	  return convertView;
 	 }
@@ -76,8 +78,7 @@ public class SuggestionListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public int getChildrenCount(int groupPosition) {
 	
-		Log.w("TEST", "Childtem: " + Childtem);
-		return ((ArrayList<String>) Childtem.get(groupPosition)).size();
+		return data.get(groupPosition).getReplaceSuggestions().size();
 	}
 
 	@Override
@@ -87,7 +88,7 @@ public class SuggestionListAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public int getGroupCount() {
-		return groupItem.size();
+		return data.size();
 	}
 	
 	@Override
@@ -112,22 +113,29 @@ public class SuggestionListAdapter extends BaseExpandableListAdapter {
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 
 		if(convertView == null){
-			convertView = minflater.inflate(R.layout.group_row, null);
+			convertView = inflater.inflate(R.layout.group_row, null);
 		}
 		
-		((CheckedTextView) convertView).setText(groupItem.get(groupPosition));
+		Log.w("TEST", "List<ContextSuggestion> data (Client/SuggestionListAdapter): " + data);
+		
+		ContextSuggestion sug = data.get(groupPosition);
+		Item toRender = sug.getItemToReplace();
+		Bitmap contextIcon = Bitmaps.getInstance(context).getContextIcon(sug.getReason());
+		
+		
+		((CheckedTextView) convertView).setText(data.get(groupPosition).getName());
 		((CheckedTextView) convertView).setChecked(isExpanded);
 		
 		
 		/**
 		 * Set the images of the parent entries (the items that shall be replaced)
 		 */
-		CheckedTextView cv = (CheckedTextView) convertView.findViewById(R.id.replaceItem);
-		Drawable icon = (Drawable) convertView.getResources().getDrawable(R.drawable.ic_launcher);
-		Drawable icon2 = (Drawable) convertView.getResources().getDrawable(R.drawable.service_icon);
-		
-		cv.setCompoundDrawablesWithIntrinsicBounds(icon2, null, icon, null);
-		
+		AutoUpdatableCheckedTextView cv = (AutoUpdatableCheckedTextView) convertView.findViewById(R.id.replaceItem);
+//		Drawable icon = (Drawable) convertView.getResources().getDrawable(R.drawable.ic_launcher);
+//		Drawable icon2 = (Drawable) convertView.getResources().getDrawable(R.drawable.service_icon);
+		cv.setItem(toRender);
+		//cv.setCompoundDrawablesWithIntrinsicBounds(icon2, null, icon, null);
+		cv.setCompoundDrawablesWithIntrinsicBounds(contextIcon);
 		return convertView;
 	}
 

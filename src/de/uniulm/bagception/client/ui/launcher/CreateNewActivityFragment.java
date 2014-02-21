@@ -150,6 +150,8 @@ public class CreateNewActivityFragment extends Fragment implements
 			@Override
 			public void onClick(View v) {
 				editName.setText("");
+				Intent intent = new Intent(getActivity(), MainGUI.class);
+				startActivity(intent);
 			}
 		});
 
@@ -299,19 +301,16 @@ public class CreateNewActivityFragment extends Fragment implements
 
 	@Override
 	public void onStatusMessage(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onCommandMessage(Bundle b) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onError(Exception e) {
-		// TODO Auto-generated method stub
 
 	}
 
