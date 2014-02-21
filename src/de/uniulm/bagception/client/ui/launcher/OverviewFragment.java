@@ -247,6 +247,30 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			
 			//SUGGESTIONS
 			contextSuggestions = statusUpdate.getContextSuggestions();
+			//DEBUGCONTEXT:
+			Log.d("DEBUGCONTEXT","Debug context:");
+			if (contextSuggestions == null){
+				Log.d("DEBUGCONTEXT","context is null");
+			}else{
+				for(ContextSuggestion sss:contextSuggestions){
+					if (sss.getItemToReplace()!=null){
+						Log.d("DEBUGCONTEXT","suggestion replace: " +sss.getItemToReplace().getName());
+					}else{
+						Log.d("DEBUGCONTEXT","suggestion replace: no");	
+					}
+					Log.d("DEBUGCONTEXT"," reason: "+sss.getReason().name());	
+					for (Item i:sss.getReplaceSuggestions()){
+						if (i == null){
+							Log.d(" DEBUGCONTEXT","replace with nothing:");
+						}else{
+							Log.d(" DEBUGCONTEXT","replace with:"+i.getName());	
+						}
+							
+					}
+				}
+				
+			}
+			
 			calcCorrespondingContextItems();
 			//TODO
 			itemsSuggFragment.updateView(statusUpdate);
@@ -436,7 +460,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		Log.d("CONTEXT","calc suggestions");	
 		suggestionToReplace.clear();
 		suggestionToRemove.clear();
-		suggestionToReplace.clear();
+		suggestionToAdd.clear();
 		if (contextSuggestions != null) {
 			for (ContextSuggestion sug : contextSuggestions) {
 				if (sug.getItemToReplace()==null){
