@@ -31,7 +31,6 @@ public class ItemsSuggFragment extends OverviewTabFragment implements BundleMess
 	
 	@Override
 	public synchronized void updateView(ContainerStateUpdate update) {
-		// TODO Auto-generated method stub
 		super.updateView(update);
 	}
 
@@ -103,49 +102,41 @@ public class ItemsSuggFragment extends OverviewTabFragment implements BundleMess
 
 	@Override
 	public void onBundleMessageRecv(Bundle b) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onBundleMessageSend(Bundle b) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onResponseMessage(Bundle b) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onResponseAnswerMessage(Bundle b) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onStatusMessage(Bundle b) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onCommandMessage(Bundle b) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onError(Exception e) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	protected List<Item> getCorrespondingItemList(ContainerStateUpdate update) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

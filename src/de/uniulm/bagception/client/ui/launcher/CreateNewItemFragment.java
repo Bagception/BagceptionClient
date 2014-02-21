@@ -225,9 +225,9 @@ public class CreateNewItemFragment extends Fragment implements
 					boolean isChecked) {
 				// TODO Auto-generated method stub
 				if (isChecked) {
-					alwaysChecked = true;
+					independetChecked = true;
 				} else {
-					alwaysChecked = false;
+					independetChecked = false;
 				}
 			}
 		});
@@ -239,9 +239,9 @@ public class CreateNewItemFragment extends Fragment implements
 					boolean isChecked) {
 				// TODO Auto-generated method stub
 				if (isChecked) {
-					independetChecked = true;
+					alwaysChecked = true;
 				} else {
-					independetChecked = false;
+					alwaysChecked = false;
 				}
 			}
 		});
@@ -293,8 +293,8 @@ public class CreateNewItemFragment extends Fragment implements
 						weather, lightness);
 
 				item = new Item(-1, editName.getText().toString(),
-						categoryForActivity, alwaysChecked, independetChecked,
-						attributes, tagIDs);
+						categoryForActivity, alwaysChecked, independetChecked, 
+ 						attributes, tagIDs);
 
 				if (((MainGUI) getActivity()).currentPicturetaken != null) {
 					item.setImage(((MainGUI) getActivity()).currentPicturetaken);
