@@ -70,6 +70,10 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 	ActivityPriorityList activityPriorityList;
 	String[] prioActivities;
 	private Activity ac = null;
+	
+	protected List<ContextSuggestion> suggestionToReplace = new ArrayList<ContextSuggestion>();
+	protected List<ContextSuggestion> suggestionToRemove = new ArrayList<ContextSuggestion>();
+	protected List<ContextSuggestion> suggestionToAdd = new ArrayList<ContextSuggestion>();
 
 	static Fragment newInstance(Context context) {
 		OverviewFragment f = new OverviewFragment();
@@ -243,7 +247,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			
 			//SUGGESTIONS
 			contextSuggestions = statusUpdate.getContextSuggestions();
-			
+			calcCorrespondingContextItems();
 			//TODO
 			itemsSuggFragment.updateView(statusUpdate);
 			
@@ -427,6 +431,44 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 	}
 
+	
+	private synchronized void calcCorrespondingContextItems(){
+		Log.d("CONTEXT","calc suggestions");	
+		suggestionToReplace.clear();
+		suggestionToRemove.clear();
+		suggestionToReplace.clear();
+		if (contextSuggestions != null) {
+			for (ContextSuggestion sug : contextSuggestions) {
+				if (sug.getItemToReplace()==null){
+					//no item to replace/remove => nothing to remove, only  to add
+					suggestionToAdd.add(sug);
+					
+					for(Item i:sug.getReplaceSuggestions()){
+						Log.d("CONTEXT","toAdd: "+i.getName());	
+					}
+					
+				}else{
+					//there is an item to replace/remove (I)
+					if (sug.getReplaceSuggestions()!=null && sug.getReplaceSuggestions().size()>0){
+						//there are suggestions + I => replace 
+						suggestionToReplace.add(sug);
+						Log.d("CONTEXT","toReplace: "+sug.getItemToReplace().getName());
+						for(Item i:sug.getReplaceSuggestions()){
+							Log.d("CONTEXT","toReplaceWith: "+i.getName());
+						}
+					}else{
+						//I + no suggestions => remove item
+						suggestionToRemove.add(sug);
+						Log.d("CONTEXT","toRemove: "+sug.getName());
+					}
+				}
+			}
+		}else{
+				Log.d("CONTEXT","suggestions are null");	
+		}
+		
+	}
+	
 	// add tagid to item
 	private void onAdminCommand(Bundle b) {
 

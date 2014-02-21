@@ -15,7 +15,7 @@ public class ItemsMissFragment extends OverviewTabFragment{
 	protected List<Item> getCorrespondingItemList(ContainerStateUpdate update) {
 		List<Item> ret = new ArrayList<Item>(update.getMissingItems());
 		
-		for(ContextSuggestion sug:suggestionToAdd){
+		for(ContextSuggestion sug:fragment.suggestionToAdd){
 			for(Item i:sug.getReplaceSuggestions()){
 				if (!ret.contains(i)){
 					ret.add(i);
@@ -32,9 +32,9 @@ public class ItemsMissFragment extends OverviewTabFragment{
 	protected synchronized void onUpdateView(ItemListArrayAdapter adapter) {
 		adapter.clearColorCodeItems();
 		adapter.clearContextInfo();
-		for(ContextSuggestion sug:suggestionToAdd){
+		for(ContextSuggestion sug:fragment.suggestionToAdd){
 			for(Item i:sug.getReplaceSuggestions()){
-				adapter.putColorCodeItems(Color.GRAY, i);
+				adapter.putColorCodeItems(Color.RED, i);
 				ArrayList<CONTEXT> ctx = new ArrayList<ContextSuggestion.CONTEXT>();
 				Log.d("CONTEXT","Context icon (miss) for "+i.getName()+": "+sug.getReason().name());
 				ctx.add(sug.getReason());
