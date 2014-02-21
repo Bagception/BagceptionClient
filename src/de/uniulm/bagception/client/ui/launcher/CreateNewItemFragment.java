@@ -56,7 +56,7 @@ public class CreateNewItemFragment extends Fragment implements
 	Spinner spinner;
 	ImageView iv;
 	CheckBox always;
-	CheckBox independet;
+	CheckBox independent;
 	String warmOn;
 	String coldOn;
 	String rainyOn;
@@ -66,8 +66,6 @@ public class CreateNewItemFragment extends Fragment implements
 	String temperature;
 	String weather;
 	String lightness;
-	boolean alwaysChecked;
-	boolean independetChecked;
 	BundleMessageActor bmActor;
 
 	private String tagId;
@@ -96,7 +94,7 @@ public class CreateNewItemFragment extends Fragment implements
 		light = (ToggleButton) root.findViewById(R.id.lightButton);
 		dark = (ToggleButton) root.findViewById(R.id.darkButton);
 		always = (CheckBox) root.findViewById(R.id.always);
-		independet = (CheckBox) root.findViewById(R.id.independent);
+		independent = (CheckBox) root.findViewById(R.id.independent);
 		viewCategory = (TextView) root.findViewById(R.id.viewCategory);
 
 		bmActor = new BundleMessageActor(this);
@@ -218,34 +216,6 @@ public class CreateNewItemFragment extends Fragment implements
 			}
 		});
 
-		always.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				// TODO Auto-generated method stub
-				if (isChecked) {
-					independetChecked = true;
-				} else {
-					independetChecked = false;
-				}
-			}
-		});
-
-		independet.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				// TODO Auto-generated method stub
-				if (isChecked) {
-					alwaysChecked = true;
-				} else {
-					alwaysChecked = false;
-				}
-			}
-		});
-
 		send.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -291,9 +261,9 @@ public class CreateNewItemFragment extends Fragment implements
 
 				ItemAttribute attributes = new ItemAttribute(temperature,
 						weather, lightness);
-
+				
 				item = new Item(-1, editName.getText().toString(),
-						categoryForActivity, alwaysChecked, independetChecked, 
+						categoryForActivity,always.isChecked() , independent.isChecked(), 
  						attributes, tagIDs);
 
 				if (((MainGUI) getActivity()).currentPicturetaken != null) {
