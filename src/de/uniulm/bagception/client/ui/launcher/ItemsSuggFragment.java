@@ -29,6 +29,12 @@ public class ItemsSuggFragment extends OverviewTabFragment implements BundleMess
 	public void setParentFragment(OverviewFragment fragment) {
 		this.fragment = fragment;
 	}
+	
+	@Override
+	public synchronized void updateView(ContainerStateUpdate update) {
+		// TODO Auto-generated method stub
+		super.updateView(update);
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
