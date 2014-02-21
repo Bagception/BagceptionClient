@@ -67,7 +67,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 	Button changeActivity;
 	Button endActivity;
 
-	ActivityPriorityList list;
+	ActivityPriorityList activityPriorityList;
 	String[] prioActivities;
 	private Activity ac = null;
 
@@ -120,19 +120,27 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 			@Override
 			public void onClick(View v) {
-				Log.d("TEST", "ja ich sende");
-				//TODO prioritylist anzeigen
-				AlertDialog.Builder priorityActivitiesAlert = new AlertDialog.Builder(getActivity());
-				priorityActivitiesAlert.setTitle("Aktivität ändern");
-				priorityActivitiesAlert.setSingleChoiceItems(prioActivities, -1, new OnClickListener() {
+				if (prioActivities != null && prioActivities.length>0){
+					final AlertDialog.Builder priorityActivitiesAlert = new AlertDialog.Builder(getActivity());
+					priorityActivitiesAlert.setTitle("Aktivität ändern");
 					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
+					priorityActivitiesAlert.setSingleChoiceItems(prioActivities, -1, new OnClickListener() {
 						
-					}
-				});
-				priorityActivitiesAlert.create().show();
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							new BundleMessageHelper(getActivity())
+							.sendMessageSendBundle(BundleMessage
+									.getInstance()
+									.createBundle(
+											BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
+											ActivityCommand.
+													start(activityPriorityList.getActivities().get(which))));
+						}
+					});
+					priorityActivitiesAlert.create().show();
+				}else{
+					Toast.makeText(getActivity(), "keine Aktivität auswählbar", Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 
@@ -281,10 +289,10 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 		case ACTIVITY_PRIORITY_LIST: {
 			Log.d("TEST", "Also das geht");
-			list = ActivityPriorityList.fromJSON(BundleMessage.getInstance().extractObject(b));
-			prioActivities = new String[list.getActivities().size()];
-			for(int i=0; i<list.getActivities().size(); i++){
-				prioActivities[i] = list.getActivities().get(i).getName();
+			activityPriorityList = ActivityPriorityList.fromJSON(BundleMessage.getInstance().extractObject(b));
+			prioActivities = new String[activityPriorityList.getActivities().size()];
+			for(int i=0; i<activityPriorityList.getActivities().size(); i++){
+				prioActivities[i] = activityPriorityList.getActivities().get(i).getName();
 			}
 
 		}
