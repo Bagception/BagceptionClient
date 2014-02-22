@@ -18,9 +18,13 @@ public class ItemsInFragment extends OverviewTabFragment{
 	protected List<Item> getCorrespondingItemList(ContainerStateUpdate update) {
 		needless = update.getNeedlessItems();
 		List<Item> ret = new ArrayList<Item>(update.getItemList());
+		
+
+		//TODO prüfen ob nötig
 		for(ContextSuggestion sug:fragment.suggestionToRemove){
 			if (!ret.contains(sug.getItemToReplace())){
 				ret.add(sug.getItemToReplace());
+				needless.remove(sug.getItemToReplace());
 			}
 		}
 		return ret;
@@ -35,6 +39,18 @@ public class ItemsInFragment extends OverviewTabFragment{
 			
 			if (needless.contains(item)){
 				adapter.putColorCodeItems(Color.CYAN, item);
+			}
+			
+			
+			for(ContextSuggestion sug:fragment.suggestionToAdd){
+				ArrayList<CONTEXT> ctx = new ArrayList<ContextSuggestion.CONTEXT>();
+				ctx.add(sug.getReason());
+				for(Item replaceItem:sug.getReplaceSuggestions()){
+					if (replaceItem.equals(item)){
+						adapter.putContextItem(ctx, item);
+					}
+				}
+				
 			}
 		}
 		
