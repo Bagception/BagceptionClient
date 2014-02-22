@@ -44,5 +44,16 @@ public class ItemsMissFragment extends OverviewTabFragment{
 			}
 			
 		}
+		
+		for(int i=0;i<adapter.getCount();i++){
+			Item item = adapter.getItem(i);
+			
+			final ContextSuggestion sug = ContextSuggestion.getItemsToReplace(fragment.suggestionToAdd, item);
+			if (sug!=null){
+				List<CONTEXT> ctx =new ArrayList<CONTEXT>();
+				ctx.add(sug.getReason());
+				adapter.putContextItem(ctx, item);
+			}
+		}
 	}
 }
