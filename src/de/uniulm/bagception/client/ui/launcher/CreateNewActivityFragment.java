@@ -152,7 +152,6 @@ public class CreateNewActivityFragment extends Fragment implements
 				editName.setText("");
 				Intent intent = new Intent(getActivity(), MainGUI.class);
 				startActivity(intent);
-
 			}
 		});
 

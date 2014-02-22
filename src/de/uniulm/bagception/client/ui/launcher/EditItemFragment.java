@@ -323,7 +323,7 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 				ItemAttribute attributes = new ItemAttribute(temperature,
 						weather, lightness);
 				newItem = new Item(-1, editName.getText().toString(),
-						categoryForActivity, always.isChecked(), independet.isChecked(),
+						categoryForActivity, independet.isChecked(), always.isChecked(),
 						attributes, tagIDs);
 
 				if (((MainGUI) getActivity()).currentPicturetaken != null) {

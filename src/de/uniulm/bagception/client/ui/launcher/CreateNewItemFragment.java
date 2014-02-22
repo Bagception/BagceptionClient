@@ -258,7 +258,7 @@ public class CreateNewItemFragment extends Fragment implements
 						weather, lightness);
 				
 				item = new Item(-1, editName.getText().toString(),
-						categoryForActivity,always.isChecked() , independent.isChecked(), 
+						categoryForActivity, independent.isChecked(), always.isChecked() ,
  						attributes, tagIDs);
 
 				if (((MainGUI) getActivity()).currentPicturetaken != null) {

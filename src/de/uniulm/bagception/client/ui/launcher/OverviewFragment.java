@@ -67,9 +67,13 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 	Button changeActivity;
 	Button endActivity;
 
-	ActivityPriorityList list;
+	ActivityPriorityList activityPriorityList;
 	String[] prioActivities;
 	private Activity ac = null;
+	
+	protected List<ContextSuggestion> suggestionToReplace = new ArrayList<ContextSuggestion>();
+	protected List<ContextSuggestion> suggestionToRemove = new ArrayList<ContextSuggestion>();
+	protected List<ContextSuggestion> suggestionToAdd = new ArrayList<ContextSuggestion>();
 
 	static Fragment newInstance(Context context) {
 		OverviewFragment f = new OverviewFragment();
@@ -120,25 +124,35 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 			@Override
 			public void onClick(View v) {
-				Log.d("TEST", "ja ich sende");
-				//TODO prioritylist anzeigen
-				AlertDialog.Builder priorityActivitiesAlert = new AlertDialog.Builder(getActivity());
-				priorityActivitiesAlert.setTitle("Aktivität ändern");
-				priorityActivitiesAlert.setSingleChoiceItems(prioActivities, -1, new OnClickListener() {
+				if (prioActivities != null && prioActivities.length>0){
+					final AlertDialog.Builder priorityActivitiesAlert = new AlertDialog.Builder(getActivity());
+					priorityActivitiesAlert.setTitle("Aktivität ändern");
 					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Start this activity
+					priorityActivitiesAlert.setSingleChoiceItems(prioActivities, -1, new OnClickListener() {
 						
-					}
-				});
-				priorityActivitiesAlert.create().show();
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							new BundleMessageHelper(getActivity())
+							.sendMessageSendBundle(BundleMessage
+									.getInstance()
+									.createBundle(
+											BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
+											ActivityCommand.
+													start(activityPriorityList.getActivities().get(which))));
+						}
+					});
+					priorityActivitiesAlert.create().show();
+				}else{
+					Toast.makeText(getActivity(), "keine Aktivität auswählbar", Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 
 		endActivity.setOnClickListener(new View.OnClickListener() {
 
-			@Override
 			public void onClick(View v) {
 				AlertDialog.Builder categoryAlert = new AlertDialog.Builder(
 						getActivity());
@@ -177,7 +191,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		});
 
 		return root;
-	}
+		}
 
 	List<Item> itemsMust;
 	List<Item> itemsIn;
@@ -235,7 +249,33 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			
 			//SUGGESTIONS
 			contextSuggestions = statusUpdate.getContextSuggestions();
+			//DEBUGCONTEXT:
+			Log.d("DEBUGCONTEXT","Debug context:");
+			if (contextSuggestions == null){
+				Log.d("DEBUGCONTEXT","context is null");
+			}else{
+				for(ContextSuggestion sss:contextSuggestions){
+					if (sss.getItemToReplace()!=null){
+						Log.d("DEBUGCONTEXT","suggestion replace: " +sss.getItemToReplace().getName());
+					}else{
+						Log.d("DEBUGCONTEXT","suggestion replace: no");	
+					}
+					Log.d("DEBUGCONTEXT"," reason: "+sss.getReason().name());	
+					for (Item i:sss.getReplaceSuggestions()){
+						if (i == null){
+							Log.d(" DEBUGCONTEXT","replace with nothing:");
+						}else{
+							Log.d(" DEBUGCONTEXT","replace with:"+i.getName());	
+						}
+							
+					}
+				}
+				
+			}
+			Log.w("TEST", "getContextSuggestions (Client/OverviewFragment:246): " + contextSuggestions);
 			
+			calcCorrespondingContextItems();
+
 			//TODO
 			itemsSuggFragment.updateView(statusUpdate);
 			
@@ -281,10 +321,10 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 		case ACTIVITY_PRIORITY_LIST: {
 			Log.d("TEST", "Also das geht");
-			list = ActivityPriorityList.fromJSON(BundleMessage.getInstance().extractObject(b));
-			prioActivities = new String[list.getActivities().size()];
-			for(int i=0; i<list.getActivities().size(); i++){
-				prioActivities[i] = list.getActivities().get(i).getName();
+			activityPriorityList = ActivityPriorityList.fromJSON(BundleMessage.getInstance().extractObject(b));
+			prioActivities = new String[activityPriorityList.getActivities().size()];
+			for(int i=0; i<activityPriorityList.getActivities().size(); i++){
+				prioActivities[i] = activityPriorityList.getActivities().get(i).getName();
 			}
 
 		}
@@ -419,6 +459,44 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 	}
 
+	
+	private synchronized void calcCorrespondingContextItems(){
+		Log.d("CONTEXT","calc suggestions");	
+		suggestionToReplace.clear();
+		suggestionToRemove.clear();
+		suggestionToAdd.clear();
+		if (contextSuggestions != null) {
+			for (ContextSuggestion sug : contextSuggestions) {
+				if (sug.getItemToReplace()==null){
+					//no item to replace/remove => nothing to remove, only  to add
+					suggestionToAdd.add(sug);
+					
+					for(Item i:sug.getReplaceSuggestions()){
+						Log.d("CONTEXT","toAdd: "+i.getName());	
+					}
+					
+				}else{
+					//there is an item to replace/remove (I)
+					if (sug.getReplaceSuggestions()!=null && sug.getReplaceSuggestions().size()>0){
+						//there are suggestions + I => replace 
+						suggestionToReplace.add(sug);
+						Log.d("CONTEXT","toReplace: "+sug.getItemToReplace().getName());
+						for(Item i:sug.getReplaceSuggestions()){
+							Log.d("CONTEXT","toReplaceWith: "+i.getName());
+						}
+					}else{
+						//I + no suggestions => remove item
+						suggestionToRemove.add(sug);
+						Log.d("CONTEXT","toRemove: "+sug.getName());
+					}
+				}
+			}
+		}else{
+				Log.d("CONTEXT","suggestions are null");	
+		}
+		
+	}
+	
 	// add tagid to item
 	private void onAdminCommand(Bundle b) {
 

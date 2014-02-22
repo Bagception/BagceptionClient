@@ -57,7 +57,6 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 	private ArrayList<String> activityNames;
 	private ArrayList<Activity> activityList;
 	private Calendar cal;
-//	private Calendar chosenCalendarDate;
 	private long startTime;
 	private long endTime;
 	private long startDate;
@@ -248,27 +247,24 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 						.createBundle(
 								BUNDLE_MESSAGE.CALENDAR_ADD_EVENT_REQUEST,
 								event));
+				getActivity().finish();
 			}
 		});
 
 		cancelBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new BundleMessageHelper(getActivity())
-				.sendMessageSendBundle(BundleMessage.getInstance()
-						.createBundle(
-								BUNDLE_MESSAGE.CALENDAR_EVENT_REQUEST,
-								null));
+				getActivity().finish();
 			}
-		});
 
+		});
+		
 		return root;
 	}
 	
 	
 	@Override
 	public void onPause() {
-//		getFragmentManager().popBackStack();
 		super.onPause();
 	}
 	

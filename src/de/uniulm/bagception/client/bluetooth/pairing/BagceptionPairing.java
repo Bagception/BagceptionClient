@@ -105,13 +105,11 @@ public class BagceptionPairing{
 		
 		@Override
 		public void onDeviceFound(BluetoothDevice device) {
-			if (!discoveredDevices.contains(device)){
-				if (device.getName() != null){
-					if (DEBUG)
-						Log.d("bt", "is not bound: "+device.getName());
-					foundBTDevices.add(device);	
-					callbacks.onDeviceFound(device);
-				}
+			if (device.getName() != null){
+				if (DEBUG)
+					Log.d("bt", "is not bound: "+device.getName());
+				foundBTDevices.add(device);	
+				callbacks.onDeviceFound(device);
 			}else{
 				if (DEBUG)
 					Log.d("bt", "is bound: "+device.getName());

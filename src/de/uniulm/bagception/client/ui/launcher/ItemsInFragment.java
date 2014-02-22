@@ -8,6 +8,7 @@ import android.util.Log;
 import de.uniulm.bagception.bundlemessageprotocol.entities.ContainerStateUpdate;
 import de.uniulm.bagception.bundlemessageprotocol.entities.ContextSuggestion;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
+import de.uniulm.bagception.bundlemessageprotocol.entities.ContextSuggestion.CONTEXT;
 
 public class ItemsInFragment extends OverviewTabFragment{
 
@@ -17,7 +18,7 @@ public class ItemsInFragment extends OverviewTabFragment{
 	protected List<Item> getCorrespondingItemList(ContainerStateUpdate update) {
 		needless = update.getNeedlessItems();
 		List<Item> ret = new ArrayList<Item>(update.getItemList());
-		for(ContextSuggestion sug:suggestionToRemove){
+		for(ContextSuggestion sug:fragment.suggestionToRemove){
 			if (!ret.contains(sug.getItemToReplace())){
 				ret.add(sug.getItemToReplace());
 			}
@@ -34,12 +35,15 @@ public class ItemsInFragment extends OverviewTabFragment{
 			
 			if (needless.contains(item)){
 				adapter.putColorCodeItems(Color.CYAN, item);
-				Log.d("COLOR","needless: "+item.getName());
 			}
 		}
 		
-		for(ContextSuggestion sug:suggestionToRemove){
-			adapter.putColorCodeItems(Color.GRAY,sug.getItemToReplace());
+		for(ContextSuggestion sug:fragment.suggestionToRemove){
+			adapter.putColorCodeItems(Color.RED,sug.getItemToReplace());
+			ArrayList<CONTEXT> ctx = new ArrayList<ContextSuggestion.CONTEXT>();
+			ctx.add(sug.getReason());
+			Log.d("CONTEXT","Context icon (in) for "+sug.getItemToReplace().getName()+": "+sug.getReason().name());
+			adapter.putContextItem(ctx, sug.getItemToReplace());
 		}
 	}
 
