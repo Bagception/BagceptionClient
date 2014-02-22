@@ -17,7 +17,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
-import android.provider.DocumentsContract.Root;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -108,7 +107,6 @@ public class CalendarOverviewFragment extends ListFragment implements BundleMess
 		this.listView = (ListView) root.findViewById(R.id.ListView1);
 		setHasOptionsMenu(true);
 		setListAdapter(adapter); 
-		updateCalendarEventList();
 		
 		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
@@ -147,6 +145,7 @@ public class CalendarOverviewFragment extends ListFragment implements BundleMess
 	public void updateCalendarEventList(){
 		calendarEventStrings.clear();
 		calendarEvents.clear();
+		adapter.notifyDataSetChanged();
 		
 		new BundleMessageHelper(getActivity())
 		.sendMessageSendBundle(BundleMessage.getInstance()
@@ -169,6 +168,11 @@ public class CalendarOverviewFragment extends ListFragment implements BundleMess
 			calendarEvents.add(event);
 			calendarEventStrings.add(event.getName());
 			adapter.notifyDataSetChanged();
+			break;
+		}
+		case CALENDAR_REMOVE_EVENT_REQUEST:{
+			log("TADAAA");
+			updateCalendarEventList();
 			break;
 		}
 		default:
@@ -213,9 +217,19 @@ public class CalendarOverviewFragment extends ListFragment implements BundleMess
 //				sendDeleteCommand(getToDeleteEntity(pos));
 //				listAdapter.notifyDataSetChanged();
 				log("delete entry: " + pos + " name: " + calendarEvents.get(pos).getName());
+				
+				log("name: " + calendarEvents.get(pos).getName());
+				log("description: " + calendarEvents.get(pos).getDescription());
+				log("calendar: " + calendarEvents.get(pos).getCalendarName());
+				log("location: " + calendarEvents.get(pos).getLocation());
+				
+				new BundleMessageHelper(getActivity())
+				.sendMessageSendBundle(BundleMessage.getInstance()
+						.createBundle(
+								BUNDLE_MESSAGE.CALENDAR_REMOVE_EVENT_REQUEST,
+								calendarEvents.get(pos)));
 				calendarEvents.remove(pos);
 				calendarEventStrings.remove(pos);
-				updateCalendarEventList();
 			}
 		});
 
