@@ -8,9 +8,12 @@ import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckedTextView;
+import android.widget.TextView;
+import android.widget.Toast;
 import de.uniulm.bagception.bundlemessageprotocol.entities.ContextSuggestion;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.client.R;
@@ -52,24 +55,24 @@ public class SuggestionListAdapter extends BaseExpandableListAdapter {
 		Log.w("TEST", "ContextSuggestion (Client/SuggestionListAdapter): " + sug);
 		
 		List<Item> replaceSuggestions = sug.getReplaceSuggestions();
+		Log.w("DEBUG", "Replace Suggestions: " + replaceSuggestions);
 		//TODO render replaceSuggestions
 		
-//		TextView text = null;
-//		if (convertView == null) {
-//			convertView = minflater.inflate(R.layout.child_row, null);
-//		}
-//		
-//		text = (TextView) convertView.findViewById(R.id.suggestionItem);
-//		text.setText(tempChild.get(childPosition));
-//		
-//		convertView.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//
-//				Toast.makeText(activity, tempChild.get(childPosition), Toast.LENGTH_SHORT).show();
-//			}
-//		});
+		TextView text = null;
+		if (convertView == null) {
+			convertView = inflater.inflate(R.layout.child_row, null);
+		}
+		
+		text = (TextView) convertView.findViewById(R.id.suggestionItem);
+		text.setText(data.get(childPosition).getReplaceSuggestions().get(childPosition).getName());
+		
+		convertView.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+
+				Toast.makeText(context, "Funzt", 5);
+			}
+		});
 		
 	  return convertView;
 	 }
@@ -113,29 +116,31 @@ public class SuggestionListAdapter extends BaseExpandableListAdapter {
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 
 		if(convertView == null){
+			Log.w("DEBUG", "Inflater: " + inflater);
 			convertView = inflater.inflate(R.layout.group_row, null);
 		}
 		
-		Log.w("TEST", "List<ContextSuggestion> data (Client/SuggestionListAdapter): " + data);
+		Log.w("DEBUG", "Data Objekt: " + data);
 		
 		ContextSuggestion sug = data.get(groupPosition);
 		Item toRender = sug.getItemToReplace();
 		Bitmap contextIcon = Bitmaps.getInstance(context).getContextIcon(sug.getReason());
 		
-		
-		((CheckedTextView) convertView).setText(data.get(groupPosition).getName());
+		Log.w("DEBUG", "Data groupPostion: " + data.get(groupPosition).getItemToReplace());
+		((CheckedTextView) convertView).setText(data.get(groupPosition).getItemToReplace().getName());
 		((CheckedTextView) convertView).setChecked(isExpanded);
 		
 		
 		/**
 		 * Set the images of the parent entries (the items that shall be replaced)
 		 */
-		AutoUpdatableCheckedTextView cv = (AutoUpdatableCheckedTextView) convertView.findViewById(R.id.replaceItem);
-//		Drawable icon = (Drawable) convertView.getResources().getDrawable(R.drawable.ic_launcher);
-//		Drawable icon2 = (Drawable) convertView.getResources().getDrawable(R.drawable.service_icon);
-		cv.setItem(toRender);
-		//cv.setCompoundDrawablesWithIntrinsicBounds(icon2, null, icon, null);
-		cv.setCompoundDrawablesWithIntrinsicBounds(contextIcon);
+//		AutoUpdatableCheckedTextView cv = (AutoUpdatableCheckedTextView) convertView.findViewById(R.id.replaceItem);
+		CheckedTextView cv = (CheckedTextView) convertView.findViewById(R.id.replaceItem);
+		Drawable icon = (Drawable) convertView.getResources().getDrawable(R.drawable.ic_launcher);
+		Drawable icon2 = (Drawable) convertView.getResources().getDrawable(R.drawable.service_icon);
+//		cv.setItem(toRender);
+		cv.setCompoundDrawablesWithIntrinsicBounds(icon2, null, icon, null);
+//		cv.setCompoundDrawablesWithIntrinsicBounds(contextIcon);
 		return convertView;
 	}
 
