@@ -14,10 +14,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
+import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
 import de.uniulm.bagception.client.bluetooth.pairing.BagceptionPairing;
 import de.uniulm.bagception.client.bluetooth.pairing.BagceptionPairing.BagceptionPairingCallbacks;
 import de.uniulm.bagception.client.bluetooth.pairing.BluetoothDeviceArrayAdapter;
 import de.uniulm.bagception.client.bluetooth.pairing.ManageConnection;
+import de.uniulm.bagception.protocol.bundle.constants.ResponseAnswer;
 
 public class NewBagFragment extends ListFragment {
 
@@ -77,6 +79,9 @@ public class NewBagFragment extends ListFragment {
 		if (getActivity() == null)
 			return;
 		if (success) {
+			Bundle b = ResponseAnswer.Ask_For_Specific_Device.toBundle();
+			b.putParcelable(ResponseAnswer.EXTRA_KEYS.PAYLOAD, d);
+			new BundleMessageHelper(getActivity()).sendResponseAnswerBundle(b);
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			builder.setMessage("Pairing erfolgreich")
 					.setCancelable(false)
@@ -119,10 +124,14 @@ public class NewBagFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 
+		
 		dialog(DIALOG_PAIR);
 		BluetoothDevice d = mAdapter.getItem(position);
 		ManageConnection mg = new ManageConnection(this);
 		mg.execute(d);
+		
+		
+		
 	}
 
 	@Override

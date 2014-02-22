@@ -40,17 +40,24 @@ public class ItemsInFragment extends OverviewTabFragment{
 				adapter.putColorCodeItems(Color.CYAN, item);
 			}
 			
-			
-			for(ContextSuggestion sug:fragment.suggestionToAdd){
-				ArrayList<CONTEXT> ctx = new ArrayList<ContextSuggestion.CONTEXT>();
+			final ContextSuggestion sug = ContextSuggestion.getReplaceSuggestions(fragment.suggestionToAdd, item);
+			if (sug!=null){
+				//
+				List<CONTEXT> ctx =new ArrayList<CONTEXT>();
 				ctx.add(sug.getReason());
-				for(Item replaceItem:sug.getReplaceSuggestions()){
-					if (replaceItem.equals(item)){
-						adapter.putContextItem(ctx, item);
-					}
-				}
-				
+				adapter.putContextItem(ctx, item);
 			}
+			
+//			for(ContextSuggestion sug:fragment.suggestionToAdd){
+//				ArrayList<CONTEXT> ctx = new ArrayList<ContextSuggestion.CONTEXT>();
+//				ctx.add(sug.getReason());
+//				for(Item replaceItem:sug.getReplaceSuggestions()){
+//					if (replaceItem.equals(item)){
+//						adapter.putContextItem(ctx, item);
+//					}
+//				}
+//				
+//			}
 		}
 		
 		for(ContextSuggestion sug:fragment.suggestionToRemove){

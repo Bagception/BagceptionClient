@@ -13,6 +13,7 @@ import de.uniulm.bagception.bluetooth.BagceptionBTServiceInterface;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.util.BagceptionBluetoothUtil;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.util.CheckReachableCallback;
+import de.uniulm.bagception.client.notification.ResponseSystem;
 import de.uniulm.bagception.client.service.BagceptionClientService;
 import de.uniulm.bagception.protocol.bundle.BundleProtocolCallback;
 import de.uniulm.bagception.protocol.bundle.constants.Command;
