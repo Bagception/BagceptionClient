@@ -16,12 +16,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
+import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand.Operation;
+import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommandProcessor;
 import de.uniulm.bagception.client.R;
 
 public abstract class BasicListEntitiesFragment<E> extends Fragment implements
@@ -42,6 +45,7 @@ public abstract class BasicListEntitiesFragment<E> extends Fragment implements
 	private void sendDeleteCommand(AdministrationCommand<E> cmd) {
 		helper.sendMessageSendBundle(BundleMessage.getInstance().createBundle(
 				BUNDLE_MESSAGE.ADMINISTRATION_COMMAND, cmd));
+		listAdapter.notifyDataSetChanged();
 	}
 
 	/**
@@ -174,6 +178,7 @@ public abstract class BasicListEntitiesFragment<E> extends Fragment implements
 
 	// BundleMessageReactor
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onBundleMessageRecv(Bundle b) {
 		BUNDLE_MESSAGE msg = BundleMessage.getInstance()
@@ -184,7 +189,20 @@ public abstract class BasicListEntitiesFragment<E> extends Fragment implements
 					.fromJSONObject(BundleMessage.getInstance()
 							.extractObject(b));
 			onAdminCommand(a_cmd);
-			break;
+			Operation op = a_cmd.getOperation();
+			switch (op) {
+			case DEL: {
+				if (a_cmd.isSuccessful()) {
+					Object o = a_cmd.getPayloadObjects()[0];
+					listAdapter.remove((E) o);
+				} else {
+					Toast.makeText(getActivity(),
+							"Löschvorgang fehlgeschlagen", Toast.LENGTH_SHORT)
+							.show();
+				}
+				break;
+			}
+			}
 
 		default:
 			break;

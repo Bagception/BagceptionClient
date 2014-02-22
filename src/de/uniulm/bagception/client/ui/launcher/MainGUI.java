@@ -13,6 +13,8 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -155,8 +157,8 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 
 	}
 
-	private final int REQUEST_IMAGE_CAPTURE = 1;
-	public static final int REQUEST_LOCATION = 2;
+//	private final int REQUEST_IMAGE_CAPTURE = 1;
+	public static final int REQUEST_LOCATION = 3;
 
 	// public void ontakePictureButtonClick(View v) {
 	// Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -237,7 +239,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 			Bundle extras = data.getExtras();
 			if (extras == null)
 				return;
-			Bitmap thePic = (Bitmap) extras.get("data");
+			Bitmap thePic = Bitmap.createScaledBitmap((Bitmap) extras.get("data"),100, 100, false);
 			if (thePic == null)
 				return;
 			ImageView img = (ImageView) findViewById(R.id.itemIcon);
@@ -249,6 +251,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 			if (resultCode != Activity.RESULT_OK) {
 				Log.d("TEST", "WHY U NOT WORKING?");
 			}
+			Log.d("TEST", "geht mir so aufn sack der dreck hier ey");
 			Bundle extras = data.getExtras();
 			if (extras == null)
 				return;
@@ -442,4 +445,6 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 	// BundleMessageHelper(this).sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.CONTAINER_STATUS_UPDATE_REQUEST,
 	// ""));
 	// }
+	
+	
 }
