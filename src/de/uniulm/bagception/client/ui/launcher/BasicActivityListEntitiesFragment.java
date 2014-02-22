@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageActor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.actor.BundleMessageReactor;
 import de.uniulm.bagception.bluetoothclientmessengercommunication.service.BundleMessageHelper;
@@ -24,6 +25,7 @@ import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Activity;
 import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand;
+import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand.Operation;
 import de.uniulm.bagception.client.R;
 
 public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
@@ -37,9 +39,11 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 
 	private BundleMessageActor actor;
 	private BundleMessageHelper helper;
-	
+
 	protected abstract String getEditFragmentName();
+
 	protected abstract String getCreateNewFragmentName();
+
 	protected abstract long getId(E e);
 
 	/**
@@ -87,7 +91,7 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 		listAdapter = getEntityAdapter();
 		listView.setAdapter(listAdapter);
 		listAdapter.notifyDataSetChanged();
-		
+
 		listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
 			@Override
@@ -97,7 +101,6 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 				return true;
 			}
 		});
-
 
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -114,11 +117,12 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 					Log.d("TEST", listAdapter.getItem(arg2).toString());
 				}
 
-				Activity activity = (Activity)listAdapter.getItem(arg2);
-				String[] data = new String[activity.getItemsForActivity().size()];
-				
-				int iter=0;
-				for (Item i:activity.getItemsForActivity()){
+				Activity activity = (Activity) listAdapter.getItem(arg2);
+				String[] data = new String[activity.getItemsForActivity()
+						.size()];
+
+				int iter = 0;
+				for (Item i : activity.getItemsForActivity()) {
 					data[iter++] = i.getName();
 				}
 
@@ -139,13 +143,17 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 							public void onClick(DialogInterface dialog,
 									int which) {
 
-								Intent intent = new Intent(getActivity(), MainGUI.class);
-								intent.putExtra("FRAGMENT", getEditFragmentName());
-								
+								Intent intent = new Intent(getActivity(),
+										MainGUI.class);
+								intent.putExtra("FRAGMENT",
+										getEditFragmentName());
+
 								long itemID = getId(listAdapter.getItem(id));
-								String serializedString = listAdapter.getItem(id).toString();
+								String serializedString = listAdapter.getItem(
+										id).toString();
 								intent.putExtra("ID", itemID);
-								intent.putExtra("ENTITYSTRING", serializedString);
+								intent.putExtra("ENTITYSTRING",
+										serializedString);
 
 								startActivity(intent);
 							}
@@ -181,7 +189,7 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 
 		return root;
 	}
-	
+
 	public void dialog(final int pos) {
 		AlertDialog.Builder dialogAlert = new AlertDialog.Builder(getActivity());
 		dialogAlert.setTitle("Eintrag löschen?");
@@ -206,7 +214,6 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 		dialogAlert.create().show();
 	}
 
-	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.actionbar_button, menu);
@@ -219,14 +226,14 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 			public boolean onMenuItemClick(MenuItem item) {
 				Intent intent = new Intent(getActivity(), MainGUI.class);
 				intent.putExtra("FRAGMENT", getCreateNewFragmentName());
-				
+
 				startActivity(intent);
 				return false;
 			}
 		});
 		super.onCreateOptionsMenu(menu, inflater);
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -247,6 +254,7 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 
 	// BundleMessageReactor
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onBundleMessageRecv(Bundle b) {
 		BUNDLE_MESSAGE msg = BundleMessage.getInstance()
@@ -257,7 +265,20 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 					.fromJSONObject(BundleMessage.getInstance()
 							.extractObject(b));
 			onAdminCommand(a_cmd);
-			break;
+			Operation op = a_cmd.getOperation();
+			switch (op) {
+			case DEL: {
+				if (a_cmd.isSuccessful()) {
+					Object o = a_cmd.getPayloadObjects()[0];
+					listAdapter.remove((E) o);
+				} else {
+					Toast.makeText(getActivity(),
+							"Löschvorgang fehlgeschlagen", Toast.LENGTH_SHORT)
+							.show();
+				}
+				break;
+			}
+			}
 
 		default:
 			break;
