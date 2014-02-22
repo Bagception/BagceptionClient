@@ -207,8 +207,9 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 					Log.w("TEST", "Location: " + location);
 
-					Intent intent = new Intent(getActivity(), MainGUI.class);
-					startActivity(intent);
+					getActivity().finish();
+//					Intent intent = new Intent(getActivity(), MainGUI.class);
+//					startActivity(intent);
 				}
 			}
 		});
@@ -218,8 +219,10 @@ public class CreateNewPlaceFragment extends Fragment implements
 			@Override
 			public void onClick(View v) {
 				editName.setText("");
-				Intent intent = new Intent(getActivity(), MainGUI.class);
-				startActivity(intent);
+				
+				getActivity().finish();
+//				Intent intent = new Intent(getActivity(), MainGUI.class);
+//				startActivity(intent);
 			}
 		});
 

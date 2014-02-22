@@ -7,7 +7,6 @@ import org.json.simple.JSONObject;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,6 +14,8 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -75,6 +76,9 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 	protected List<ContextSuggestion> suggestionToRemove = new ArrayList<ContextSuggestion>();
 	protected List<ContextSuggestion> suggestionToAdd = new ArrayList<ContextSuggestion>();
 
+	private final ToneGenerator toneGenerator = new ToneGenerator(
+			AudioManager.STREAM_MUSIC, 100);
+	
 	static Fragment newInstance(Context context) {
 		OverviewFragment f = new OverviewFragment();
 		return f;
@@ -150,7 +154,6 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 		endActivity.setOnClickListener(new View.OnClickListener() {
 
-			@Override
 			public void onClick(View v) {
 				AlertDialog.Builder categoryAlert = new AlertDialog.Builder(
 						getActivity());
@@ -189,7 +192,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		});
 
 		return root;
-	}
+		}
 
 	List<Item> itemsMust;
 	List<Item> itemsIn;
@@ -317,6 +320,10 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			dialog(unknownItem);
 			break;
 
+		case ITEM_FOUND:
+			toneGenerator.startTone(ToneGenerator.TONE_PROP_BEEP);
+			break;
+			
 		case ACTIVITY_PRIORITY_LIST: {
 			Log.d("TEST", "Also das geht");
 			activityPriorityList = ActivityPriorityList.fromJSON(BundleMessage.getInstance().extractObject(b));
