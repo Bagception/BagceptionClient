@@ -73,7 +73,7 @@ public class ItemListArrayAdapter extends ArrayAdapter<Item> {
             }else{
             	view.setBackgroundColor(Color.WHITE);
             }
-            List<CONTEXT> ctx = context.get(item);
+            List<CONTEXT> ctx = context.get(item.getId());
             ImageView contextImg = (ImageView)view.findViewById(R.id.contextIcon);
             if (ctx!=null){
 	            Bitmap bmp=null;

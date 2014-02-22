@@ -328,6 +328,7 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 
 				if (((MainGUI) getActivity()).currentPicturetaken != null) {
 					newItem.setImage(((MainGUI) getActivity()).currentPicturetaken);
+					newItem.serializeImage();
 				}
 
 				Log.d("TEST", newItem.toString());
@@ -339,7 +340,7 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 				Log.d("TEST", newItem.toString());
 //				Intent intent = new Intent(getActivity(), MainGUI.class);
 //				startActivity(intent);
-				ImageCachingSystem.getInstance().clearCache(newItem);
+				ImageCachingSystem.getInstance().clearCache(oldItem);
 				getActivity().finish();
 			}
 		});
@@ -350,7 +351,7 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 			public void onClick(View v) {
 				editName.setText("");
 				iv.setImageResource(R.drawable.ic_launcher);
-
+				getActivity().finish();
 			}
 		});
 

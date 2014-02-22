@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginTop="350dp"
+            android:layout_marginTop="412dp"
             android:background="@color/background"
             android:divider="?android:attr/listDivider"
             android:dividerPadding="12dp"

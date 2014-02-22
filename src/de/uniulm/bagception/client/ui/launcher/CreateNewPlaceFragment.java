@@ -180,8 +180,7 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 
 
-				if ("".equals(editName.getText().toString().trim()) || latView.length() == 0
-						|| lngView.length() == 0) {
+				if ("".equals(editName.getText().toString().trim())) {
 					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
 							getActivity());
 					dialogAlert.setTitle("Bitte alle Felder ausfüllen");

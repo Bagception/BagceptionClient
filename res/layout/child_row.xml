@@ -15,10 +15,10 @@
 
         <de.uniulm.bagception.client.items.AutoUpdateableItemView
             android:id="@+id/childImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="fitXY"
             android:layout_margin="5dp"
-            android:background="@drawable/ic_launcher"
             android:contentDescription="@string/hello_world" />
 
         <TextView

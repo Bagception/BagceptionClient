@@ -1,16 +1,21 @@
 package de.uniulm.bagception.client.ui.launcher;
 
+import java.io.File;
+
 import org.json.simple.JSONObject;
 
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -51,9 +56,8 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 	private View drawRightLayout;
 	public Bitmap currentPicturetaken = null;
 
-	final String[] data = { "Übersicht", "Items", "Orte",
-			"Kategorien", "Aktivitäten",
-			"Neue Tasche", "Kalender" };
+	final String[] data = { "Übersicht", "Items", "Orte", "Kategorien",
+			"Aktivitäten", "Neue Tasche", "Kalender" };
 	final String[] menueFragments = {
 			"de.uniulm.bagception.client.ui.launcher.OverviewFragment",
 			"de.uniulm.bagception.client.ui.launcher.AllItemsFragment",
@@ -125,7 +129,6 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 		tx.commit();
 	}
 
-
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
@@ -155,30 +158,93 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 	private final int REQUEST_IMAGE_CAPTURE = 1;
 	public static final int REQUEST_LOCATION = 2;
 
+	// public void ontakePictureButtonClick(View v) {
+	// Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+	// if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+	// startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+	// }
+	//
+	// }
+	//
+	// @Override
+	// protected void onActivityResult(int requestCode, int resultCode, Intent
+	// data) {
+	// if (requestCode == REQUEST_IMAGE_CAPTURE) {
+	// Bundle extras = data.getExtras();
+	// if (extras == null)
+	// return;
+	// Bitmap imageBitmap = (Bitmap) extras.get("data");
+	// if (imageBitmap == null)
+	// return;
+	// // send as string (this would work over bluetooth)
+	// Toast.makeText(this, "picture taken", Toast.LENGTH_SHORT).show();
+	// ImageView img = (ImageView) findViewById(R.id.itemIcon);
+	// if (img != null) {
+	// img.setImageBitmap(imageBitmap);
+	// }
+	// currentPicturetaken = imageBitmap;
+	// } else if (requestCode == REQUEST_LOCATION) {
+	// if (resultCode != Activity.RESULT_OK) {
+	// Log.d("TEST", "WHY U NOT WORKING?");
+	// }
+	// Bundle extras = data.getExtras();
+	// if (extras == null)
+	// return;
+	// float lat = (float) extras.getDouble("LAT");
+	// float longt = (float) extras.getDouble("LNG");
+	// int rad = extras.getInt("RAD");
+	// TextView latView = (TextView) findViewById(R.id.latitudeView);
+	// TextView lngView = (TextView) findViewById(R.id.longitudeView);
+	// latView.setText("" + lat);
+	// lngView.setText("" + longt);
+	//
+	// Log.w("TEST", "Lat: " + lat);
+	// Log.w("TEST", "Lon: " + longt);
+	//
+	// Location locCoords = new Location("", lat, longt, rad);
+	// new BundleMessageHelper(this).sendMessageSendBundle(BundleMessage
+	// .getInstance().createBundle(
+	// BUNDLE_MESSAGE.RESOLVE_COORDS_REQUEST, locCoords));
+	// }
+	// }
+
+	ImageView imVCature_pic;
+
 	public void ontakePictureButtonClick(View v) {
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-			startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-		}
+		File file = new File(Environment.getExternalStorageDirectory()
+				+ File.separator + "img.jpg");
+		takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+		startActivityForResult(takePictureIntent, 1);
 
 	}
 
-	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == REQUEST_IMAGE_CAPTURE) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == 1) {
+			File file = new File(Environment.getExternalStorageDirectory()
+					+ File.separator + "img.jpg");
+			try {
+				cropCapturedImage(Uri.fromFile(file));
+			} catch (ActivityNotFoundException aNFE) {
+				String errorMessage = "Sorry - your device doesn't support the crop action!";
+				Toast toast = Toast.makeText(this, errorMessage,
+						Toast.LENGTH_SHORT);
+				toast.show();
+			}
+		}
+		if (requestCode == 2) {
 			Bundle extras = data.getExtras();
 			if (extras == null)
 				return;
-			Bitmap imageBitmap = (Bitmap) extras.get("data");
-			if (imageBitmap == null)
+			Bitmap thePic = (Bitmap) extras.get("data");
+			if (thePic == null)
 				return;
-			// send as string (this would work over bluetooth)
-			Toast.makeText(this, "picture taken", Toast.LENGTH_SHORT).show();
 			ImageView img = (ImageView) findViewById(R.id.itemIcon);
 			if (img != null) {
-				img.setImageBitmap(imageBitmap);
+				img.setImageBitmap(thePic);
 			}
-			currentPicturetaken = imageBitmap;
+			currentPicturetaken = thePic;
 		} else if (requestCode == REQUEST_LOCATION) {
 			if (resultCode != Activity.RESULT_OK) {
 				Log.d("TEST", "WHY U NOT WORKING?");
@@ -204,6 +270,25 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 		}
 	}
 
+	public void cropCapturedImage(Uri picUri) {
+		// call the standard crop action intent
+		Intent cropIntent = new Intent("com.android.camera.action.CROP");
+		// indicate image type and Uri of image
+		cropIntent.setDataAndType(picUri, "image/*");
+		// set crop properties
+		cropIntent.putExtra("crop", "true");
+		// indicate aspect of desired crop
+		cropIntent.putExtra("aspectX", 1);
+		cropIntent.putExtra("aspectY", 1);
+		// indicate output X and Y
+		cropIntent.putExtra("outputX", 256);
+		cropIntent.putExtra("outputY", 256);
+		// retrieve data on return
+		cropIntent.putExtra("return-data", true);
+		// start the activity - we handle returning in onActivityResult
+		startActivityForResult(cropIntent, 2);
+	}
+
 	@Override
 	public void onBundleMessageRecv(Bundle b) {
 		BUNDLE_MESSAGE msg = BundleMessage.getInstance()
@@ -221,7 +306,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 						Toast.makeText(
 								MainGUI.this,
 								"item : " + a.getName()
-										+ " erfolgreich angelegt ",
+										+ " erfolgreich angelegt ", 
 								Toast.LENGTH_SHORT).show();
 					} else {
 						Toast.makeText(
@@ -304,10 +389,11 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 			break;
 		}
 		case UNABLE_TO_SEND_DATA: {
-			Toast.makeText(this,
+			Toast.makeText(
+					this,
 					"Daten konnten nicht gesendet werden. Das Gerät ist mit keiner Tasche verbunden.",
 					Toast.LENGTH_LONG).show();
-			//drawer.openDrawer(drawRightLayout);	
+			// drawer.openDrawer(drawRightLayout);
 			break;
 		}
 		default:
