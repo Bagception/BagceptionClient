@@ -10,9 +10,13 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -196,6 +200,26 @@ public class EditActivityFragment extends Fragment implements
 		});
 
 		return root;
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.actionbar_button, menu);
+
+		MenuItem item = menu.findItem(R.id.menu_item_add);
+		Log.d("TEST", "fhejfedj");
+		item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				Intent intent = new Intent(getActivity(), MainGUI.class);
+//				intent.putExtra("FRAGMENT", getCreateNewFragmentName());
+
+				startActivity(intent);
+				return false;
+			}
+		});
+		super.onCreateOptionsMenu(menu, inflater);
 	}
 
 	@Override
