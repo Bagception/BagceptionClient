@@ -306,7 +306,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 						Toast.makeText(
 								MainGUI.this,
 								"item : " + a.getName()
-										+ " erfolgreich angelegt ",
+										+ " erfolgreich angelegt ", 
 								Toast.LENGTH_SHORT).show();
 					} else {
 						Toast.makeText(
