@@ -128,9 +128,6 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 					final AlertDialog.Builder priorityActivitiesAlert = new AlertDialog.Builder(getActivity());
 					priorityActivitiesAlert.setTitle("Aktivität ändern");
 					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						// TODO Start this activity
 					priorityActivitiesAlert.setSingleChoiceItems(prioActivities, -1, new OnClickListener() {
 						
 						@Override
