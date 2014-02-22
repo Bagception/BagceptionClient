@@ -9,11 +9,15 @@ import de.uniulm.bagception.bundlemessageprotocol.BundleMessage;
 import de.uniulm.bagception.bundlemessageprotocol.BundleMessage.BUNDLE_MESSAGE;
 import de.uniulm.bagception.bundlemessageprotocol.entities.CalendarEvent;
 import de.uniulm.bagception.client.R;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ListFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
+import android.provider.DocumentsContract.Root;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,6 +25,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -30,6 +36,7 @@ public class CalendarOverviewFragment extends ListFragment implements BundleMess
 	private ArrayAdapter<String> adapter;
 	private ArrayList<String> calendarEventStrings;
 	private ArrayList<CalendarEvent> calendarEvents;
+	private ListView listView;
 	ArrayList<String> text = new ArrayList<String>();
 
 	
@@ -67,6 +74,7 @@ public class CalendarOverviewFragment extends ListFragment implements BundleMess
 				return false;
 			}
 		});
+		
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
@@ -97,9 +105,23 @@ public class CalendarOverviewFragment extends ListFragment implements BundleMess
 		this.calendarEventStrings = new ArrayList<String>();
 		this.calendarEvents = new ArrayList<CalendarEvent>();
 		this.adapter = new ArrayAdapter<String>(inflater.getContext(), android.R.layout.simple_list_item_1, calendarEventStrings);  
+		this.listView = (ListView) root.findViewById(R.id.ListView1);
 		setHasOptionsMenu(true);
 		setListAdapter(adapter); 
 		updateCalendarEventList();
+		
+		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+					dialog(arg2);
+				
+				return false;
+			}
+		});
+		
+		
 		return root;
 
 	}
@@ -112,7 +134,10 @@ public class CalendarOverviewFragment extends ListFragment implements BundleMess
 		log(ce.getDescription());
 		log(""+ce.getStartDate());
 	}
+	
 
+	
+	
 	@Override
 	public void onPause() {
 		super.onPause();
@@ -167,6 +192,34 @@ public class CalendarOverviewFragment extends ListFragment implements BundleMess
 	}
 	@Override
 	public void onError(Exception e) {
+	}
+	
+	public void dialog(final int pos) {
+		AlertDialog.Builder dialogAlert = new AlertDialog.Builder(getActivity());
+		dialogAlert.setTitle("Eintrag löschen?");
+		dialogAlert.setNegativeButton("Abbrechen", new OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.cancel();
+
+			}
+		});
+
+		dialogAlert.setPositiveButton("Löschen", new OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+//				sendDeleteCommand(getToDeleteEntity(pos));
+//				listAdapter.notifyDataSetChanged();
+				log("delete entry: " + pos + " name: " + calendarEvents.get(pos).getName());
+				calendarEvents.remove(pos);
+				calendarEventStrings.remove(pos);
+				updateCalendarEventList();
+			}
+		});
+
+		dialogAlert.create().show();
 	}
 
 
