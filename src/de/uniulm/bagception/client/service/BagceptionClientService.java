@@ -55,7 +55,7 @@ public class BagceptionClientService extends ObservableService {
 
 		notificationMessageActor = new BundleMessageActor(notifySys);
 		notificationMessageActor.register(this);
-
+		
 		stringNotificationMessageActor = new BundleMessageActor(
 				new BundleMessageReactor() {
 					@Override
@@ -99,7 +99,7 @@ public class BagceptionClientService extends ObservableService {
 						}
 					}
 				});
-
+		stringNotificationMessageActor.register(this);
 		super.onCreate();
 	}
 
@@ -117,6 +117,7 @@ public class BagceptionClientService extends ObservableService {
 	public void onDestroy() {
 		bluetoothMessageActor.unregister(this);
 		notificationMessageActor.unregister(this);
+		stringNotificationMessageActor.register(this);
 		stopForeground(true);
 		imageCachingActor.unregister(this);
 		super.onDestroy();
