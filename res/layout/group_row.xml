@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+<de.uniulm.bagception.client.ui.launcher.AutoUpdatableCheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/replaceItem" 
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content" 
+	android:layout_marginLeft="5dp" 
+	android:gravity="center_vertical" 
+	android:textColor="#5E5E5E" 
+	android:drawableRight="@drawable/overview_pic"
+	android:drawableLeft="@drawable/overview_pic"
+	android:padding="10dp" 
+ 	android:textStyle="bold"
+    />
 
-<!-- <de.uniulm.bagception.client.ui.launcher.AutoUpdatableCheckedTextView -->
+    
+<!-- <de.uniulm.bagception.client.ui.launcher.AutoUpdatableCheckedTextView 
 <CheckedTextView
     xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" 
     
@@ -16,3 +29,4 @@
 	android:padding="10dp" 
 	android:textSelectHandleLeft="@string/hello_world" 
  	android:textStyle="bold" /> 
+-->
