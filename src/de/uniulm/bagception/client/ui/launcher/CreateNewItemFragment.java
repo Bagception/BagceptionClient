@@ -289,8 +289,10 @@ public class CreateNewItemFragment extends Fragment implements
 									BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
 									ItemCommand.add(item)));
 					Log.d("TEST", item.toString());
-					Intent intent = new Intent(getActivity(), MainGUI.class);
-					startActivity(intent);
+					
+					getActivity().finish();
+//					Intent intent = new Intent(getActivity(), MainGUI.class);
+//					startActivity(intent);
 				}
 			}
 		});
@@ -301,8 +303,10 @@ public class CreateNewItemFragment extends Fragment implements
 			public void onClick(View v) {
 				editName.setText("");
 				iv.setImageResource(R.drawable.ic_launcher);
-				Intent intent = new Intent(getActivity(), MainGUI.class);
-				startActivity(intent);
+				
+				getActivity().finish();
+//				Intent intent = new Intent(getActivity(), MainGUI.class);
+//				startActivity(intent);
 			}
 		});
 

@@ -69,9 +69,10 @@ public class CreateNewCategoryFragment extends Fragment {
 							.createBundle(
 									BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
 									CategoryCommand.add(category)));
-
-					Intent intent = new Intent(getActivity(), MainGUI.class);
-					startActivity(intent);
+					
+					getActivity().finish();
+//					Intent intent = new Intent(getActivity(), MainGUI.class);
+//					startActivity(intent);
 				}
 			}
 		});
@@ -81,8 +82,10 @@ public class CreateNewCategoryFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				editName.setText("");
-				Intent intent = new Intent(getActivity(), MainGUI.class);
-				startActivity(intent);
+				
+				getActivity().finish();
+//				Intent intent = new Intent(getActivity(), MainGUI.class);
+//				startActivity(intent);
 			}
 		});
 
