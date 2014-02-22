@@ -15,6 +15,8 @@ public class ItemsMissFragment extends OverviewTabFragment{
 	protected List<Item> getCorrespondingItemList(ContainerStateUpdate update) {
 		List<Item> ret = new ArrayList<Item>(update.getMissingItems());
 		
+		
+		//context items zu liste der fehlenden hinzufügen
 		for(ContextSuggestion sug:fragment.suggestionToAdd){
 			for(Item i:sug.getReplaceSuggestions()){
 				if (!ret.contains(i)){
