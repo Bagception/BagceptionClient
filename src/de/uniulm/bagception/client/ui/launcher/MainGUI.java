@@ -260,9 +260,6 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 			latView.setText("" + lat);
 			lngView.setText("" + longt);
 
-			Log.w("TEST", "Lat: " + lat);
-			Log.w("TEST", "Lon: " + longt);
-
 			Location locCoords = new Location("", lat, longt, rad);
 			new BundleMessageHelper(this).sendMessageSendBundle(BundleMessage
 					.getInstance().createBundle(
