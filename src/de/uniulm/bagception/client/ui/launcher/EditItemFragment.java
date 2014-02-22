@@ -328,7 +328,8 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 
 				if (((MainGUI) getActivity()).currentPicturetaken != null) {
 					newItem.setImage(((MainGUI) getActivity()).currentPicturetaken);
-					newItem.serializeImage();
+					boolean pt = ((MainGUI) getActivity()).pictureTaken;
+					newItem.serializeImage(pt);
 				}
 
 				Log.d("TEST", newItem.toString());

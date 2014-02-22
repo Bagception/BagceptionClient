@@ -13,8 +13,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -57,7 +55,8 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 	private DrawerLayout drawer;
 	private View drawRightLayout;
 	public Bitmap currentPicturetaken = null;
-
+	public boolean pictureTaken=false;
+	
 	final String[] data = { "Übersicht", "Items", "Orte", "Kategorien",
 			"Aktivitäten", "Neue Tasche", "Kalender" };
 	final String[] menueFragments = {
@@ -75,6 +74,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 		bmActor = new BundleMessageActor(this);
 		bmHelper = new BundleMessageHelper(this);
 		setContentView(R.layout.activity_main_gui);
+		pictureTaken = false;
 		currentPicturetaken = BitmapFactory.decodeResource(getResources(),
 				R.drawable.ic_launcher);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActionBar()
@@ -247,6 +247,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 				img.setImageBitmap(thePic);
 			}
 			currentPicturetaken = thePic;
+			pictureTaken = true;
 		} else if (requestCode == REQUEST_LOCATION) {
 			if (resultCode != Activity.RESULT_OK) {
 				Log.d("TEST", "WHY U NOT WORKING?");
