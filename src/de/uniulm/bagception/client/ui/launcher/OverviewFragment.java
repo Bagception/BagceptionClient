@@ -106,7 +106,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		// initiating both tabs and set text to it.
 		itemsInTab = actionBar.newTab().setText("Enthalten (0)");
 		itemsMissTab = actionBar.newTab().setText("Fehlend (0)");
-		itemsSuggTab = actionBar.newTab().setText("Vorschlag");
+		itemsSuggTab = actionBar.newTab().setText("Vorschlag (0)");
 
 		itemsInFragment = new ItemsInFragment();
 		itemsInFragment.setParentFragment(this);
@@ -283,16 +283,17 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			
 			
 			itemsInTab.setText(String.format("Enthalten" + " (%d)",
-					itemsIn.size()));
+					itemsIn.size()+suggestionToRemove.size()));
 			// itemsNeedlessTab.setText(String.format("Überflüssig (%d)",needlessItems.size()));
 			itemsMissTab.setText(String.format("Fehlend (%d)",
-					missingItems.size()));
+					missingItems.size()+suggestionToAdd.size()));
 
 			itemsInFragment.updateView(statusUpdate);
 			itemsMissFragment.updateView(statusUpdate);
 			// itemsNeedlessFragment.updateView(statusUpdate);
 			// debugMessage(statusUpdate);
 
+			itemsSuggTab.setText(String.format("Vorschlag (%d)",suggestionToReplace.size()));
 			StringBuilder sb = new StringBuilder();
 
 			sb.append("Update: \n");

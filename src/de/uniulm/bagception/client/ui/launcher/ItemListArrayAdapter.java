@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,14 +74,19 @@ public class ItemListArrayAdapter extends ArrayAdapter<Item> {
             }else{
             	view.setBackgroundColor(Color.WHITE);
             }
-            List<CONTEXT> ctx = context.get(item);
+            List<CONTEXT> ctx = context.get(item.getId());
+            
             ImageView contextImg = (ImageView)view.findViewById(R.id.contextIcon);
             if (ctx!=null){
 	            Bitmap bmp=null;
             	for(CONTEXT c:ctx){
             		bmp=bitmaps.getContextIcon(c);
+            		Log.d("CONTEXT",item.getName()+" kontext: "+c.name());
             	}
+            	contextImg.setVisibility(View.VISIBLE);
             	contextImg.setImageBitmap(bmp);
+            }else{
+            	contextImg.setVisibility(View.INVISIBLE);
             }
          }
 

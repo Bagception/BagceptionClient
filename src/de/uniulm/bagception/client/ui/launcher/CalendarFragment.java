@@ -237,6 +237,7 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 				long dateStart = startDate + startTime;
 				long dateEnd = dateStart + 1000 * 60 * 60 * 2;
 				CalendarEvent event = new CalendarEvent(eventNameEditText.getText().toString(),
+														1,
 														"", 
 														selectedActivityTextView.getText().toString(),
 														"-1",
