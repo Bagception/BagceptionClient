@@ -91,8 +91,9 @@ public class EditCategoryFragment extends Fragment implements
 									CategoryCommand.edit(oldCategory,
 											newCategory)));
 
-					Intent intent = new Intent(getActivity(), MainGUI.class);
-					startActivity(intent);
+//					Intent intent = new Intent(getActivity(), MainGUI.class);
+//					startActivity(intent);
+					getActivity().finish();
 				}
 			}
 		});
@@ -102,7 +103,7 @@ public class EditCategoryFragment extends Fragment implements
 			@Override
 			public void onClick(View v) {
 				editName.setText("");
-
+				getActivity().finish();
 			}
 		});
 

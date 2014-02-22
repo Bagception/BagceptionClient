@@ -160,8 +160,9 @@ public class EditActivityFragment extends Fragment implements
 						.createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
 								ActivityCommand.edit(oldActivity, newActivity)));
 
-				Intent intent = new Intent(getActivity(), MainGUI.class);
-				startActivity(intent);
+				getActivity().finish();
+//				Intent intent = new Intent(getActivity(), MainGUI.class);
+//				startActivity(intent);
 
 			}
 		});
@@ -172,6 +173,7 @@ public class EditActivityFragment extends Fragment implements
 			public void onClick(View v) {
 				editName.setText("");
 
+				getActivity().finish();
 			}
 		});
 
