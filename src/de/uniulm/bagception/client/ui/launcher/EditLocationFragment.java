@@ -235,8 +235,9 @@ public class EditLocationFragment extends Fragment implements
 									LocationCommand.edit(oldLocation,
 											newLocation)));
 
-					Intent intent = new Intent(getActivity(), MainGUI.class);
-					startActivity(intent);
+					getActivity().finish();
+//					Intent intent = new Intent(getActivity(), MainGUI.class);
+//					startActivity(intent);
 				}
 			}
 		});
@@ -246,6 +247,7 @@ public class EditLocationFragment extends Fragment implements
 			@Override
 			public void onClick(View v) {
 				editName.setText("");
+				getActivity().finish();
 			}
 		});
 

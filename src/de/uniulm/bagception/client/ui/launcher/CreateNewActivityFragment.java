@@ -139,8 +139,9 @@ public class CreateNewActivityFragment extends Fragment implements
 									BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
 									ActivityCommand.add(activity)));
 
-					Intent intent = new Intent(getActivity(), MainGUI.class);
-					startActivity(intent);
+					getActivity().finish();
+//					Intent intent = new Intent(getActivity(), MainGUI.class);
+//					startActivity(intent);
 				}
 			}
 		});
@@ -150,8 +151,9 @@ public class CreateNewActivityFragment extends Fragment implements
 			@Override
 			public void onClick(View v) {
 				editName.setText("");
-				Intent intent = new Intent(getActivity(), MainGUI.class);
-				startActivity(intent);
+				getActivity().finish();
+//				Intent intent = new Intent(getActivity(), MainGUI.class);
+//				startActivity(intent);
 			}
 		});
 

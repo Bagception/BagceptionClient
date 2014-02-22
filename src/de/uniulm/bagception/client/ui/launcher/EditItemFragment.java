@@ -337,9 +337,10 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 						.createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
 								ItemCommand.edit(oldItem, newItem)));
 				Log.d("TEST", newItem.toString());
-				Intent intent = new Intent(getActivity(), MainGUI.class);
-				startActivity(intent);
+//				Intent intent = new Intent(getActivity(), MainGUI.class);
+//				startActivity(intent);
 				ImageCachingSystem.getInstance().clearCache(newItem);
+				getActivity().finish();
 			}
 		});
 
