@@ -10,7 +10,6 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,7 +40,7 @@ import de.uniulm.bagception.client.R;
 public class EditActivityFragment extends Fragment implements
 		BundleMessageReactor {
 
-	ArrayList<Item> itemsForActivity;
+	ArrayList<Item> itemsForActivity = new ArrayList<Item>();
 	Location locationForActivity;
 	EditText editName;
 	Button send;
@@ -83,16 +82,17 @@ public class EditActivityFragment extends Fragment implements
 		org.json.simple.JSONObject obj = new org.json.simple.JSONObject();
 		JSONParser p = new JSONParser();
 		try {
-			Log.w("TEST", "Parser: " + p);
-			Log.w("TEST", "String: " + i);
 			obj = (org.json.simple.JSONObject) p.parse(i);
 			activity = Activity.fromJSON(obj);
+			itemsForActivity.addAll(activity.getItemsForActivity());
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		final Activity oldActivity = activity;
 
 		bmActor = new BundleMessageActor(this);
+		
+		
 
 		addPlace.setOnClickListener(new OnClickListener() {
 
@@ -153,17 +153,35 @@ public class EditActivityFragment extends Fragment implements
 				Activity newActivity = new Activity(name, itemsForActivity,
 						locationForActivity);
 				Log.w("TEST", "Die erstellte Activity: " + newActivity);
+				if ("".equals(editName.getText().toString().trim())) {
 
-				BundleMessageHelper helper = new BundleMessageHelper(
-						getActivity());
-				helper.sendMessageSendBundle(BundleMessage.getInstance()
-						.createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
-								ActivityCommand.edit(oldActivity, newActivity)));
+					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
+							getActivity());
+					dialogAlert.setTitle("Bitte alle Felder ausfüllen");
+					dialogAlert.setNeutralButton("OK",
+							new DialogInterface.OnClickListener() {
 
-				getActivity().finish();
-//				Intent intent = new Intent(getActivity(), MainGUI.class);
-//				startActivity(intent);
+								public void onClick(DialogInterface dialog,
+										int which) {
+									dialog.cancel();
+								}
+							});
+					dialogAlert.create().show();
 
+				} else {
+
+					BundleMessageHelper helper = new BundleMessageHelper(
+							getActivity());
+					helper.sendMessageSendBundle(BundleMessage.getInstance()
+							.createBundle(
+									BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
+									ActivityCommand.edit(oldActivity,
+											newActivity)));
+
+					getActivity().finish();
+					// Intent intent = new Intent(getActivity(), MainGUI.class);
+					// startActivity(intent);
+				}
 			}
 		});
 

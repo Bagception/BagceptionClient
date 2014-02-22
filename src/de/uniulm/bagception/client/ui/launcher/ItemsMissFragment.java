@@ -36,7 +36,7 @@ public class ItemsMissFragment extends OverviewTabFragment{
 		adapter.clearContextInfo();
 		for(ContextSuggestion sug:fragment.suggestionToAdd){
 			for(Item i:sug.getReplaceSuggestions()){
-				adapter.putColorCodeItems(Color.RED, i);
+				adapter.putColorCodeItems(Color.GRAY, i);
 				ArrayList<CONTEXT> ctx = new ArrayList<ContextSuggestion.CONTEXT>();
 				Log.d("CONTEXT","Context icon (miss) for "+i.getName()+": "+sug.getReason().name());
 				ctx.add(sug.getReason());
