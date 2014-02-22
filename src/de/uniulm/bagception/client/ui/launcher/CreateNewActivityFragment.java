@@ -261,7 +261,7 @@ public class CreateNewActivityFragment extends Fragment implements
 									listadapter.addAll(selectedItems);
 									listView.invalidate();
 									itemsForActivity = itemsSelected;
-									Log.w("TEST",
+									Log.e("DEBUG",
 											"ItemsForActivity wird gefüllt mit: "
 													+ itemsForActivity);
 								}

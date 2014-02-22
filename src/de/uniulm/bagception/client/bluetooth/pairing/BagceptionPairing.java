@@ -2,7 +2,9 @@ package de.uniulm.bagception.client.bluetooth.pairing;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import android.bluetooth.BluetoothAdapter;
@@ -15,7 +17,7 @@ public class BagceptionPairing{
 	private boolean DEBUG = false;
 
 	private final BagceptionPairingCallbacks callbacks;
-	private final List<BluetoothDevice> foundBTDevices =  Collections.synchronizedList(new  ArrayList<BluetoothDevice>());
+	private final Set<BluetoothDevice> foundBTDevices =  Collections.synchronizedSet(new  HashSet<BluetoothDevice>());
 	public final BluetoothAdapter bluetoothAdapter;
 	private final ArrayList<BluetoothDevice> discoveredDevices = new ArrayList<BluetoothDevice>();
 	private final BluetoothServiceActor actor;
@@ -54,7 +56,7 @@ public class BagceptionPairing{
 	}
 	public void cancel(){
 		bluetoothAdapter.cancelDiscovery();
-		callbacks.onScanFinished(foundBTDevices);
+		callbacks.onScanFinished(new ArrayList<BluetoothDevice>(foundBTDevices));
 		startOver();
 	}
 	
@@ -88,7 +90,7 @@ public class BagceptionPairing{
 			}
 				
 		}
-		callbacks.onScanFinished(foundBTDevices);
+		callbacks.onScanFinished(new ArrayList<BluetoothDevice>(foundBTDevices));
 		
 	}
 	

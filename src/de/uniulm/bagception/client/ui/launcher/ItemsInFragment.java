@@ -20,10 +20,9 @@ public class ItemsInFragment extends OverviewTabFragment{
 		List<Item> ret = new ArrayList<Item>(update.getItemList());
 		
 
-		//TODO prüfen ob nötig
+		//aus needless items context items entfernen
 		for(ContextSuggestion sug:fragment.suggestionToRemove){
 			if (!ret.contains(sug.getItemToReplace())){
-				ret.add(sug.getItemToReplace());
 				needless.remove(sug.getItemToReplace());
 			}
 		}
@@ -55,7 +54,7 @@ public class ItemsInFragment extends OverviewTabFragment{
 		}
 		
 		for(ContextSuggestion sug:fragment.suggestionToRemove){
-			adapter.putColorCodeItems(Color.RED,sug.getItemToReplace());
+			adapter.putColorCodeItems(Color.GRAY,sug.getItemToReplace());
 			ArrayList<CONTEXT> ctx = new ArrayList<ContextSuggestion.CONTEXT>();
 			ctx.add(sug.getReason());
 			Log.d("CONTEXT","Context icon (in) for "+sug.getItemToReplace().getName()+": "+sug.getReason().name());
