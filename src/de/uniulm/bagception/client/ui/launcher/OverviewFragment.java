@@ -143,6 +143,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 											BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
 											ActivityCommand.
 													start(activityPriorityList.getActivities().get(which))));
+							dialog.cancel();
 						}
 					});
 					priorityActivitiesAlert.create().show();
