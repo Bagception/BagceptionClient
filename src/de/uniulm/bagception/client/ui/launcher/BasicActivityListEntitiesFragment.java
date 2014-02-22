@@ -87,6 +87,17 @@ public abstract class BasicActivityListEntitiesFragment<E> extends Fragment
 		listAdapter = getEntityAdapter();
 		listView.setAdapter(listAdapter);
 		listAdapter.notifyDataSetChanged();
+		
+		listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				dialog(arg2);
+				return true;
+			}
+		});
+
 
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 

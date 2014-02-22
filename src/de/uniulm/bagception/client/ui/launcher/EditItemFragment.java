@@ -174,7 +174,7 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 				always.setChecked(true);
 			}
 
-			if (item.getContextItem()  == true) {
+			if (item.getContextItem() == true) {
 				independet.setChecked(true);
 			}
 		}
@@ -323,8 +323,8 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 				ItemAttribute attributes = new ItemAttribute(temperature,
 						weather, lightness);
 				newItem = new Item(-1, editName.getText().toString(),
-						categoryForActivity, independet.isChecked(), always.isChecked(),
-						attributes, tagIDs);
+						categoryForActivity, independet.isChecked(), always
+								.isChecked(), attributes, tagIDs);
 
 				if (((MainGUI) getActivity()).currentPicturetaken != null) {
 					newItem.setImage(((MainGUI) getActivity()).currentPicturetaken);
@@ -332,16 +332,32 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 				}
 
 				Log.d("TEST", newItem.toString());
-				BundleMessageHelper helper = new BundleMessageHelper(
-						getActivity());
-				helper.sendMessageSendBundle(BundleMessage.getInstance()
-						.createBundle(BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
-								ItemCommand.edit(oldItem, newItem)));
-				Log.d("TEST", newItem.toString());
-//				Intent intent = new Intent(getActivity(), MainGUI.class);
-//				startActivity(intent);
-				ImageCachingSystem.getInstance().clearCache(oldItem);
-				getActivity().finish();
+				if ("".equals(editName.getText().toString().trim())) {
+					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
+							getActivity());
+					dialogAlert.setTitle("Bitte alle Felder ausfüllen");
+					dialogAlert.setNeutralButton("OK",
+							new DialogInterface.OnClickListener() {
+
+								public void onClick(DialogInterface dialog,
+										int which) {
+									dialog.cancel();
+								}
+							});
+					dialogAlert.create().show();
+				} else {
+					BundleMessageHelper helper = new BundleMessageHelper(
+							getActivity());
+					helper.sendMessageSendBundle(BundleMessage.getInstance()
+							.createBundle(
+									BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
+									ItemCommand.edit(oldItem, newItem)));
+					Log.d("TEST", newItem.toString());
+					// Intent intent = new Intent(getActivity(), MainGUI.class);
+					// startActivity(intent);
+					ImageCachingSystem.getInstance().clearCache(oldItem);
+					getActivity().finish();
+				}
 			}
 		});
 

@@ -208,9 +208,7 @@ public class EditLocationFragment extends Fragment implements
 				float lat = Float.parseFloat(latView.getText().toString());
 				float lon = Float.parseFloat(lngView.getText().toString());
 
-				if ("".equals(editName.getText().toString().trim())
-						|| latView.length() == 0 || lngView.length() == 0
-						|| resultLocation.getMac() == null) {
+				if ("".equals(editName.getText().toString().trim())) {
 					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
 							getActivity());
 					dialogAlert.setTitle("Bitte alle Felder ausfüllen");
