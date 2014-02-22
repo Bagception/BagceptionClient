@@ -16,12 +16,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="left"
-        android:background="#e5e5e5"
+        android:background="#CDCDCD"
         android:paddingLeft="15dp"
-        android:paddingTop="10dp"
+        android:paddingTop="0dp"
+        android:paddingRight="15dp"
         android:choiceMode="singleChoice"        
         android:divider="@color/dividerDrawer"
-        android:dividerHeight="0dp" />
+        android:dividerHeight="1dp" />
 
     <fragment
         android:id="@+id/drawerRight"
@@ -32,6 +33,6 @@
         android:background="#e5e5e5"
         android:choiceMode="singleChoice"
         android:divider="@color/dividerDrawer"
-        android:dividerHeight="0dp" />
+        android:dividerHeight="1dp" />
 
 </android.support.v4.widget.DrawerLayout>
