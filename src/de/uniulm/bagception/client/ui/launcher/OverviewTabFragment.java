@@ -22,6 +22,9 @@ public abstract class OverviewTabFragment extends Fragment {
 	}
 	
 
+	public int getSize(){
+		return itemsStatusView.getAdapter().getCount();
+	}
 
 	public void setParentFragment(OverviewFragment fragment) {
 		this.fragment = fragment;
