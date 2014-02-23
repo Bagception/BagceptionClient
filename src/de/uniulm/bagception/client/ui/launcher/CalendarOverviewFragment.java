@@ -62,13 +62,12 @@ public class CalendarOverviewFragment extends ListFragment implements BundleMess
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.actionbar_button, menu);
 		MenuItem item = menu.findItem(R.id.menu_item_add);
-		log("optionsMenü pressed");
 		item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
 
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
 				Intent intent = new Intent(getActivity(), MainGUI.class);
-				intent.putExtra("FRAGMENT", "de.uniulm.bagception.client.ui.launcher.CalendarFragment");
+				intent.putExtra("FRAGMENT", "de.uniulm.bagception.client.ui.launcher.CreateNewCalendarFragment");
 				startActivity(intent);
 				return false;
 			}
@@ -114,7 +113,6 @@ public class CalendarOverviewFragment extends ListFragment implements BundleMess
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
 					dialog(arg2);
-				
 				return false;
 			}
 		});
