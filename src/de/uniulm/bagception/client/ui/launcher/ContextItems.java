@@ -53,6 +53,7 @@ public class ContextItems {
 					//there is an item to replace/remove (I)
 					if (sug.getReplaceSuggestions()!=null && sug.getReplaceSuggestions().size()>0){
 						//there are suggestions + I => replace 
+						
 						itemsReplace.add(sug);
 						Log.d("CONTEXT","toReplace: "+sug.getItemToReplace().getName());
 						for(Item i:sug.getReplaceSuggestions()){
@@ -121,6 +122,20 @@ public class ContextItems {
 //			}
 			
 		}
+		
+		List<ContextSuggestion> toDelete = new ArrayList<ContextSuggestion>();
+		for(ContextSuggestion sug: itemsReplace){
+			Item i = sug.getItemToReplace();
+			
+			if (!itemsIn.contains(i)){
+				toDelete.add(ContextSuggestion.getItemsToReplace(itemsReplace, i));
+			}
+		}
+		
+		for(ContextSuggestion del:toDelete){
+			itemsReplace.remove(del);	
+		}
+		
 		
 		debug(stateUpdate);
 	}
