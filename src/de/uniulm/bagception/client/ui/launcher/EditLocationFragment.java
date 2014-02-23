@@ -125,8 +125,10 @@ public class EditLocationFragment extends Fragment implements
 		lngView.setText(location.getLng().toString());
 		
 		Log.w("DEBUG", "Location beim Editieren: " + location);
-		wlanView.setText("WLAN: " + location.getMac().toString());
-
+		if(location.getMac() != null){
+			wlanView.setText("WLAN: " + location.getMac().toString());
+		}
+		
 		resolveAddress.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -212,10 +214,15 @@ public class EditLocationFragment extends Fragment implements
 			@Override
 			public void onClick(View v) {
 
-				float lat = Float.parseFloat(latView.getText().toString());
-				float lon = Float.parseFloat(lngView.getText().toString());
+				float lat = -1;
+				float lon = -1;
+				
+				if(latView.getText() != null|| lngView.getText() != null){
+					lat = Float.parseFloat(latView.getText().toString());
+					lon = Float.parseFloat(lngView.getText().toString());
+				}
 
-				if ("".equals(editName.getText().toString().trim())) {
+				if ("".equals(editName.getText().toString().trim()) || lat == -1 || lon == -1) {
 					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
 							getActivity());
 					dialogAlert.setTitle("Bitte alle Felder ausfüllen");
