@@ -48,7 +48,7 @@
                 android:id="@+id/viewActivitiesBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Aktivität" />
+                android:text="Aktivität hinzufügen" />
 
             <TextView
                 android:id="@+id/selectedActivityTextView"
@@ -89,7 +89,7 @@
                 android:id="@+id/showTimePickerBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pick time" />
+                android:text="Startzeit" />
 
             <TextView
                 android:id="@+id/timeTextView"
@@ -110,7 +110,7 @@
                 android:id="@+id/showDatePickerBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pick date" />
+                android:text="Startdatum" />
 
             <TextView
                 android:id="@+id/dateTextView"
@@ -131,7 +131,7 @@
                 android:id="@+id/showEndTimePickerBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pick end time" />
+                android:text="Endzeit" />
 
             <TextView
                 android:id="@+id/EndTimeTextView"
@@ -152,7 +152,7 @@
                 android:id="@+id/showEndDatePickerBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pick end date" />
+                android:text="Enddatum" />
 
             <TextView
                 android:id="@+id/endDateTextView"

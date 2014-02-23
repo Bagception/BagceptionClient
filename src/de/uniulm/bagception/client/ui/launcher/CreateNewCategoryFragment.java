@@ -5,6 +5,8 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +39,8 @@ public class CreateNewCategoryFragment extends Fragment {
 			Bundle savedInstanceState) {
 		final ViewGroup root = (ViewGroup) inflater.inflate(
 				R.layout.fragment_create_new_category, null);
+		getActivity().getActionBar().setTitle("Kategorie hinzufügen");
+		getActivity().getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0099CC")));
 		editName = (EditText) root.findViewById(R.id.editCategory);
 		send = (Button) root.findViewById(R.id.sendCategory);
 		cancel = (Button) root.findViewById(R.id.cancelCategory);
@@ -46,7 +50,6 @@ public class CreateNewCategoryFragment extends Fragment {
 			@Override
 			public void onClick(View arg0) {
 				
-				Toast.makeText(getActivity(), "RLY FU", Toast.LENGTH_LONG).show();
 
 				if ("".equals(editName.getText().toString().trim())) {
 					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
