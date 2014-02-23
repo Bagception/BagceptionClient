@@ -1,12 +1,10 @@
 package de.uniulm.bagception.client.ui.launcher;
 
 import java.util.ArrayList;
-
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -200,15 +198,13 @@ public class CreateNewPlaceFragment extends Fragment implements
 				} else {
 					Location location = new Location(-1, editName.getText()
 							.toString(), lat, lon, resultLocation.getRadius(),
-							resultLocation.getMac());
+							device.getMac());
 					BundleMessageHelper helper = new BundleMessageHelper(
 							getActivity());
 					helper.sendMessageSendBundle(BundleMessage.getInstance()
 							.createBundle(
 									BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
 									LocationCommand.add(location)));
-
-					Log.w("TEST", "Location: " + location);
 
 					getActivity().finish();
 //					Intent intent = new Intent(getActivity(), MainGUI.class);
