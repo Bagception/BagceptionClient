@@ -11,21 +11,23 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.Toast;
-import de.uniulm.bagception.bundlemessageprotocol.entities.ContainerStateUpdate;
-import de.uniulm.bagception.bundlemessageprotocol.entities.Item;
+import de.uniulm.bagception.bundlemessageprotocol.entities.RichItem;
 import de.uniulm.bagception.client.R;
 
 public class ItemsSuggFragment extends OverviewTabFragment implements OnChildClickListener{
+
+	
+	@Override
+	protected List<RichItem> getCorrespondingItemList(ContextItems contextItems) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	private SuggestionListAdapter suggAdapter;
 	private ExpandableListView expandbleLis;
 
 	
-	@Override
-	public synchronized void updateView(ContainerStateUpdate update) {
-		
-		super.updateView(update);
-	}
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,13 +41,13 @@ public class ItemsSuggFragment extends OverviewTabFragment implements OnChildCli
 		
 		if(suggAdapter == null){
 			
-			Log.w("TEST", "ContextSuggestion (Client/ItemSuggFragment): " + fragment.suggestionToReplace);
-			suggAdapter = new SuggestionListAdapter(getActivity(),fragment.suggestionToReplace);
+			Log.w("TEST", "ContextSuggestion (Client/ItemSuggFragment): " + fragment.contextItems.getItemsReplace());
+			suggAdapter = new SuggestionListAdapter(getActivity(),fragment.contextItems.getItemsReplace());
 			suggAdapter.setInflater((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE));
 		}
 	
 		if(expandbleLis.getExpandableListAdapter() == null){
-			Log.w("TEST", "suggAdapter (Client/ItemSuggFragment): " + fragment.suggestionToReplace);
+			Log.w("TEST", "suggAdapter (Client/ItemSuggFragment): " + fragment.contextItems.getItemsReplace());
 			expandbleLis.setAdapter(suggAdapter);
 		}	
 		
@@ -53,11 +55,7 @@ public class ItemsSuggFragment extends OverviewTabFragment implements OnChildCli
 
 	}
 	
-	@Override
-	protected List<Item> getCorrespondingItemList(ContainerStateUpdate update) {
-		//we do not need this, because the listview is different
-		return null;
-	}
+
 
 	@Override
 	public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,

@@ -1,12 +1,10 @@
 package de.uniulm.bagception.client.ui.launcher;
 
 import java.util.ArrayList;
-
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -179,12 +177,20 @@ public class CreateNewPlaceFragment extends Fragment implements
 			@Override
 			public void onClick(View v) {
 
-				float lat = Float.parseFloat(latView.getText().toString());
-				float lon = Float.parseFloat(lngView.getText().toString());
+				float lat = -1;
+				float lon = -1;
+				
+				if(latView.getText().toString() != null|| lngView.getText().toString() != null){
+					
+					Log.w("DEBUG", "Latitude: " + latView.getText());
+					Log.w("DEBUG", "Longitude: " + lngView.getText());
+					
+					lat = Float.parseFloat(latView.getText().toString());
+					lon = Float.parseFloat(lngView.getText().toString());
+				}
 
 
-
-				if ("".equals(editName.getText().toString().trim())) {
+				if ("".equals(editName.getText().toString().trim()) || lat == -1 || lon == -1) {
 					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
 							getActivity());
 					dialogAlert.setTitle("Bitte alle Felder ausfüllen");
@@ -200,15 +206,13 @@ public class CreateNewPlaceFragment extends Fragment implements
 				} else {
 					Location location = new Location(-1, editName.getText()
 							.toString(), lat, lon, resultLocation.getRadius(),
-							resultLocation.getMac());
+							device.getMac());
 					BundleMessageHelper helper = new BundleMessageHelper(
 							getActivity());
 					helper.sendMessageSendBundle(BundleMessage.getInstance()
 							.createBundle(
 									BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
 									LocationCommand.add(location)));
-
-					Log.w("TEST", "Location: " + location);
 
 					getActivity().finish();
 //					Intent intent = new Intent(getActivity(), MainGUI.class);
