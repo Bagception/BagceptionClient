@@ -1,6 +1,5 @@
 package de.uniulm.bagception.client.ui.launcher;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.json.simple.JSONObject;
@@ -55,6 +54,8 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 	private ItemsInFragment itemsInFragment;
 	private ItemsMissFragment itemsMissFragment;
 	private ItemsSuggFragment itemsSuggFragment;
+	
+	ContextItems contextItems;
 
 	private BundleMessageHelper bmHelper;
 	private TextView currentActivityView;
@@ -72,9 +73,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 	String[] prioActivities;
 	private Activity ac = null;
 	
-	protected List<ContextSuggestion> suggestionToReplace = new ArrayList<ContextSuggestion>();
-	protected List<ContextSuggestion> suggestionToRemove = new ArrayList<ContextSuggestion>();
-	protected List<ContextSuggestion> suggestionToAdd = new ArrayList<ContextSuggestion>();
+
 
 	private final ToneGenerator toneGenerator = new ToneGenerator(
 			AudioManager.STREAM_MUSIC, 100);
@@ -119,6 +118,8 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		itemsMissTab.setTabListener(new ItemTabListener(itemsMissFragment));
 		itemsSuggTab.setTabListener(new ItemTabListener(itemsSuggFragment));
 
+		contextItems = new ContextItems();
+		
 		actionBar.addTab(itemsInTab);
 		actionBar.addTab(itemsMissTab);
 		actionBar.addTab(itemsSuggTab);
@@ -195,20 +196,14 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		return root;
 		}
 
-	List<Item> itemsMust;
-	List<Item> itemsIn;
-	List<Item> needlessItems;
-	List<Item> missingItems;
-	List<Item> copiedMustItems;
 	
 
 	
 	
 
-	public void onBundleMessageRecv(Bundle b) {
+	public synchronized void onBundleMessageRecv(Bundle b) {
 		BUNDLE_MESSAGE msg = BundleMessage.getInstance()
 				.getBundleMessageType(b);
-		Log.d("TEST", "msg" + msg.toString());
 		switch (msg) {
 
 		case CONTAINER_STATUS_UPDATE:
@@ -230,86 +225,34 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			currentActivityView.setText("Aktuelle Aktivität: "
 					+ currentActivity);
 
-			itemsIn = statusUpdate.getItemList();
-			itemsMust = statusUpdate.getActivity().getItemsForActivity();
-			if (statusUpdate.getNeedlessItems() == null) {
-			} else {
-				needlessItems = statusUpdate.getNeedlessItems();
-			}
-			missingItems = statusUpdate.getMissingItems();
-
-			if (itemsMust == null) {
-				copiedMustItems = new ArrayList<Item>();
-			} else {
-				copiedMustItems = new ArrayList<Item>(itemsMust);
-			}
 			
+			contextItems.update(statusUpdate);
+			updateItemListSize();
+			itemsInFragment.update();
+			itemsMissFragment.update();
+			itemsSuggFragment.update();
 			
-			
-			//SUGGESTIONS
-			contextSuggestions = statusUpdate.getContextSuggestions();
-			//DEBUGCONTEXT:
-			Log.d("DEBUGCONTEXT","Debug context:");
-			if (contextSuggestions == null){
-				Log.d("DEBUGCONTEXT","context is null");
-			}else{
-				for(ContextSuggestion sss:contextSuggestions){
-					if (sss.getItemToReplace()!=null){
-						Log.d("DEBUGCONTEXT","suggestion replace: " +sss.getItemToReplace().getName());
-					}else{
-						Log.d("DEBUGCONTEXT","suggestion replace: no");	
-					}
-					Log.d("DEBUGCONTEXT"," reason: "+sss.getReason().name());	
-					for (Item i:sss.getReplaceSuggestions()){
-						if (i == null){
-							Log.d(" DEBUGCONTEXT","replace with nothing:");
-						}else{
-							Log.d(" DEBUGCONTEXT","replace with:"+i.getName());	
-						}
-							
-					}
-				}
-				
-			}
-			Log.w("TEST", "getContextSuggestions (Client/OverviewFragment:246): " + contextSuggestions);
-			
-			calcCorrespondingContextItems();
-
 			//TODO
-			itemsSuggFragment.updateView(statusUpdate);
-			
-			
-			itemsInTab.setText(String.format("Enthalten" + " (%d)",
-					itemsInFragment.getSize()));
-			// itemsNeedlessTab.setText(String.format("Überflüssig (%d)",needlessItems.size()));
-			itemsMissTab.setText(String.format("Fehlend (%d)",
-					itemsInFragment.getSize()));
-
-			itemsInFragment.updateView(statusUpdate); 
-			itemsMissFragment.updateView(statusUpdate);
-			// itemsNeedlessFragment.updateView(statusUpdate);
-			// debugMessage(statusUpdate);
-
-			itemsSuggTab.setText(String.format("Vorschlag (%d)",suggestionToReplace.size()));
-			StringBuilder sb = new StringBuilder();
-
-			sb.append("Update: \n");
-			sb.append("Items in Bag:");
-			sb.append("\n");
-
-			sb.append("\n");
-			sb.append("Activity: ");
-			sb.append(statusUpdate.getActivity().getName());
-			sb.append("\n");
-			sb.append("Items for activity:");
-			for(Item i:statusUpdate.getActivity().getItemsForActivity()){
-				sb.append(i.getName() + ", ");
-			}
-			sb.append("\n");
-
-			sb.append("\n");
-			 Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG)
-			 .show();
+			//itemsSuggTab.setText(String.format("Vorschlag (%d)",suggestionToReplace.size()));
+//			StringBuilder sb = new StringBuilder();
+//
+//			sb.append("Update: \n");
+//			sb.append("Items in Bag:");
+//			sb.append("\n");
+//
+//			sb.append("\n");
+//			sb.append("Activity: ");
+//			sb.append(statusUpdate.getActivity().getName());
+//			sb.append("\n");
+//			sb.append("Items for activity:");
+//			for(Item i:statusUpdate.getActivity().getItemsForActivity()){
+//				sb.append(i.getName() + ", ");
+//			}
+//			sb.append("\n");
+//
+//			sb.append("\n");
+//			 Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG)
+//			 .show();
 			 
 			break;
 
@@ -324,7 +267,6 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			break;
 			
 		case ACTIVITY_PRIORITY_LIST: {
-			Log.d("TEST", "Also das geht");
 			activityPriorityList = ActivityPriorityList.fromJSON(BundleMessage.getInstance().extractObject(b));
 			prioActivities = new String[activityPriorityList.getActivities().size()];
 			for(int i=0; i<activityPriorityList.getActivities().size(); i++){
@@ -376,28 +318,8 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		dialogAlert.create().show();
 	}
 
-	// private void debugMessage(ContainerStateUpdate update) {
-	// StringBuilder sb = new StringBuilder();
-	//
-	// sb.append("Update: \n");
-	// sb.append("Items in Bag:");
-	// sb.append("\n");
-	//
-	// sb.append("\n");
-	// sb.append("Activity: ");
-	// sb.append(statusUpdate.getActivity().getName());
-	// sb.append("\n");
-	// sb.append("Items for activity:");
-	// sb.append("\n");
-	//
-	// sb.append("\n");
-	// Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG).show();
-	// }
 
-	public synchronized ContainerStateUpdate getItemUpdate() {
-		
-		return statusUpdate;
-	}
+	
 
 	@Override
 	public void onBundleMessageSend(Bundle b) {
@@ -463,43 +385,6 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 
 	}
 
-	
-	private synchronized void calcCorrespondingContextItems(){
-		Log.d("CONTEXT","calc suggestions");	
-		suggestionToReplace.clear();
-		suggestionToRemove.clear();
-		suggestionToAdd.clear();
-		if (contextSuggestions != null) {
-			for (ContextSuggestion sug : contextSuggestions) {
-				if (sug.getItemToReplace()==null){
-					//no item to replace/remove => nothing to remove, only  to add
-					suggestionToAdd.add(sug);
-					
-					for(Item i:sug.getReplaceSuggestions()){
-						Log.d("CONTEXT","toAdd: "+i.getName());	
-					}
-					
-				}else{
-					//there is an item to replace/remove (I)
-					if (sug.getReplaceSuggestions()!=null && sug.getReplaceSuggestions().size()>0){
-						//there are suggestions + I => replace 
-						suggestionToReplace.add(sug);
-						Log.d("CONTEXT","toReplace: "+sug.getItemToReplace().getName());
-						for(Item i:sug.getReplaceSuggestions()){
-							Log.d("CONTEXT","toReplaceWith: "+i.getName());
-						}
-					}else{
-						//I + no suggestions => remove item
-						suggestionToRemove.add(sug);
-						Log.d("CONTEXT","toRemove: "+sug.getName());
-					}
-				}
-			}
-		}else{
-				Log.d("CONTEXT","suggestions are null");	
-		}
-		
-	}
 	
 	// add tagid to item
 	private void onAdminCommand(Bundle b) {
@@ -571,6 +456,15 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			Log.d("FIXME", "admin command is null (int Overview fragment)"); // XXX
 		}
 
+	}
+	
+	public void updateItemListSize(){
+		if (contextItems == null) return;
+		itemsMissTab.setText(String.format("Fehlend" + " (%d)",contextItems.getItemsMiss().size()));
+		itemsInTab.setText(String.format("Enthalten" + " (%d)",contextItems.getItemsIn().size()));
+		itemsSuggTab.setText(String.format("Vorschlag" + " (%d)",contextItems.getItemsReplace().size()));
+		
+				
 	}
 
 }
