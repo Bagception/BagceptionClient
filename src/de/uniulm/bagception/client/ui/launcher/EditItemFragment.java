@@ -393,7 +393,7 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 
 					AlertDialog.Builder categoryAlert = new AlertDialog.Builder(
 							getActivity());
-					categoryAlert.setTitle("Items zur Activity hinzufügen");
+					categoryAlert.setTitle("Kategorie hinzufügen");
 
 					categoryAlert.setItems(categoryStrings,
 							new DialogInterface.OnClickListener() {

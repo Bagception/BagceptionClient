@@ -348,7 +348,7 @@ public class CreateNewItemFragment extends Fragment implements
 						AlertDialog.Builder categoryAlert = new AlertDialog.Builder(
 								getActivity());
 						categoryAlert
-								.setTitle("Item einer Kategorie hinzufügen");
+								.setTitle("Kategorie hinzufügen");
 
 						categoryAlert.setItems(categoryStrings,
 								new DialogInterface.OnClickListener() {
