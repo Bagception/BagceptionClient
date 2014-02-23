@@ -214,7 +214,6 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 		case CONTAINER_STATUS_UPDATE:
 			itemsInFragment.setParentFragment(this);
 			itemsMissFragment.setParentFragment(this);
-			// itemsNeedlessFragment.setParentFragment(this);
 			
 			
 			statusUpdate = ContainerStateUpdate.fromJSON(BundleMessage
@@ -222,7 +221,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			String currentActivity = statusUpdate.getActivity().getName();
 			ac = statusUpdate.getActivity();
 			
-			if(ac.getName().equals("keine Aktivität")){
+			if(ac.getName().equals("keine")){
 				endActivity.setEnabled(false);
 			} else{
 				endActivity.setEnabled(true);
@@ -234,8 +233,6 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			itemsIn = statusUpdate.getItemList();
 			itemsMust = statusUpdate.getActivity().getItemsForActivity();
 			if (statusUpdate.getNeedlessItems() == null) {
-				// Toast.makeText(getActivity(), "Keine needless Items",
-				// Toast.LENGTH_SHORT);
 			} else {
 				needlessItems = statusUpdate.getNeedlessItems();
 			}
@@ -283,12 +280,12 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			
 			
 			itemsInTab.setText(String.format("Enthalten" + " (%d)",
-					itemsIn.size()+suggestionToRemove.size()));
+					itemsInFragment.getSize()));
 			// itemsNeedlessTab.setText(String.format("Überflüssig (%d)",needlessItems.size()));
 			itemsMissTab.setText(String.format("Fehlend (%d)",
-					missingItems.size()+suggestionToAdd.size()));
+					itemsInFragment.getSize()));
 
-			itemsInFragment.updateView(statusUpdate);
+			itemsInFragment.updateView(statusUpdate); 
 			itemsMissFragment.updateView(statusUpdate);
 			// itemsNeedlessFragment.updateView(statusUpdate);
 			// debugMessage(statusUpdate);
