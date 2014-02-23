@@ -55,6 +55,7 @@ public class EditActivityFragment extends Fragment implements
 	ListView listView;
 	ArrayAdapter<String> listadapter;
 	TextView placeView;
+	long activity_id;
 
 	public static Fragment newInstance(Context context) {
 		EditActivityFragment f = new EditActivityFragment();
@@ -94,6 +95,9 @@ public class EditActivityFragment extends Fragment implements
 		}
 		final Activity oldActivity = activity;
 
+		activity_id = oldActivity.getId();
+		Log.w("DEBUG", "ActivityID: " + activity_id);
+		
 		bmActor = new BundleMessageActor(this);
 		
 		
@@ -154,7 +158,7 @@ public class EditActivityFragment extends Fragment implements
 								+ itemsForActivity);
 				String name = editName.getText().toString();
 
-				Activity newActivity = new Activity(name, itemsForActivity,
+				Activity newActivity = new Activity(activity_id, name, itemsForActivity,
 						locationForActivity);
 				Log.w("TEST", "Die erstellte Activity: " + newActivity);
 				if ("".equals(editName.getText().toString().trim())) {

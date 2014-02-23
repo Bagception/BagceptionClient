@@ -1,4 +1,4 @@
-package de.uniulm.bagception.client.bluetooth.middleware;
+package de.uniulm.bagception.client.notification;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
+import de.uniulm.bagception.client.bluetooth.middleware.BluetoothSystem;
 import de.uniulm.bagception.protocol.bundle.constants.Response;
 import de.uniulm.bagception.protocol.bundle.constants.ResponseAnswer;
 
