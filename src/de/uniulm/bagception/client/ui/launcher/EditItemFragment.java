@@ -11,6 +11,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -86,6 +88,8 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 			Bundle savedInstanceState) {
 		final ViewGroup root = (ViewGroup) inflater.inflate(
 				R.layout.fragment_create_new_item, null);
+		getActivity().getActionBar().setTitle("Item bearbeiten");
+		getActivity().getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0099CC")));
 		editName = (EditText) root.findViewById(R.id.editName);
 		send = (Button) root.findViewById(R.id.sendItem);
 		cancel = (Button) root.findViewById(R.id.cancelItem);
@@ -141,8 +145,6 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 			viewCategory.setText(item.getCategory().getName());
 		}
 
-		// TODO
-		// get image
 		Bitmap bmp = ImageCachingSystem.getInstance().getImage(item);
 		iv.setImageBitmap(bmp);
 		if (item.getAttribute() != null) {
@@ -386,14 +388,16 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 						de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand<de.uniulm.bagception.bundlemessageprotocol.entities.Category> i) {
 					acceptList = false;
 					final Category[] categories = i.getPayloadObjects();
+					final long[] categoryID = new long[categories.length];
 					final String[] categoryStrings = new String[categories.length];
 					for (int iter = 0; iter < categoryStrings.length; iter++) {
+						categoryID[iter] = categories[iter].getId();
 						categoryStrings[iter] = categories[iter].getName();
 					}
 
 					AlertDialog.Builder categoryAlert = new AlertDialog.Builder(
 							getActivity());
-					categoryAlert.setTitle("Items zur Activity hinzufügen");
+					categoryAlert.setTitle("Kategorie hinzufügen");
 
 					categoryAlert.setItems(categoryStrings,
 							new DialogInterface.OnClickListener() {
@@ -401,7 +405,7 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 								@Override
 								public void onClick(DialogInterface dialog,
 										int which) {
-									categoryForActivity = new Category(
+									categoryForActivity = new Category(categoryID[which],
 											categoryStrings[which]);
 									viewCategory
 											.setText(categoryStrings[which]);

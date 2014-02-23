@@ -10,6 +10,8 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -82,6 +84,8 @@ public class EditLocationFragment extends Fragment implements
 
 		final ViewGroup root = (ViewGroup) inflater.inflate(
 				R.layout.fragment_create_new_place, null);
+		getActivity().getActionBar().setTitle("Ort bearbeiten");
+		getActivity().getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0099CC")));
 		editName = (EditText) root.findViewById(R.id.editName);
 		editAddress = (EditText) root.findViewById(R.id.editAddress);
 		btView = (TextView) root.findViewById(R.id.btView);
@@ -119,6 +123,9 @@ public class EditLocationFragment extends Fragment implements
 
 		latView.setText(location.getLat().toString());
 		lngView.setText(location.getLng().toString());
+		
+		Log.w("DEBUG", "Location beim Editieren: " + location);
+		wlanView.setText("WLAN: " + location.getMac().toString());
 
 		resolveAddress.setOnClickListener(new OnClickListener() {
 
@@ -222,9 +229,13 @@ public class EditLocationFragment extends Fragment implements
 							});
 					dialogAlert.create().show();
 				} else {
+					String mac = null;
+					if(device != null){
+						mac = device.getMac();
+					}
 					newLocation = new Location(-1, editName.getText()
 							.toString(), lat, lon, resultLocation.getRadius(),
-							resultLocation.getMac());
+							mac);
 					BundleMessageHelper helper = new BundleMessageHelper(
 							getActivity());
 					helper.sendMessageSendBundle(BundleMessage.getInstance()

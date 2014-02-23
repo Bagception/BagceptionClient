@@ -1,12 +1,12 @@
 package de.uniulm.bagception.client.ui.launcher;
 
 import java.util.ArrayList;
-
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -78,6 +78,8 @@ public class CreateNewPlaceFragment extends Fragment implements
 			Bundle savedInstanceState) {
 		final ViewGroup root = (ViewGroup) inflater.inflate(
 				R.layout.fragment_create_new_place, null);
+		getActivity().getActionBar().setTitle("Ort hinzufügen");
+		getActivity().getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0099CC")));
 		editName = (EditText) root.findViewById(R.id.editName);
 		editAddress = (EditText) root.findViewById(R.id.editAddress);
 		btView = (TextView) root.findViewById(R.id.btView);
@@ -196,15 +198,13 @@ public class CreateNewPlaceFragment extends Fragment implements
 				} else {
 					Location location = new Location(-1, editName.getText()
 							.toString(), lat, lon, resultLocation.getRadius(),
-							resultLocation.getMac());
+							device.getMac());
 					BundleMessageHelper helper = new BundleMessageHelper(
 							getActivity());
 					helper.sendMessageSendBundle(BundleMessage.getInstance()
 							.createBundle(
 									BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
 									LocationCommand.add(location)));
-
-					Log.w("TEST", "Location: " + location);
 
 					getActivity().finish();
 //					Intent intent = new Intent(getActivity(), MainGUI.class);
