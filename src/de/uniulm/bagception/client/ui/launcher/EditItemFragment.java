@@ -141,8 +141,6 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 			viewCategory.setText(item.getCategory().getName());
 		}
 
-		// TODO
-		// get image
 		Bitmap bmp = ImageCachingSystem.getInstance().getImage(item);
 		iv.setImageBitmap(bmp);
 		if (item.getAttribute() != null) {
@@ -386,8 +384,10 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 						de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommand<de.uniulm.bagception.bundlemessageprotocol.entities.Category> i) {
 					acceptList = false;
 					final Category[] categories = i.getPayloadObjects();
+					final long[] categoryID = new long[categories.length];
 					final String[] categoryStrings = new String[categories.length];
 					for (int iter = 0; iter < categoryStrings.length; iter++) {
+						categoryID[iter] = categories[iter].getId();
 						categoryStrings[iter] = categories[iter].getName();
 					}
 
@@ -401,7 +401,7 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 								@Override
 								public void onClick(DialogInterface dialog,
 										int which) {
-									categoryForActivity = new Category(
+									categoryForActivity = new Category(categoryID[which],
 											categoryStrings[which]);
 									viewCategory
 											.setText(categoryStrings[which]);

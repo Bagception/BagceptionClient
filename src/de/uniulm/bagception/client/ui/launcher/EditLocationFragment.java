@@ -119,6 +119,9 @@ public class EditLocationFragment extends Fragment implements
 
 		latView.setText(location.getLat().toString());
 		lngView.setText(location.getLng().toString());
+		
+		Log.w("DEBUG", "Location beim Editieren: " + location);
+		wlanView.setText("WLAN: " + location.getMac().toString());
 
 		resolveAddress.setOnClickListener(new OnClickListener() {
 
@@ -224,7 +227,7 @@ public class EditLocationFragment extends Fragment implements
 				} else {
 					newLocation = new Location(-1, editName.getText()
 							.toString(), lat, lon, resultLocation.getRadius(),
-							resultLocation.getMac());
+							device.getMac());
 					BundleMessageHelper helper = new BundleMessageHelper(
 							getActivity());
 					helper.sendMessageSendBundle(BundleMessage.getInstance()
