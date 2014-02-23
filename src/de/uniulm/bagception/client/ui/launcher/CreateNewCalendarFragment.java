@@ -12,6 +12,8 @@ import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,7 +38,7 @@ import de.uniulm.bagception.bundlemessageprotocol.entities.administration.Admini
 import de.uniulm.bagception.bundlemessageprotocol.entities.administration.AdministrationCommandProcessor;
 import de.uniulm.bagception.client.R;
 
-public class CalendarFragment extends Fragment implements BundleMessageReactor{
+public class CreateNewCalendarFragment extends Fragment implements BundleMessageReactor{
 
 	private Button sendBtn;
 	private Button cancelBtn;
@@ -57,10 +59,10 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 	private ArrayList<String> activityNames;
 	private ArrayList<Activity> activityList;
 	private Calendar cal;
-	private long startTime;
-	private long endTime;
-	private long startDate;
-	private long endDate;
+	private long startTime=0;
+	private long endTime=0;
+	private long startDate=0;
+	private long endDate=0;
 	private AlertDialog.Builder calendarNamesAlertDialog;
 	private AlertDialog.Builder activitieNamesAlertDialog;
 	
@@ -68,7 +70,7 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 	private BundleMessageActor actor;
 	
 	public static Fragment newInstance(Context context) {
-		CalendarFragment c = new CalendarFragment();
+		CreateNewCalendarFragment c = new CreateNewCalendarFragment();
 		return c;
 	}
 	
@@ -91,6 +93,8 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 			Bundle savedInstanceState) {
 		final ViewGroup root = (ViewGroup) inflater.inflate(
 				R.layout.fragment_calendar, null);
+		getActivity().getActionBar().setTitle("Kalendereintrag erstellen");
+		getActivity().getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0099CC")));
 		cal = Calendar.getInstance();
 		cal = Calendar.getInstance();
 		cal.setTimeInMillis(0);
@@ -147,6 +151,9 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 			@Override
 			public void onClick(View v) {
 				Calendar rightNow = Calendar.getInstance();
+				if(startTime != 0){
+					rightNow.setTimeInMillis(startTime);
+				}
 				TimePickerDialog dialog = new TimePickerDialog(getActivity(), new OnTimeSetListener() {
 					@Override
 					public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -154,7 +161,11 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 						cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
 						cal.set(Calendar.MINUTE, minute);
 						startTime = cal.getTimeInMillis();
-						timeTextView.setText(getTime(startTime));
+						timeTextView.setText(getTime(startTime) + " Uhr");
+						if(endTime == 0){
+							endTime = startTime + 1000 * 60 * 60;
+							endTimeTextView.setText(getTime(endTime) + " Uhr");
+						}
 					}
 				}, rightNow.get(Calendar.HOUR_OF_DAY), rightNow.get(Calendar.MINUTE), true);
 				dialog.show();
@@ -165,6 +176,9 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 			@Override
 			public void onClick(View v) {
 				Calendar rightNow = Calendar.getInstance();
+				if(startDate != 0){
+					rightNow.setTimeInMillis(startDate);
+				}
 				DatePickerDialog dialog = new DatePickerDialog(getActivity(),
 						new OnDateSetListener() {
 					
@@ -177,6 +191,11 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 								cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 								startDate = cal.getTimeInMillis();
 								dateTextView.setText(getDate(startDate));
+								
+								if(endDate == 0){
+									endDate = startDate;
+									endDateTextView.setText(getDate(endDate));
+								}
 							}
 						}
 						, rightNow.get(Calendar.YEAR), rightNow.get(Calendar.MONTH), rightNow.get(Calendar.DAY_OF_MONTH));
@@ -189,6 +208,9 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 			@Override
 			public void onClick(View v) {
 				Calendar rightNow = Calendar.getInstance();
+				if(endDate != 0){
+					rightNow.setTimeInMillis(endDate);
+				}
 
 				DatePickerDialog dialog = new DatePickerDialog(getActivity(),
 						new OnDateSetListener() {
@@ -243,12 +265,57 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 														"-1",
 														dateStart,
 														dateEnd);
-				new BundleMessageHelper(getActivity())
-				.sendMessageSendBundle(BundleMessage.getInstance()
-						.createBundle(
-								BUNDLE_MESSAGE.CALENDAR_ADD_EVENT_REQUEST,
-								event));
-				getActivity().finish();
+				
+				if(eventNameEditText.getText().toString().equals("") || 
+				   selectedActivityTextView.getText().toString().equals("") ||
+				   dateStart==0 || dateEnd == 0){
+					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
+							getActivity());
+					dialogAlert.setTitle("Bitte alle Felder ausfüllen");
+					dialogAlert.setNeutralButton("OK",
+							new DialogInterface.OnClickListener() {
+
+								public void onClick(DialogInterface dialog,
+										int which) {
+									dialog.cancel();
+								}
+							});
+					dialogAlert.create().show();
+				}else if(dateStart>dateEnd){
+					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
+							getActivity());
+					dialogAlert.setTitle("Keine gültigen Kalenderdaten");
+					dialogAlert.setNeutralButton("OK",
+							new DialogInterface.OnClickListener() {
+
+								public void onClick(DialogInterface dialog,
+										int which) {
+									dialog.cancel();
+								}
+							});
+					dialogAlert.create().show();
+				}else if(dateStart<System.currentTimeMillis()){
+					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
+							getActivity());
+					dialogAlert.setTitle("Der Termin muss in der Zukunft stattfinden");
+					dialogAlert.setNeutralButton("OK",
+							new DialogInterface.OnClickListener() {
+
+								public void onClick(DialogInterface dialog,
+										int which) {
+									dialog.cancel();
+								}
+							});
+					dialogAlert.create().show();
+				}else{
+					new BundleMessageHelper(getActivity())
+					.sendMessageSendBundle(BundleMessage.getInstance()
+							.createBundle(
+									BUNDLE_MESSAGE.CALENDAR_ADD_EVENT_REQUEST,
+									event));
+					getActivity().finish();
+				}
+					
 			}
 		});
 
@@ -330,7 +397,7 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 	
 	public String getDate(long milliSeconds) {
 	    SimpleDateFormat formatter = new SimpleDateFormat(
-	            "dd/MM/yyyy");
+	            "dd.MM.yyyy");
 	    Calendar calendar = Calendar.getInstance();
 	    calendar.setTimeInMillis(milliSeconds);
 	    return formatter.format(calendar.getTime());
@@ -338,7 +405,7 @@ public class CalendarFragment extends Fragment implements BundleMessageReactor{
 	
 	public String getTime(long milliSeconds) {
 	    SimpleDateFormat formatter = new SimpleDateFormat(
-	            "hh:mm");
+	            "HH:mm");
 	    Calendar calendar = Calendar.getInstance();
 	    calendar.setTimeInMillis(milliSeconds);
 	    return formatter.format(calendar.getTime());
