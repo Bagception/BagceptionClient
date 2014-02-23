@@ -280,12 +280,12 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			
 			
 			itemsInTab.setText(String.format("Enthalten" + " (%d)",
-					itemsIn.size()+suggestionToRemove.size()));
+					itemsInFragment.getSize()));
 			// itemsNeedlessTab.setText(String.format("Überflüssig (%d)",needlessItems.size()));
 			itemsMissTab.setText(String.format("Fehlend (%d)",
-					missingItems.size()+suggestionToAdd.size()));
+					itemsInFragment.getSize()));
 
-			itemsInFragment.updateView(statusUpdate);
+			itemsInFragment.updateView(statusUpdate); 
 			itemsMissFragment.updateView(statusUpdate);
 			// itemsNeedlessFragment.updateView(statusUpdate);
 			// debugMessage(statusUpdate);
