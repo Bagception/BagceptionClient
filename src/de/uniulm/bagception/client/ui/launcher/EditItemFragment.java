@@ -89,7 +89,8 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 		final ViewGroup root = (ViewGroup) inflater.inflate(
 				R.layout.fragment_create_new_item, null);
 		getActivity().getActionBar().setTitle("Item bearbeiten");
-		getActivity().getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0099CC")));
+		getActivity().getActionBar().setBackgroundDrawable(
+				new ColorDrawable(Color.parseColor("#0099CC")));
 		editName = (EditText) root.findViewById(R.id.editName);
 		send = (Button) root.findViewById(R.id.sendItem);
 		cancel = (Button) root.findViewById(R.id.cancelItem);
@@ -115,7 +116,7 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 		try {
 			obj = (org.json.simple.JSONObject) p.parse(i);
 			item = Item.fromJSON(obj);
-			Log.d("TEST", item.getName().toString());
+			// Log.d("TEST", item.getName().toString());
 
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -158,17 +159,27 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 				cold.setChecked(true);
 			} else if (temperature.equals("warm")) {
 				warm.setChecked(true);
+			} else if (weather.equals("Both selected")) {
+				cold.setChecked(true);
+				warm.setChecked(true);
+
 			}
 
 			if (weather.equals("sunny")) {
 				sunny.setChecked(true);
 			} else if (weather.equals("rainy")) {
 				rainy.setChecked(true);
+			} else if (weather.equals("Both selected")) {
+				sunny.setChecked(true);
+				rainy.setChecked(true);
 			}
 
 			if (lightness.equals("light")) {
 				light.setChecked(true);
 			} else if (lightness.equals("cold")) {
+				dark.setChecked(true);
+			} else if (weather.equals("Both selected")) {
+				light.setChecked(true);
 				dark.setChecked(true);
 			}
 
@@ -322,6 +333,7 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 					lightness = "Both selected";
 				}
 
+
 				ItemAttribute attributes = new ItemAttribute(temperature,
 						weather, lightness);
 				newItem = new Item(-1, editName.getText().toString(),
@@ -334,7 +346,6 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 					newItem.serializeImage(pt);
 				}
 
-				Log.d("TEST", newItem.toString());
 				if ("".equals(editName.getText().toString().trim())) {
 					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
 							getActivity());
@@ -355,9 +366,6 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 							.createBundle(
 									BUNDLE_MESSAGE.ADMINISTRATION_COMMAND,
 									ItemCommand.edit(oldItem, newItem)));
-					Log.d("TEST", newItem.toString());
-					// Intent intent = new Intent(getActivity(), MainGUI.class);
-					// startActivity(intent);
 					ImageCachingSystem.getInstance().clearCache(oldItem);
 					getActivity().finish();
 				}

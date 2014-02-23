@@ -55,8 +55,8 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 	private DrawerLayout drawer;
 	private View drawRightLayout;
 	public Bitmap currentPicturetaken = null;
-	public boolean pictureTaken=false;
-	
+	public boolean pictureTaken = false;
+
 	final String[] data = { "Übersicht", "Items", "Orte", "Kategorien",
 			"Aktivitäten", "Neue Tasche", "Kalender" };
 	final String[] menueFragments = {
@@ -157,7 +157,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 
 	}
 
-//	private final int REQUEST_IMAGE_CAPTURE = 1;
+	// private final int REQUEST_IMAGE_CAPTURE = 1;
 	public static final int REQUEST_LOCATION = 3;
 
 	// public void ontakePictureButtonClick(View v) {
@@ -217,13 +217,17 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 		File file = new File(Environment.getExternalStorageDirectory()
 				+ File.separator + "img.jpg");
 		takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-		startActivityForResult(takePictureIntent, 1);
+		if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+			Log.d("TEST", "FUUUU");
+			startActivityForResult(takePictureIntent, 1);
+		}
 
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == 1) {
+			Log.d("TEST", "Code ist 1");
 			File file = new File(Environment.getExternalStorageDirectory()
 					+ File.separator + "img.jpg");
 			try {
@@ -234,12 +238,20 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 						Toast.LENGTH_SHORT);
 				toast.show();
 			}
+			return;
 		}
+		Bundle extras = null;
 		if (requestCode == 2) {
-			Bundle extras = data.getExtras();
+			Log.d("TEST", "Code ist 2");
+			if (data == null) {
+				return;
+			} else {
+				extras = data.getExtras();
+			}
 			if (extras == null)
 				return;
-			Bitmap thePic = Bitmap.createScaledBitmap((Bitmap) extras.get("data"),100, 100, false);
+			Bitmap thePic = Bitmap.createScaledBitmap(
+					(Bitmap) extras.get("data"), 100, 100, false);
 			if (thePic == null)
 				return;
 			ImageView img = (ImageView) findViewById(R.id.itemIcon);
@@ -253,12 +265,12 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 				Log.d("TEST", "WHY U NOT WORKING?");
 			}
 			Log.d("TEST", "geht mir so aufn sack der dreck hier ey");
-			Bundle extras = data.getExtras();
-			if (extras == null)
+			Bundle locExtras = data.getExtras();
+			if (locExtras == null)
 				return;
-			float lat = (float) extras.getDouble("LAT");
-			float longt = (float) extras.getDouble("LNG");
-			int rad = extras.getInt("RAD");
+			float lat = (float) locExtras.getDouble("LAT");
+			float longt = (float) locExtras.getDouble("LNG");
+			int rad = locExtras.getInt("RAD");
 			TextView latView = (TextView) findViewById(R.id.latitudeView);
 			TextView lngView = (TextView) findViewById(R.id.longitudeView);
 			latView.setText("" + lat);
@@ -307,7 +319,7 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 						Toast.makeText(
 								MainGUI.this,
 								"item : " + a.getName()
-										+ " erfolgreich angelegt ", 
+										+ " erfolgreich angelegt ",
 								Toast.LENGTH_SHORT).show();
 					} else {
 						Toast.makeText(
@@ -446,6 +458,5 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 	// BundleMessageHelper(this).sendMessageSendBundle(BundleMessage.getInstance().createBundle(BUNDLE_MESSAGE.CONTAINER_STATUS_UPDATE_REQUEST,
 	// ""));
 	// }
-	
-	
+
 }

@@ -177,12 +177,20 @@ public class CreateNewPlaceFragment extends Fragment implements
 			@Override
 			public void onClick(View v) {
 
-				float lat = Float.parseFloat(latView.getText().toString());
-				float lon = Float.parseFloat(lngView.getText().toString());
+				float lat = -1;
+				float lon = -1;
+				
+				if(latView.getText().toString() != null|| lngView.getText().toString() != null){
+					
+					Log.w("DEBUG", "Latitude: " + latView.getText());
+					Log.w("DEBUG", "Longitude: " + lngView.getText());
+					
+					lat = Float.parseFloat(latView.getText().toString());
+					lon = Float.parseFloat(lngView.getText().toString());
+				}
 
 
-
-				if ("".equals(editName.getText().toString().trim())) {
+				if ("".equals(editName.getText().toString().trim()) || lat == -1 || lon == -1) {
 					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
 							getActivity());
 					dialogAlert.setTitle("Bitte alle Felder ausfüllen");
