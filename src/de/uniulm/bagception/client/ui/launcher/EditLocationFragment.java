@@ -229,9 +229,13 @@ public class EditLocationFragment extends Fragment implements
 							});
 					dialogAlert.create().show();
 				} else {
+					String mac = null;
+					if(device != null){
+						mac = device.getMac();
+					}
 					newLocation = new Location(-1, editName.getText()
 							.toString(), lat, lon, resultLocation.getRadius(),
-							device.getMac());
+							mac);
 					BundleMessageHelper helper = new BundleMessageHelper(
 							getActivity());
 					helper.sendMessageSendBundle(BundleMessage.getInstance()
