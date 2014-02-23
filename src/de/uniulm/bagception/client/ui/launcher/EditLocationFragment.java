@@ -107,7 +107,7 @@ public class EditLocationFragment extends Fragment implements
 		try {
 			obj = (org.json.simple.JSONObject) p.parse(i);
 			location = Location.fromJSON(obj);
-			Log.d("TEST", location.getName().toString());
+			Log.d("TEST", "loc: " + location.toString());
 
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -121,6 +121,7 @@ public class EditLocationFragment extends Fragment implements
 						.createBundle(BUNDLE_MESSAGE.RESOLVE_COORDS_REQUEST,
 								oldLocation));
 
+		Log.d("TEST", location.getLat().toString());
 		latView.setText(location.getLat().toString());
 		lngView.setText(location.getLng().toString());
 		
@@ -214,15 +215,7 @@ public class EditLocationFragment extends Fragment implements
 			@Override
 			public void onClick(View v) {
 
-				float lat = -1;
-				float lon = -1;
-				
-				if(latView.getText() != null|| lngView.getText() != null){
-					lat = Float.parseFloat(latView.getText().toString());
-					lon = Float.parseFloat(lngView.getText().toString());
-				}
-
-				if ("".equals(editName.getText().toString().trim()) || lat == -1 || lon == -1) {
+				if ("".equals(editName.getText().toString().trim()) || resultLocation == null) {
 					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
 							getActivity());
 					dialogAlert.setTitle("Bitte alle Felder ausfüllen");
@@ -241,7 +234,7 @@ public class EditLocationFragment extends Fragment implements
 						mac = device.getMac();
 					}
 					newLocation = new Location(-1, editName.getText()
-							.toString(), lat, lon, resultLocation.getRadius(),
+							.toString(), resultLocation.getLat(), resultLocation.getLng(), resultLocation.getRadius(),
 							mac);
 					BundleMessageHelper helper = new BundleMessageHelper(
 							getActivity());

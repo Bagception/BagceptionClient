@@ -79,7 +79,8 @@ public class CreateNewPlaceFragment extends Fragment implements
 		final ViewGroup root = (ViewGroup) inflater.inflate(
 				R.layout.fragment_create_new_place, null);
 		getActivity().getActionBar().setTitle("Ort hinzufügen");
-		getActivity().getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0099CC")));
+		getActivity().getActionBar().setBackgroundDrawable(
+				new ColorDrawable(Color.parseColor("#0099CC")));
 		editName = (EditText) root.findViewById(R.id.editName);
 		editAddress = (EditText) root.findViewById(R.id.editAddress);
 		btView = (TextView) root.findViewById(R.id.btView);
@@ -177,20 +178,21 @@ public class CreateNewPlaceFragment extends Fragment implements
 			@Override
 			public void onClick(View v) {
 
-				float lat = -1;
-				float lon = -1;
-				
-				if(latView.getText().toString() != null|| lngView.getText().toString() != null){
-					
-					Log.w("DEBUG", "Latitude: " + latView.getText());
-					Log.w("DEBUG", "Longitude: " + lngView.getText());
-					
-					lat = Float.parseFloat(latView.getText().toString());
-					lon = Float.parseFloat(lngView.getText().toString());
-				}
-
-
-				if ("".equals(editName.getText().toString().trim()) || lat == -1 || lon == -1) {
+				// float lat = -1;
+				// float lon = -1;
+				//
+				// if(latView.getText().toString() != null||
+				// lngView.getText().toString() != null){
+				//
+				// Log.w("TEST", "Latitude: " + latView.getText());
+				// Log.w("TEST", "Longitude: " + lngView.getText());
+				//
+				//
+				// lat = Float.parseFloat(latView.getText().toString());
+				// lon = Float.parseFloat(lngView.getText().toString());
+				// }
+				if ("".equals(editName.getText().toString().trim())
+						|| resultLocation == null) {
 					AlertDialog.Builder dialogAlert = new AlertDialog.Builder(
 							getActivity());
 					dialogAlert.setTitle("Bitte alle Felder ausfüllen");
@@ -204,9 +206,18 @@ public class CreateNewPlaceFragment extends Fragment implements
 							});
 					dialogAlert.create().show();
 				} else {
+					String mac;
+					if (device == null) {
+						mac = "";
+					}else {
+						mac = device.getMac();
+					}
 					Location location = new Location(-1, editName.getText()
-							.toString(), lat, lon, resultLocation.getRadius(),
-							device.getMac());
+							.toString(), lat,
+							lng,
+							resultLocation.getRadius(), mac);
+					
+					Log.d("TEST", "loc alt: " + location.toString());
 					BundleMessageHelper helper = new BundleMessageHelper(
 							getActivity());
 					helper.sendMessageSendBundle(BundleMessage.getInstance()
@@ -215,8 +226,8 @@ public class CreateNewPlaceFragment extends Fragment implements
 									LocationCommand.add(location)));
 
 					getActivity().finish();
-//					Intent intent = new Intent(getActivity(), MainGUI.class);
-//					startActivity(intent);
+					// Intent intent = new Intent(getActivity(), MainGUI.class);
+					// startActivity(intent);
 				}
 			}
 		});
@@ -226,10 +237,10 @@ public class CreateNewPlaceFragment extends Fragment implements
 			@Override
 			public void onClick(View v) {
 				editName.setText("");
-				
+
 				getActivity().finish();
-//				Intent intent = new Intent(getActivity(), MainGUI.class);
-//				startActivity(intent);
+				// Intent intent = new Intent(getActivity(), MainGUI.class);
+				// startActivity(intent);
 			}
 		});
 
@@ -241,6 +252,9 @@ public class CreateNewPlaceFragment extends Fragment implements
 		super.onPause();
 	}
 
+	Float lat;
+	Float lng;
+	
 	@Override
 	public void onBundleMessageRecv(Bundle b) {
 		switch (BundleMessage.getInstance().getBundleMessageType(b)) {
@@ -268,6 +282,8 @@ public class CreateNewPlaceFragment extends Fragment implements
 					.extractObject(b));
 			latView.setText("" + resultLocation.getLat());
 			lngView.setText("" + resultLocation.getLng());
+			lng = resultLocation.getLng();
+			lat = resultLocation.getLat();
 			Log.w("TEST",
 					resultLocation.getLat() + " und " + resultLocation.getLng());
 			break;
@@ -278,6 +294,11 @@ public class CreateNewPlaceFragment extends Fragment implements
 					.extractObject(b));
 			Log.d("TEST", "result" + resultLocation.getName());
 			editAddress.setText(resultLocation.getName());
+			latView.setText("" + resultLocation.getLat());
+			lngView.setText("" + resultLocation.getLng());
+			lng = resultLocation.getLng();
+			lat = resultLocation.getLat();
+			Log.d("TEST", latView.getText() + "and" + lng.toString());
 			break;
 
 		}
