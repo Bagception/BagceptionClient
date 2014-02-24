@@ -74,14 +74,14 @@
                 android:id="@+id/viewCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginRight="15dp"
                 android:layout_gravity="center_vertical"
+                android:layout_marginRight="15dp"
                 android:layout_weight="1"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
                 android:text="Keine Kategorie" />
 
-           <Button
+            <Button
                 android:id="@+id/addCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -172,7 +172,7 @@
                 android:layout_weight="1"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
-                android:text="Sonne"
+                android:text="Trocken"
                 android:textOff="Sonne"
                 android:textOn="Sonne" />
 
@@ -248,19 +248,34 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dip" >
 
+            <TextView
+                android:id="@+id/variables"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:text="Mitnehmen wenn: "
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/text" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow5"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip" >
+
             <CheckBox
                 android:id="@+id/always"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="false"
-                android:text="Immer dabei" />
+                android:text="Immer" />
 
             <CheckBox
                 android:id="@+id/independent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="false"
-                android:text="Aktivitätsunabhängig" />
+                android:text="Kontext erfüllt" />
         </TableRow>
 
         <LinearLayout

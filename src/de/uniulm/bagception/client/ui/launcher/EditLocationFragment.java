@@ -289,7 +289,6 @@ public class EditLocationFragment extends Fragment implements
 			break;
 		}
 		case RESOLVE_ADDRESS_REPLY: {
-			// Location location
 			Log.w("TEST", "Hole mir jetzt die Location");
 			resultLocation = Location.fromJSON(BundleMessage.getInstance()
 					.extractObject(b));
@@ -304,6 +303,8 @@ public class EditLocationFragment extends Fragment implements
 			resultLocation = Location.fromJSON(BundleMessage.getInstance()
 					.extractObject(b));
 			Log.d("TEST", "result" + resultLocation.getName());
+			latView.setText("" + resultLocation.getLat());
+			lngView.setText("" + resultLocation.getLng());
 			editAddress.setText(resultLocation.getName());
 			break;
 

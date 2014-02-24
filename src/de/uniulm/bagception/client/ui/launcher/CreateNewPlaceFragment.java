@@ -280,8 +280,8 @@ public class CreateNewPlaceFragment extends Fragment implements
 			Log.w("TEST", "Hole mir jetzt die Location");
 			resultLocation = Location.fromJSON(BundleMessage.getInstance()
 					.extractObject(b));
-			latView.setText("" + resultLocation.getLat());
-			lngView.setText("" + resultLocation.getLng());
+			latView.setText("Lat: " + resultLocation.getLat());
+			lngView.setText("Long: " + resultLocation.getLng());
 			lng = resultLocation.getLng();
 			lat = resultLocation.getLat();
 			Log.w("TEST",
@@ -294,11 +294,18 @@ public class CreateNewPlaceFragment extends Fragment implements
 					.extractObject(b));
 			Log.d("TEST", "result" + resultLocation.getName());
 			editAddress.setText(resultLocation.getName());
-			latView.setText("" + resultLocation.getLat());
-			lngView.setText("" + resultLocation.getLng());
 			lng = resultLocation.getLng();
 			lat = resultLocation.getLat();
 			Log.d("TEST", latView.getText() + "and" + lng.toString());
+			
+			Location locAddress = new Location(editAddress.getText()
+					.toString(), "");
+			Log.d("TEST", "Adresse: " + editAddress.getText().toString());
+			new BundleMessageHelper(getActivity())
+					.sendMessageSendBundle(BundleMessage.getInstance()
+							.createBundle(
+									BUNDLE_MESSAGE.RESOLVE_ADDRESS_REQUEST,
+									locAddress));
 			break;
 
 		}

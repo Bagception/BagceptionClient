@@ -273,8 +273,8 @@ public class MainGUI extends Activity implements BundleMessageReactor {
 			int rad = locExtras.getInt("RAD");
 			TextView latView = (TextView) findViewById(R.id.latitudeView);
 			TextView lngView = (TextView) findViewById(R.id.longitudeView);
-			latView.setText("" + lat);
-			lngView.setText("" + longt);
+//			latView.setText("" + lat);
+//			lngView.setText("" + longt);
 
 			Location locCoords = new Location("", lat, longt, rad);
 			new BundleMessageHelper(this).sendMessageSendBundle(BundleMessage
