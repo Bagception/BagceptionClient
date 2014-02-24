@@ -101,23 +101,35 @@ public class ContextItems {
 		for(Item item:stateUpdate.getItemList()){
 //			ContextSuggestion sug = ContextSuggestion.getReplaceSuggestions(stateUpdate.getContextSuggestions(), item);
 			ContextSuggestion sug = ContextSuggestion.getItemsToReplace(stateUpdate.getContextSuggestions(), item);	//item can be replaced or is needless 
-			boolean needless = ((stateUpdate.getNeedlessItems().contains(item) || sug != null) && !item.getIndependentItem() && !item.getContextItem());
+			ContextSuggestion suggestAdd = ContextSuggestion.getReplaceSuggestions(stateUpdate.getContextSuggestions(), item);
 			
-
+			boolean isInNeedless = stateUpdate.getNeedlessItems().contains(item);
+			boolean canBeReplaced = (sug != null);
+			
+			boolean isIndependent = item.getIndependentItem();
+			boolean contextItemWithoutContext = suggestAdd == null && item.getContextItem();
+			boolean contextItemWitContext = suggestAdd != null && item.getContextItem();
+			
+			boolean needless = isInNeedless || contextItemWithoutContext || canBeReplaced;
+			
+			
+			if (isIndependent || contextItemWitContext){
+				needless = false;
+			}
+			
 			
 			Log.d("CTX"," in name: "+item.getName());
 			Log.d("CTX"," sug: "+sug);
 			if (sug != null){
 				Log.d("CTX"," reason: "+sug.getReason());
 				Log.d("CTX"," replace: "+sug.getReplaceSuggestions());	
-			}
-			if (sug !=null){
-				Log.d("CTX",sug.toString());	
+				itemsIn.add(new RichItem(item,sug,needless));
 			}else{
-				Log.d("CTX","sug is null");
+				itemsIn.add(new RichItem(item,suggestAdd,needless));
+				
 			}
 			
-			itemsIn.add(new RichItem(item,sug,needless));
+			
 			
 			
 			
