@@ -49,7 +49,7 @@ public class RichItemArrayAdapter extends ArrayAdapter<RichItem>{
 	            
 
             	if (ctx!=null){
-	            	view.setBackgroundColor(Color.GRAY);
+	            	view.setBackgroundColor(Color.argb(10, 255, 250, 50));
 	            	Bitmap bmp=null;
             		bmp=bitmaps.getContextIcon(ctx);
             		Log.d("CONTEXT",item.getName()+" kontext: "+ctx.name());
@@ -60,7 +60,7 @@ public class RichItemArrayAdapter extends ArrayAdapter<RichItem>{
 	            	contextImg.setVisibility(View.INVISIBLE);
 	            }
             	if (item.isNeedless()){
-	            	view.setBackgroundColor(Color.CYAN);
+	            	view.setBackgroundColor(Color.argb(50, 255, 0, 0));
             	}
             }
 	            
