@@ -10,6 +10,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -53,14 +54,14 @@ public class NewBagFragment extends ListFragment {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setMessage("Nach Geräten suchen?")
 				.setCancelable(false)
-				.setPositiveButton("suchen",
+				.setPositiveButton("Suchen",
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
 								startScan();
 
 							}
 						})
-				.setNegativeButton("abbrechen",
+				.setNegativeButton("Abbrechen",
 						new DialogInterface.OnClickListener() {
 
 							@Override
@@ -89,7 +90,7 @@ public class NewBagFragment extends ListFragment {
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
-
+									startActivity(new Intent(getActivity(),MainGUI.class));
 								}
 							});
 			AlertDialog alert = builder.create();
@@ -98,7 +99,7 @@ public class NewBagFragment extends ListFragment {
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			builder.setMessage("Pairing fehlgeschlagen")
 					.setCancelable(false)
-					.setNegativeButton("erneut suchen",
+					.setNegativeButton("Erneut suchen",
 							new DialogInterface.OnClickListener() {
 
 								@Override
@@ -196,7 +197,7 @@ public class NewBagFragment extends ListFragment {
 		case DIALOG_SEARCH:
 			this.dialog = ProgressDialog
 					.show(getActivity(),
-							"suche..",
+							"Suche..",
 							"Suche nach Geräten... bitte warten");//\n\nDer Bagception Server muss auf dem fremden Gerät eingeschaltet sein");
 			this.dialog.setCanceledOnTouchOutside(true);
 			this.dialog.setOnCancelListener(new OnCancelListener() {
