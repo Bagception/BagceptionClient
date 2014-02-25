@@ -38,10 +38,37 @@ public class ContextItems {
 		//needless, context
 		
 		
+		Log.d("CCC","in update");
 		
 		
 		if (stateUpdate.getContextSuggestions() != null) {
+			Log.d("CCC","contexte len: "+stateUpdate.getContextSuggestions().size());
 			for (ContextSuggestion sug : stateUpdate.getContextSuggestions()) {
+				StringBuilder sb = new StringBuilder();
+				sb.append("Contexte:\n");
+				if (sug.getItemToReplace() == null){
+					sb.append("Item: null\n");
+				}else{
+					sb.append("Item: "+sug.getItemToReplace().getName()+"\n");
+					
+				}
+				if (sug.getReason() == null){
+					sb.append("Reason: null\n");
+				}else{
+					sb.append("Reason: "+sug.getReason().name()+"\n");
+					
+				}
+				if (sug.getReplaceSuggestions() == null){
+					sb.append("replace with: null\n");
+				}else{
+					sb.append("replace with: \n");
+					for (Item i:sug.getReplaceSuggestions()){
+						sb.append(i.getName()+"\n");
+					}
+				}
+				
+				
+				Log.d("CCC",sb.toString());
 				if (sug.getItemToReplace()==null){
 					//no item to replace/remove => nothing to remove, only  to add
 					suggestionToAdd.add(sug);
@@ -67,30 +94,42 @@ public class ContextItems {
 				}
 			}
 		}else{
-				Log.d("CONTEXT","suggestions are null");	
+				Log.d("CCC","suggestions are null");	
 		}
 		
 		//calculate items in: needless must be marked, needless are only needless when they are not context items
 		for(Item item:stateUpdate.getItemList()){
 //			ContextSuggestion sug = ContextSuggestion.getReplaceSuggestions(stateUpdate.getContextSuggestions(), item);
 			ContextSuggestion sug = ContextSuggestion.getItemsToReplace(stateUpdate.getContextSuggestions(), item);	//item can be replaced or is needless 
-			boolean needless = (stateUpdate.getNeedlessItems().contains(item) || sug != null);
+			ContextSuggestion suggestAdd = ContextSuggestion.getReplaceSuggestions(stateUpdate.getContextSuggestions(), item);
 			
-
+			boolean isInNeedless = stateUpdate.getNeedlessItems().contains(item);
+			boolean canBeReplaced = (sug != null);
+			
+			boolean isIndependent = item.getIndependentItem();
+			boolean contextItemWithoutContext = suggestAdd == null && item.getContextItem();
+			boolean contextItemWitContext = suggestAdd != null && item.getContextItem();
+			
+			boolean needless = isInNeedless || contextItemWithoutContext || canBeReplaced;
+			
+			
+			if (isIndependent || contextItemWitContext){
+				needless = false;
+			}
+			
 			
 			Log.d("CTX"," in name: "+item.getName());
 			Log.d("CTX"," sug: "+sug);
 			if (sug != null){
 				Log.d("CTX"," reason: "+sug.getReason());
 				Log.d("CTX"," replace: "+sug.getReplaceSuggestions());	
-			}
-			if (sug !=null){
-				Log.d("CTX",sug.toString());	
+				itemsIn.add(new RichItem(item,sug,needless));
 			}else{
-				Log.d("CTX","sug is null");
+				itemsIn.add(new RichItem(item,suggestAdd,needless));
+				
 			}
 			
-			itemsIn.add(new RichItem(item,sug,needless));
+			
 			
 			
 			
@@ -121,6 +160,13 @@ public class ContextItems {
 //				itemsMiss.add(new RichItem(item,sug,false));
 //			}
 			
+		}
+		for (ContextSuggestion sug:suggestionToAdd){
+			for (Item i:sug.getReplaceSuggestions()){
+				if (!itemsIn.contains(i)){
+					itemsMiss.add(new RichItem(i, sug, false));
+				}
+			}
 		}
 		
 		List<ContextSuggestion> toDelete = new ArrayList<ContextSuggestion>();

@@ -176,7 +176,7 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 
 			if (lightness.equals("light")) {
 				light.setChecked(true);
-			} else if (lightness.equals("cold")) {
+			} else if (lightness.equals("dark")) {
 				dark.setChecked(true);
 			} else if (weather.equals("Both selected")) {
 				light.setChecked(true);
@@ -284,7 +284,7 @@ public class EditItemFragment extends Fragment implements BundleMessageReactor {
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
 				if (isChecked) {
-					darkOn = "cold";
+					darkOn = "dark";
 				} else {
 					darkOn = null;
 				}
