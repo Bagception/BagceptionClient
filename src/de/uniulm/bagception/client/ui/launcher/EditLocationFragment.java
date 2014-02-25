@@ -45,7 +45,6 @@ public class EditLocationFragment extends Fragment implements
 	Button send;
 	ShowMap showMap;
 	Button cancel;
-	Button bt;
 	Button wlan;
 	Button resolveAddress;
 	BundleMessageActor actor;
@@ -144,37 +143,7 @@ public class EditLocationFragment extends Fragment implements
 			}
 		});
 
-		bt.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				btDevices.clear();
-				btAlert = new AlertDialog.Builder(getActivity());
-				btAlert.setTitle("Bluetooth Devices");
-
-				btArrayAdapter = new ArrayAdapter<String>(getActivity(),
-						android.R.layout.simple_selectable_list_item, btDevices);
-
-				new BundleMessageHelper(getActivity())
-						.sendMessageSendBundle(BundleMessage
-								.getInstance()
-								.createBundle(
-										BUNDLE_MESSAGE.BLUETOOTH_SEARCH_REQUEST,
-										null));
-				btAlert.setAdapter(btArrayAdapter,
-						new DialogInterface.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								btView.setText("BT: "
-										+ btDevices.get(which).toString());
-							}
-						});
-				btAlert.create().show();
-			}
-		});
-
+	
 		wlan.setOnClickListener(new OnClickListener() {
 
 			@Override

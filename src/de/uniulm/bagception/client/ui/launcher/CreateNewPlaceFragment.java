@@ -40,7 +40,6 @@ public class CreateNewPlaceFragment extends Fragment implements
 	Button send;
 	ShowMap showMap;
 	Button cancel;
-	Button bt;
 	Button wlan;
 	Button resolveAddress;
 	BundleMessageActor actor;
@@ -106,37 +105,6 @@ public class CreateNewPlaceFragment extends Fragment implements
 										BUNDLE_MESSAGE.RESOLVE_ADDRESS_REQUEST,
 										locAddress));
 
-			}
-		});
-
-		bt.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				btDevices.clear();
-				btAlert = new AlertDialog.Builder(getActivity());
-				btAlert.setTitle("Bluetooth Devices");
-
-				btArrayAdapter = new ArrayAdapter<String>(getActivity(),
-						android.R.layout.simple_selectable_list_item, btDevices);
-
-				new BundleMessageHelper(getActivity())
-						.sendMessageSendBundle(BundleMessage
-								.getInstance()
-								.createBundle(
-										BUNDLE_MESSAGE.BLUETOOTH_SEARCH_REQUEST,
-										null));
-				btAlert.setAdapter(btArrayAdapter,
-						new DialogInterface.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								btView.setText("BT: "
-										+ btDevices.get(which).toString());
-							}
-						});
-				btAlert.create().show();
 			}
 		});
 
@@ -207,14 +175,13 @@ public class CreateNewPlaceFragment extends Fragment implements
 					String mac;
 					if (device == null) {
 						mac = "";
-					}else {
+					} else {
 						mac = device.getMac();
 					}
 					Location location = new Location(-1, editName.getText()
-							.toString(), lat,
-							lng,
-							resultLocation.getRadius(), mac);
-					
+							.toString(), lat, lng, resultLocation.getRadius(),
+							mac);
+
 					Log.d("TEST", "loc alt: " + location.toString());
 					BundleMessageHelper helper = new BundleMessageHelper(
 							getActivity());
@@ -252,7 +219,7 @@ public class CreateNewPlaceFragment extends Fragment implements
 
 	Float lat;
 	Float lng;
-	
+
 	@Override
 	public void onBundleMessageRecv(Bundle b) {
 		switch (BundleMessage.getInstance().getBundleMessageType(b)) {
@@ -295,9 +262,9 @@ public class CreateNewPlaceFragment extends Fragment implements
 			lng = resultLocation.getLng();
 			lat = resultLocation.getLat();
 			Log.d("TEST", latView.getText() + "and" + lng.toString());
-			
-			Location locAddress = new Location(editAddress.getText()
-					.toString(), "");
+
+			Location locAddress = new Location(
+					editAddress.getText().toString(), "");
 			Log.d("TEST", "Adresse: " + editAddress.getText().toString());
 			new BundleMessageHelper(getActivity())
 					.sendMessageSendBundle(BundleMessage.getInstance()
