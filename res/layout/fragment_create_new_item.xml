@@ -173,8 +173,8 @@
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
                 android:text="Trocken"
-                android:textOff="Sonne"
-                android:textOn="Sonne" />
+                android:textOff="Trocken"
+                android:textOn="Trocken" />
 
             <ToggleButton
                 android:id="@+id/rainButton"
