@@ -31,7 +31,7 @@ public abstract class OverviewTabFragment extends Fragment {
 		
 	}
 	
-	public void update(){
+	public synchronized void update(){
 		if (itemsStatusView != null){
 			itemsStatusView.invalidate();
 			RichItemArrayAdapter adapter = (RichItemArrayAdapter)itemsStatusView.getAdapter();
@@ -57,7 +57,7 @@ public abstract class OverviewTabFragment extends Fragment {
 	
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+	public synchronized View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		ViewGroup root = (ViewGroup) inflater.inflate(
 				R.layout.fragment_items_in, null);

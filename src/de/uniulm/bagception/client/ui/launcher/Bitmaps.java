@@ -20,7 +20,7 @@ public class Bitmaps {
 		contextImageMap.put(CONTEXT.COLD, BitmapFactory.decodeResource(context.getResources(), R.drawable.cold));
 		contextImageMap.put(CONTEXT.DARK, BitmapFactory.decodeResource(context.getResources(), R.drawable.night));
 		contextImageMap.put(CONTEXT.RAIN, BitmapFactory.decodeResource(context.getResources(), R.drawable.rain));
-		contextImageMap.put(CONTEXT.SUNNY, BitmapFactory.decodeResource(context.getResources(), R.drawable.daywarm));
+		contextImageMap.put(CONTEXT.SUNNY, BitmapFactory.decodeResource(context.getResources(), R.drawable.dry));
 		contextImageMap.put(CONTEXT.WARM, BitmapFactory.decodeResource(context.getResources(), R.drawable.hot));
 		isInit = true;
 	}
