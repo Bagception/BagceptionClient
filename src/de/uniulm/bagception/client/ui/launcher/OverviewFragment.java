@@ -75,8 +75,7 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 	
 
 
-	private final ToneGenerator toneGenerator = new ToneGenerator(
-			AudioManager.STREAM_MUSIC, 100);
+	
 	
 	static Fragment newInstance(Context context) {
 		OverviewFragment f = new OverviewFragment();
@@ -263,7 +262,6 @@ public class OverviewFragment extends Fragment implements BundleMessageReactor {
 			break;
 
 		case ITEM_FOUND:
-			toneGenerator.startTone(ToneGenerator.TONE_PROP_BEEP);
 			break;
 			
 		case ACTIVITY_PRIORITY_LIST: {

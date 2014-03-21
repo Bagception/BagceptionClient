@@ -3,6 +3,8 @@ package de.uniulm.bagception.client.service;
 import org.json.simple.JSONObject;
 
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.Toast;
@@ -30,7 +32,8 @@ public class BagceptionClientService extends ObservableService {
 
 	private BluetoothSystem btSys;
 	private NotificationSystem notifySys;
-
+	private ToneGenerator toneGenerator;
+	
 	@Override
 	public String getServiceName() {
 
@@ -39,7 +42,9 @@ public class BagceptionClientService extends ObservableService {
 
 	@Override
 	public void onCreate() {
-
+		toneGenerator = new ToneGenerator(
+				AudioManager.STREAM_MUSIC, 100);
+		
 		bmHelper = new BundleMessageHelper(this);
 
 		ImageCachingSystem.initInstance(this);
@@ -92,6 +97,11 @@ public class BagceptionClientService extends ObservableService {
 							JSONObject message = BundleMessage.getInstance().extractObject(b);
 							String msg = message.get("msg").toString();
 							Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+							break;
+						}
+						
+						case ITEM_FOUND:{
+							toneGenerator.startTone(ToneGenerator.TONE_PROP_BEEP);
 							break;
 						}
 						default:
