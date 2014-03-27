@@ -44,6 +44,8 @@ public class ContextItems {
 		if (stateUpdate.getContextSuggestions() != null) {
 			Log.d("CCC","contexte len: "+stateUpdate.getContextSuggestions().size());
 			for (ContextSuggestion sug : stateUpdate.getContextSuggestions()) {
+				//Log
+				
 				StringBuilder sb = new StringBuilder();
 				sb.append("Contexte:\n");
 				if (sug.getItemToReplace() == null){
@@ -69,6 +71,8 @@ public class ContextItems {
 				
 				
 				Log.d("CCC",sb.toString());
+				
+				//check if item has to be (replaced, removed or added to the bag)
 				if (sug.getItemToReplace()==null){
 					//no item to replace/remove => nothing to remove, only  to add
 					suggestionToAdd.add(sug);
@@ -144,16 +148,25 @@ public class ContextItems {
 				Log.d("CTX"," replace: "+sug.getReplaceSuggestions());
 					
 			}
+			//sugReplace = all items who have a list to replace with (=to replace || to add)
 			ContextSuggestion sugReplace = ContextSuggestion.getReplaceSuggestions(itemsReplace, item);
-			if (sugReplace != null){
+			if (sugReplace != null && sugReplace.getReplaceSuggestions().size()>0){
 				for(Item sugitem:sugReplace.getReplaceSuggestions()){
 					itemsMiss.add(new RichItem(sugitem,sug,false));
 				}	
 			}
+			//sugToReplace = all items who have a suggestion to remove this item
 			ContextSuggestion sugToReplace = ContextSuggestion.getItemsToReplace(itemsReplace, item);
+			
+			ContextSuggestion sugToRemove = ContextSuggestion.getItemsToReplace(suggestionToRemove, item);
+			
+			Log.d("AAA","check for "+item.getName() + sugToReplace);
 			Log.d("CTX","for item: "+item.getName()+" replace suggestion is " + sugToReplace);
-			if (sugToReplace == null){
-				itemsMiss.add(new RichItem(item,sug,false));
+			
+			if (sugToReplace == null && sugToRemove == null){
+				Log.d("AAA",item.getName());
+				RichItem ri = new RichItem(item,sug,false);
+				itemsMiss.add(ri);
 			}
 //			Log.d("CTX2",item.getName()+": "+sugReplace.getItemToReplace().getName());
 //			if ( !(sugReplace != null && sugReplace.getItemToReplace() != null)){
@@ -164,6 +177,7 @@ public class ContextItems {
 		for (ContextSuggestion sug:suggestionToAdd){
 			for (Item i:sug.getReplaceSuggestions()){
 				if (!itemsIn.contains(i)){
+					Log.d("BBB",i.getName());
 					itemsMiss.add(new RichItem(i, sug, false));
 				}
 			}
